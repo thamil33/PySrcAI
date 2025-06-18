@@ -1,0 +1,12 @@
+numpy
+setuptools
+termcolor
+absl-py
+dotenv
+sentence-transformers
+huggingface-hub
+pandas
+torch
+torchvision
+torchaudio
+--extra-index-url https://download.pytorch.org/whl/cu128
