@@ -32,5 +32,5 @@ Both `pyscrai` and `concordia` will now be available as importable modules.
 
 5. Run a scenario from project root, i.e 
 ``` bash
-python -m pyscrai.scenario.determinist_libertarian 
+python -m pyscrai.scenario.angeldemon
 ```

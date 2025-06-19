@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from concordia.prefabs.entity.basic_with_plan import Entity as BasicEntity
 from concordia.prefabs.game_master.dialogic import GameMaster as DebateGameMaster
 from concordia.associative_memory.basic_associative_memory import AssociativeMemoryBank
-from pyscrai.embedding.sentence_transformers import embedder
+from pyscrai.embedding.hf_embedding import embedder
 from concordia.language_model.openrouter_model import OpenRouterLanguageModel
 
 # Load environment variables

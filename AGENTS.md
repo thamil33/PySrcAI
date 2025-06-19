@@ -7,9 +7,9 @@
 ## Component Overview
 
 ### Embedding System
-- SentenceTransformer for text embeddings
-- Model: "sentence-transformers/all-mpnet-base-v2"
-- CPU and CUDA support
+- Hugging Face Inference API for text embeddings
+- Model: "BAAI/bge-base-en-v1.5"
+- API-based embedding generation
 
 ### Language Model Integration
 - OpenRouter API with environment-based API key management

@@ -3,9 +3,9 @@
 ## Component Overview
 
 ### Embedding System
-- Using SentenceTransformer for text embeddings
-- Model: "sentence-transformers/all-mpnet-base-v2"
-- Configured for both CPU and CUDA support
+- Using Hugging Face Inference API for text embeddings
+- Model: "BAAI/bge-base-en-v1.5"
+- Configured for API-based embedding generation
 - Error handling for embedding generation
 
 ### Language Model Integration
