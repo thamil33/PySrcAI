@@ -1,17 +1,5 @@
 # Current Project State
 
-## Project Structure
-```
-pyscrai/
-├── embedding/
-│   └── sentence_transformers.py     # Sentence transformer implementation for embeddings
-├── engine/
-│   ├── debate_engine.py            # Core debate simulation engine
-│   └── debate_master.py            # Debate moderator implementation
-└── scenario/
-    └── angeldemon.py               # Example philosophical debate scenario
-```
-
 ## Component Overview
 
 ### Embedding System
@@ -22,7 +10,6 @@ pyscrai/
 
 ### Language Model Integration
 - Using OpenRouter API
-- Current model: mistralai/devstral-small:free
 - API key management through environment variables
 - Direct integration with Concordia's language model interface
 
