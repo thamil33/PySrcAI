@@ -5,7 +5,7 @@ from typing import Any
 
 from concordia.typing import entity as entity_lib
 from concordia.environment import engine
-from concordia.document import interactive_document
+
 
 class DebateEngine(engine.Engine):
     """Engine for managing philosophical debates between entities."""
@@ -74,17 +74,12 @@ class DebateEngine(engine.Engine):
         entities: Sequence[entity_lib.Entity],
         premise: str,
         max_steps: int,
-        verbose: bool = True,
+        verbose: bool = False,
         log: list[Mapping[str, Any]] | None = None,
-    ):
-        """Run the debate simulation loop."""
+    ) -> list[Mapping[str, Any]]:
+        """Run the debate simulation loop and return logged events."""
         if log is None:
             log = []
-
-        print("\n Debate between Entities:")
-        print("=" * 50)
-        print(f"\nPremise: {premise}\n")
-        print("=" * 50)
 
         # Initialize with the premise
         for entity in entities:
@@ -98,15 +93,8 @@ class DebateEngine(engine.Engine):
                 # Determine next actor and their action
                 actor, action_spec = self.next_acting(game_master, entities)
 
-                if verbose:
-                    print(f"\nTurn {self.current_turn + 1}: {actor.name}'s perspective...")
-
                 # Get the actor's response
                 response = actor.act(action_spec)
-
-                if verbose:
-                    print(f"{actor.name}: {response}\n")
-                    print("-" * 50)
 
                 # Record the event
                 self.resolve(game_master, response)
@@ -115,18 +103,21 @@ class DebateEngine(engine.Engine):
                 for entity in entities:
                     entity.observe(response)
 
-                # Log the turn if requested
-                if log is not None:
-                    log.append({
-                        'turn': self.current_turn,
-                        'actor': actor.name,
-                        'response': response
-                    })
+                # Log the turn
+                log.append({
+                    'turn': self.current_turn,
+                    'actor': actor.name,
+                    'response': response,
+                })
 
                 step += 1
 
             except Exception as e:
-                print(f"Error during turn {self.current_turn}: {str(e)}")
+                log.append({
+                    'turn': self.current_turn,
+                    'actor': 'error',
+                    'response': str(e),
+                })
                 break
 
         return log
