@@ -49,7 +49,7 @@ class HFEmbedder:
                 logging.error("Error with model %s: %s", model, exc)
                 time.sleep(2)
         logging.error("All models failed. Returning zero vector.")
-        return np.zeros(768)
+        return np.zeros(self.embedding_dim)
 
 
 # Backwards compatible helper
