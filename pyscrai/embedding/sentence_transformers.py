@@ -1,9 +1,9 @@
-# Setting up the SentenceTransformer embedder
+# Online embedder using Hugging Face Inference API
 import os
 import numpy as np
 import logging
+import requests
 from dotenv import load_dotenv
-from sentence_transformers import SentenceTransformer
 
 # Load environment variables from .env file
 load_dotenv()
@@ -11,20 +11,30 @@ load_dotenv()
 # Configure logging
 logging.basicConfig(level=logging.ERROR)
 
-# Initialize the SentenceTransformer model once
-st_model = SentenceTransformer(
-    model_name_or_path="sentence-transformers/all-mpnet-base-v2",
-    device='cpu',  # or 'cpu'
-    local_files_only=False
-)
+HF_API_TOKEN = os.getenv("HF_API_TOKEN")
+# Using the BAAI/bge-base-en-v1.5 model which is well-supported by the Inference API
+API_URL = "https://api-inference.huggingface.co/models/BAAI/bge-base-en-v1.5"
 
-# Embedder function for the memory bank
 def embedder(text: str) -> np.ndarray:
+    headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
     try:
-        # Encode the text and get embeddings
-        embedding = st_model.encode(text, convert_to_numpy=True)
+        # The bge models expect a different payload format
+        payload = {
+            "inputs": text,
+            "options": {
+                "wait_for_model": True
+            }
+        }
+        
+        response = requests.post(API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        
+        # BGE models return a list of embeddings
+        embedding = np.array(response.json()[0])
+        
+        # Return the embedding vector
         return embedding
     except Exception as e:
         logging.error(f"Error generating embedding: {str(e)}")
-        # Return a zero vector as fallback with same dimensions as the model's output
-        return np.zeros(st_model.get_sentence_embedding_dimension())
+        # Return a zero vector as fallback (768 dims for bge-base-en-v1.5)
+        return np.zeros(768)

@@ -3,9 +3,5 @@ setuptools
 termcolor
 absl-py
 dotenv
-sentence-transformers
-huggingface-hub
 pandas
-torch
-torchvision
-torchaudio
+requests
