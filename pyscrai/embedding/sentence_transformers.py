@@ -14,9 +14,8 @@ logging.basicConfig(level=logging.ERROR)
 # Initialize the SentenceTransformer model once
 st_model = SentenceTransformer(
     model_name_or_path="sentence-transformers/all-mpnet-base-v2",
-    device='cuda',  # or 'cpu'
-    cache_folder=os.environ.get('HF_HOME', os.path.expanduser('~/.cache/huggingface')),
-    local_files_only=True
+    device='cpu',  # or 'cpu'
+    local_files_only=False
 )
 
 # Embedder function for the memory bank
