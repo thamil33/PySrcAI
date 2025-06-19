@@ -17,17 +17,18 @@
      source .venv/Scripts/activate
      ```
 
-3. Install the packages in editable mode:
+
+3. Install python dependencies (make certain the virtual environment is activated before running):
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Install the packages in editable mode:
    ```bash
    pip install -e .
    ```
 
 Both `pyscrai` and `concordia` will now be available as importable modules.
-
-4. Install python dependencies Make certain virtual environment is activated before runnning.
-```bash
-pip install -r requirements.txt
-```
 
 5. Run a scenario from project root, i.e 
 ``` bash
