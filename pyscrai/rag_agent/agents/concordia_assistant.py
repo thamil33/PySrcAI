@@ -50,6 +50,5 @@ Always base your responses on the provided context from the Concordia documentat
             "docs/concordia_developers_guide.md",
             "docs/concordia_overview.md",
             "concordia/concordia_integration_test.py",
-            "AGENTS.md",
-            "readme.md"
+            "concordia/concordia_integration_test.md",
         ]
