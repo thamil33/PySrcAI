@@ -5,6 +5,7 @@
 - **Configuration:** All credentials and settings are managed via `.env` variables
 - **Framework Status:** Concordia framework fully integrated and validated via integration tests
 - **Documentation:** Comprehensive docs created for framework overview and developer guidance
+- **Testing Updates:** Added unit tests for RAG assistants using the HuggingFace embedder
 
 ## Short-term development goals:
 

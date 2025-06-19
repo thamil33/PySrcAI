@@ -1,21 +1,23 @@
 """Concordia Assistant - specialized RAG agent for Concordia framework documentation."""
 
 from typing import List
-from ..base_rag_agent import BaseRAGAgent
-from ..config_loader import AgentConfig
+
+# BaseRAGAgent and configuration live in the src namespace
+from ..src.base_rag_agent import BaseRAGAgent
+from ..src.config_loader import AgentConfig
 
 
 class ConcordiaAssistant(BaseRAGAgent):
     """
     Specialized RAG agent for answering questions about the Concordia framework.
-    
+
     Provides expertise in:
     - Concordia component architecture
     - Agent development patterns
     - Integration examples
     - API documentation
     """
-    
+
     def get_system_prompt(self) -> str:
         """Return the system prompt for Concordia assistance."""
         return """You are an expert assistant for the Concordia framework, a Python library for building agent-based simulations.
@@ -41,7 +43,7 @@ Always base your responses on the provided context from the Concordia documentat
     def get_agent_name(self) -> str:
         """Return the name of this agent."""
         return "ConcordiaAssistant"
-    
+
     def get_default_data_sources(self) -> List[str]:
         """Return default data sources for Concordia documentation."""
         return [
