@@ -5,11 +5,12 @@ absl-py
 dotenv
 pandas
 requests
-
+pytest
+pytest-cov
 python-dateutil
 reactivex
 retry
-
+IPython
 typing-extensions
 jinja2
 
