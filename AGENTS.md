@@ -25,7 +25,7 @@ This repository hosts the **pyscrai** package alongside the **concordia** framew
    - Update or add unit tests when altering functionality.
 
 4. **Commits and Pull Requests**
-   - Commit directly to the default branch; avoid creating new branches.
+   - Commit directly to the hf_online_embedding branch; avoid creating new branches.
    - Use concise commit messages and provide a short summary of test results in the PR body.
 
 Consult the docs directory for further background and development notes.
