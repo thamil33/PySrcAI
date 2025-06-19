@@ -18,4 +18,4 @@ if __name__ == "__main__":
         "A philosopher and a scientist meet to debate whether humans truly have free will, "
         "or if every action is determined by prior causes."
     )
-    run_debate(entity1_params, entity2_params, topic, premise, turns=6)
+    run_debate(entity1_params, entity2_params, topic, premise, turns=2)

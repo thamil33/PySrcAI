@@ -1,5 +1,7 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: pyscrai
 Version: 0.1.0
 Summary: A package for scenario-based conversational AI components.
 Author: Tyler Hamilton
+Dynamic: author
+Dynamic: summary
