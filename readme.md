@@ -1,7 +1,8 @@
 # pyscrai & concordia
 
-This repository contains the **pyscrai** package and the core **concordia** framework.
-The project focuses on building modular conversational simulations that can be easily extended.
+This repository contains the **pyscrai** package and the core **concordia** framework it aims to leverage. 
+
+The project focuses on building modular simulations that can be easily extended.
 
 ## Setup
 1. Create a Python 3.12 virtual environment named `.venv` at the project root:
@@ -21,14 +22,10 @@ The project focuses on building modular conversational simulations that can be e
    ```bash
    pip install -r requirements.txt
    ```
-4. Install the packages in editable mode:
+4. Install modules using setup.py:
    ```bash
-   pip install -e .
-   ```
-5. Run a scenario from the project root:
-   ```bash
-   python -m pyscrai.scenario.angeldemon
+   pip install -e . 
    ```
 
-## Documentation
-See the [docs](docs/README.md) folder for architecture notes and usage guides.
+
+

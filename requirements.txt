@@ -5,12 +5,12 @@ absl-py
 dotenv
 pandas
 requests
-ipython
-langchain-community
-matplotlib
+# ipython
+# langchain-community
+# matplotlib
 python-dateutil
 reactivex
 retry
-transformers
+# transformers
 typing-extensions
 jinja2
