@@ -1,0 +1,42 @@
+# Custom RAG Agent Configuration Template
+# Copy this file and customize it for your specific agent
+
+models:
+  language_model: "mistralai/mistral-small-3.1-24b-instruct:free"
+  embedding_provider: "huggingface_api"  # or "local_sentencetransformers"
+  embedding_model: "BAAI/bge-base-en-v1.5"
+
+vector_db:
+  type: "chromadb"
+  persist_directory: "./vector_storage"
+  collection_name: "custom_agent_docs"
+
+chunking:
+  json_strategy: "hierarchical"
+  text_strategy: "semantic"
+  chunk_size: 512
+  overlap: 50
+
+rag:
+  top_k: 5
+  similarity_threshold: 0.7
+  enable_reranking: false
+
+# Example configurations for different use cases:
+
+# For large document collections:
+# chunking:
+#   chunk_size: 1024
+#   overlap: 100
+# rag:
+#   top_k: 10
+
+# For precise, focused responses:
+# rag:
+#   top_k: 3
+#   similarity_threshold: 0.8
+
+# For local embedding models:
+# models:
+#   embedding_provider: "local_sentencetransformers"
+#   embedding_model: "sentence-transformers/all-mpnet-base-v2"

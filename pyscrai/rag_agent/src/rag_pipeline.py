@@ -2,11 +2,11 @@
 
 import os
 from typing import List, Dict, Any, Tuple, Optional
-from .config_loader import AssistantConfig, load_config
-from .embedding_adapter import EmbeddingAdapter
-from .vector_db import ChromaDBAdapter
-from .chunking import DocumentChunker
-from .llm_adapter import OpenRouterAdapter
+from .config_loader import AgentConfig, load_config
+from adapters.embedding_adapter import EmbeddingAdapter
+from adapters.vector_db_adapter import VectorDBAdapter
+from src.chunking import DocumentChunker
+from adapters.llm_adapter import LLMAdapter
 
 
 class ConcordiaRAGPipeline:
@@ -28,10 +28,9 @@ class ConcordiaRAGPipeline:
             # Initialize embedding adapter
             print("Setting up embedding adapter...")
             self.embedding_adapter = EmbeddingAdapter(self.config)
-            
-            # Initialize vector database
+              # Initialize vector database
             print("Setting up vector database...")
-            self.vector_db = ChromaDBAdapter(self.config)
+            self.vector_db = VectorDBAdapter(self.config)
             
             # Initialize document chunker
             print("Setting up document chunker...")
@@ -39,7 +38,7 @@ class ConcordiaRAGPipeline:
             
             # Initialize language model
             print("Setting up language model...")
-            self.llm_adapter = OpenRouterAdapter(self.config)
+            self.llm_adapter = LLMAdapter(self.config)
             
             self._initialized = True
             print("RAG Pipeline initialized successfully!")
@@ -47,9 +46,9 @@ class ConcordiaRAGPipeline:
         except Exception as e:
             print(f"Error initializing RAG pipeline: {e}")
             raise
-    
-    def ingest_documents(self, force_reingest: bool = False):
-        """Ingest documents from configured data sources."""
+
+    def ingest_documents(self, file_paths: List[str], force_reingest: bool = False):
+        """Ingest documents from specified file paths."""
         if not self._initialized:
             self.initialize()
         
@@ -64,19 +63,18 @@ class ConcordiaRAGPipeline:
             self.vector_db.clear_collection()
         
         print("Starting document ingestion...")
-        
         all_chunks = []
-        for data_source in self.config.data_sources:
-            print(f"Processing data source: {data_source.path}")
+        for file_path in file_paths:
+            print(f"Processing file: {file_path}")
             
             # Check if path exists
-            if not os.path.exists(data_source.path):
-                print(f"Warning: Data source path not found: {data_source.path}")
+            if not os.path.exists(file_path):
+                print(f"Warning: File not found: {file_path}")
                 continue
             
-            chunks = self._process_data_source(data_source)
+            chunks = self._process_file(file_path)
             all_chunks.extend(chunks)
-            print(f"Extracted {len(chunks)} chunks from {data_source.path}")
+            print(f"Extracted {len(chunks)} chunks from {file_path}")
         
         if not all_chunks:
             print("No documents found to ingest.")
@@ -87,20 +85,15 @@ class ConcordiaRAGPipeline:
         self._embed_and_store_chunks(all_chunks)
         
         print(f"Document ingestion completed. Total chunks: {len(all_chunks)}")
-    
-    def _process_data_source(self, data_source) -> List[Tuple[str, Dict[str, Any]]]:
-        """Process a single data source and return chunks."""
-        if data_source.type == "text":
-            return self.chunker.chunk_text_file(data_source.path)
-        elif data_source.type == "json":
-            return self.chunker.chunk_json_file(data_source.path)
-        elif data_source.type == "text_directory":
-            return self.chunker.chunk_directory(data_source.path, "text")
-        elif data_source.type == "json_directory":
-            return self.chunker.chunk_directory(data_source.path, "json")
+
+    def _process_file(self, file_path: str) -> List[Tuple[str, Dict[str, Any]]]:
+        """Process a single file and return chunks."""
+        if file_path.endswith('.json'):
+            return self.chunker.chunk_json_file(file_path)
+        elif os.path.isdir(file_path):
+            return self.chunker.chunk_directory(file_path, "text")
         else:
-            print(f"Unknown data source type: {data_source.type}")
-            return []
+            return self.chunker.chunk_text_file(file_path)
     
     def _embed_and_store_chunks(self, chunks: List[Tuple[str, Dict[str, Any]]]):
         """Generate embeddings for chunks and store in vector database."""
@@ -126,20 +119,24 @@ class ConcordiaRAGPipeline:
         """Query the RAG system with a question."""
         if not self._initialized:
             self.initialize()
-        
         try:
             # Generate embedding for the query
             query_embedding = self.embedding_adapter.embed_text(query_text)
             
-            # Retrieve relevant documents
-            documents, metadatas, similarities = self.vector_db.query_similar(
-                query_embedding,
-                top_k=self.config.rag.top_k,
-                similarity_threshold=self.config.rag.similarity_threshold
+            # Retrieve relevant documents using the updated method signature
+            results = self.vector_db.query(
+                query_text,
+                self.embedding_adapter,
+                top_k=self.config.rag.top_k
             )
             
-            if not documents:
+            if not results:
                 return "I couldn't find any relevant information in the documentation to answer your question."
+            
+            # Extract documents and metadata from results
+            documents = [result['content'] for result in results]
+            metadatas = [result['metadata'] for result in results]
+            similarities = [result['similarity'] for result in results]
             
             # Build context from retrieved documents
             context = self._build_context(documents, metadatas, similarities)
@@ -177,9 +174,8 @@ User Question: {query}
 Please provide a clear and helpful answer based on the context provided. If the context doesn't contain enough information to fully answer the question, say so and provide what information you can.
 
 Answer:"""
-        
-        # Generate response
-        response = self.llm_adapter.generate_response(prompt)
+          # Generate response
+        response = self.llm_adapter.generate(prompt)
         
         # Add source information if requested
         if include_sources and metadatas:
@@ -199,11 +195,10 @@ Answer:"""
             "initialized": self._initialized,
             "config_loaded": self.config is not None,
         }
-        
         if self._initialized:
             status.update({
-                "embedding_provider": self.config.embedding.provider,
-                "language_model": self.config.models["language_model"],
+                "embedding_provider": self.config.models.embedding_provider,
+                "language_model": self.config.models.language_model,
                 "vector_db_info": self.vector_db.get_collection_info() if self.vector_db else {},
             })
         
