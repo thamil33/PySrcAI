@@ -17,10 +17,10 @@ logging.basicConfig(level=logging.ERROR)
 
 DEFAULT_MODELS: list[str] = [
     "BAAI/bge-base-en-v1.5",
-    "Xenova/gte-small",
-    "FlagEmbedding",
-    "Ember",
-    "E5",
+    "BAAI/bge-small-en-v1.5", 
+    "sentence-transformers/all-MiniLM-L6-v2",
+    "sentence-transformers/all-mpnet-base-v2",
+    "intfloat/e5-base-v2",
 ]
 
 
@@ -32,19 +32,31 @@ class HFEmbedder:
         if not self.token:
             raise ValueError("HF_API_TOKEN not provided")
         self.models = list(models) if models else DEFAULT_MODELS
+        self._embedding_dim = None  # Will be determined from first successful embedding
+
+    @property
+    def embedding_dim(self) -> int:
+        """Get the embedding dimension. Defaults to 768 if not yet determined."""
+        return self._embedding_dim or 768
 
     def __call__(self, text: str) -> np.ndarray:
         headers = {"Authorization": f"Bearer {self.token}"}
         for model in self.models:
             api_url = f"https://api-inference.huggingface.co/models/{model}"
+            payload = {
+                "inputs": text,
+                "options": {"wait_for_model": True},
+            }
             try:
-                payload = {
-                    "inputs": text,
-                    "options": {"wait_for_model": True},
-                }
                 response = requests.post(api_url, headers=headers, json=payload)
                 response.raise_for_status()
-                return np.array(response.json()[0])
+                embedding = np.array(response.json())
+                
+                # Store embedding dimension on first successful call
+                if self._embedding_dim is None:
+                    self._embedding_dim = len(embedding)
+                    
+                return embedding
             except requests.exceptions.RequestException as exc:
                 logging.error("Error with model %s: %s", model, exc)
                 time.sleep(2)

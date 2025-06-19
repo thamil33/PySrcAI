@@ -5,12 +5,21 @@ absl-py
 dotenv
 pandas
 requests
-# ipython
-# langchain-community
-# matplotlib
+
 python-dateutil
 reactivex
 retry
-# transformers
+
 typing-extensions
 jinja2
+
+# Concordia Assistant dependencies
+PyYAML
+chromadb
+
+
+# Documentation generation
+sphinx
+sphinx-rtd-theme
+sphinx-autodoc-typehints
+myst-parser

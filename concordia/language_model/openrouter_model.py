@@ -32,7 +32,7 @@ class OpenRouterLanguageModel(language_model.LanguageModel):
         self._api_key = api_key or os.environ.get("OPENROUTER_API_KEY")
         self._base_url = base_url or os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
         self._site_url = site_url or os.environ.get("OPENROUTER_SITE_URL", "")
-        self._app_name = app_name or os.environ.get("OPENROUTER_APP_NAME", "pysim")
+        self._app_name = app_name or os.environ.get("OPENROUTER_APP_NAME", "pyscrai")
 
         if not self._api_key:
             raise ValueError("OpenRouter API key not provided and OPENROUTER_API_KEY not set")

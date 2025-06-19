@@ -153,7 +153,8 @@ New functionality can be added through:
 1. **Custom Components**: Create classes implementing the component interfaces
 2. **Custom Prefabs**: Combine existing and new components into reusable configurations
 3. **Custom Engines**: Implement specialized simulation logic
-4. **Custom Language Models**: Connect to different AI backends
+4. **Upgrade Openrouter Language Model**: 
+5. **Implement local LLM support with lmstudio_model**
 
 ## Integration with Language Models
 
@@ -171,4 +172,10 @@ Concordia is designed to work with various language model backends:
 
 ---
 
-This documentation provides a high-level overview of Concordia's architecture and capabilities. 
+This documentation provides a high-level overview of Concordia's architecture and capabilities.
+
+For further guidance, refer to:
+- [docs/concordia_developers_guide.md](concordia_developers_guide.md) - Comprehensive developer documentation
+- [concordia/.api_docs/README.md](../../concordia/.api_docs/README.md) - Complete API documentation (LLM-compatible JSON format)
+- [concordia/concordia_integration_test.md](../concordia/concordia_integration_test.md) - Integration test reference and validation
+- Concordia source code docstrings for detailed API documentation
