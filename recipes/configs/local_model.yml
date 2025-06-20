@@ -1,0 +1,35 @@
+# Local Model RAG Configuration (No API keys required)
+models:
+  provider: "lmstudio"
+  model: "local-model"
+  base_url: "http://localhost:1234/v1"
+  temperature: 0.3
+  max_tokens: 1500
+
+embedding:
+  provider: "local_sentencetransformers"
+  model: "all-MiniLM-L6-v2"
+  device: "cpu"
+
+vectordb:
+  provider: "chroma"
+  persist_directory: "./vectorstore/local_docs"
+  collection_name: "local_documentation"
+
+chunking:
+  strategy: "recursive"
+  chunk_size: 800
+  overlap: 150
+
+rag:
+  top_k: 3
+  search_type: "similarity"
+  system_prompt: |
+    You are a knowledgeable assistant. Answer questions based on the provided context.
+    Be concise and accurate in your responses.
+
+agent:
+  name: "Local RAG Assistant"
+  description: "Local RAG assistant using offline models"
+  data_paths:
+    - "./docs"
