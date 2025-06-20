@@ -30,8 +30,8 @@ class LLMAdapter:
     def _initialize_llm(self):
         """Initialize the language model using Concordia's OpenRouter integration."""
         try:
-            # Import from Concordia's language model module
-            from concordia.language_model import openrouter_model
+            # Import from pyscrai.language_model_client
+            from pyscrai.language_model_client import openrouter_model
 
             # Get API key
             api_key = get_api_key("OPENROUTER_API_KEY")
