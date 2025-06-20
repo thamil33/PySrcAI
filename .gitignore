@@ -6,7 +6,7 @@ pyscrai.egg-info
 __pycache__
 docs/references/
 .pytest_cache
-
+.api_docs
 # API Documentation - exclude build artifacts and auto-generated modules
 # Keep only essential source files needed to rebuild from scratch
 concordia/.api_docs/_build/

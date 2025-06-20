@@ -3,7 +3,7 @@
 import os
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Optional, Tuple
-from .config_loader import AgentConfig
+from ..config_loader import AgentConfig
 
 
 class BaseRAGAgent(ABC):
@@ -22,6 +22,18 @@ class BaseRAGAgent(ABC):
         self.chunker = None
         self.llm_adapter = None
         self._initialized = False
+        # Log config accesses for agent section
+        self._log_config_access("agent.name", getattr(getattr(config, 'agent', None), 'name', None))
+        self._log_config_access("agent.system_prompt", getattr(getattr(config, 'agent', None), 'system_prompt', None))
+        self._log_config_access("agent.data_sources", getattr(getattr(config, 'agent', None), 'data_sources', None))
+
+    def _log_config_access(self, key, value):
+        try:
+            from ..config_access_logger import is_logging_enabled, logger
+            if is_logging_enabled():
+                logger.info(f"base_rag_agent accessed {key} -> {repr(value)}")
+        except Exception:
+            pass
 
     @abstractmethod
     def get_system_prompt(self) -> str:
@@ -111,7 +123,7 @@ class BaseRAGAgent(ABC):
             top_k: Number of top results to retrieve (uses config default if None)
 
         Returns:
-            The agent's response
+            The agent's formatted response
         """
         if not self._initialized:
             self.initialize()
@@ -123,7 +135,8 @@ class BaseRAGAgent(ABC):
         )
 
         # Generate response using LLM
-        return self._generate_response(question, relevant_docs)
+        raw_response = self._generate_response(question, relevant_docs)
+        return self._format_response(raw_response, relevant_docs)
 
     def _generate_response(
         self, question: str, relevant_docs: List[Dict[str, Any]]
@@ -135,11 +148,16 @@ class BaseRAGAgent(ABC):
         # Create the full prompt
         prompt = self._build_prompt(question, context)
 
-        # Generate response
-        return self.llm_adapter.generate(prompt)
+        # Extract model kwargs (e.g., max_tokens) from config if available
+        model_kwargs = {}
+        if hasattr(self.config, "openrouter") and self.config.openrouter and 'model_kwargs' in self.config.openrouter:
+         model_kwargs = self.config.openrouter['model_kwargs'] or {}
+
+        # Generate response, passing model_kwargs if present
+        return self.llm_adapter.generate(prompt, **model_kwargs)
 
     def _format_context(self, relevant_docs: List[Dict[str, Any]]) -> str:
-        """Format retrieved documents into context string."""
+        """Format retrieved documents into a readable, cited context string."""
         if not relevant_docs:
             return "No relevant information found."
 
@@ -148,10 +166,43 @@ class BaseRAGAgent(ABC):
             content = doc.get("content", "")
             metadata = doc.get("metadata", {})
             source = metadata.get("source", "Unknown")
-
-            context_parts.append(f"[{i}] {content}\n(Source: {source})")
+            chunk_type = metadata.get("chunk_type", "text")
+            section = metadata.get("json_path") or metadata.get("chunk_id")
+            # Format citation string
+            citation = f"[Source: {source}"
+            if section:
+                citation += f", Section: {section}"
+            citation += f", Type: {chunk_type}]"
+            context_parts.append(f"[{i}] {content}\n{citation}")
 
         return "\n\n".join(context_parts)
+
+    def _format_response(self, response: str, relevant_docs: List[Dict[str, Any]]) -> str:
+        """
+        Format the final LLM response for display.
+        Adds a header, handles truncation, and can append citations if needed.
+        Can be overridden by subclasses for custom formatting.
+        """
+        max_length = 6000  # characters, for CLI display
+        formatted = response.strip()
+        truncated = False
+        if len(formatted) > max_length:
+            formatted = formatted[:max_length] + "... [truncated]"
+            truncated = True
+        # Optionally, add a references section
+        references = []
+        for i, doc in enumerate(relevant_docs, 1):
+            metadata = doc.get("metadata", {})
+            source = metadata.get("source", "Unknown")
+            if source not in references:
+                references.append(source)
+        refs_str = "\n".join(f"[{i}] {src}" for i, src in enumerate(references, 1))
+        output = f"\n---\n{formatted}\n"
+        if references:
+            output += f"\nReferences:\n{refs_str}\n"
+        if truncated:
+            output += "\n[Note: Response truncated for display. Refine your query for more specific results.]\n"
+        return output
 
     def _build_prompt(self, question: str, context: str) -> str:
         """Build the complete prompt for the LLM."""

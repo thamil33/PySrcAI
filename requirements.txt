@@ -13,7 +13,9 @@ retry
 IPython
 typing-extensions
 jinja2
-
+hf_xet
+Pyarrow
+sentence-transformers
 # Concordia Assistant dependencies
 PyYAML
 chromadb

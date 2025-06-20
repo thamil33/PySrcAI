@@ -3,10 +3,7 @@
 import numpy as np
 from typing import List, Union
 
-# NOTE: config_loader lives in the `src` namespace package. Use an absolute
-# import to avoid failures when this module is imported outside of that
-# package.
-from ..src.config_loader import AgentConfig, get_hf_home, get_api_key
+from ..config_loader import AgentConfig, get_hf_home, get_api_key
 
 
 class EmbeddingAdapter:
@@ -14,10 +11,22 @@ class EmbeddingAdapter:
 
     def __init__(self, config: AgentConfig):
         self.config = config
-        self.provider = config.models.embedding_provider
-        self.model_name = config.models.embedding_model
+        self.provider = config.embedding.provider
+        self.model = config.embedding.model
         self.embedder = None
+        # Log config accesses
+        self._log_config_access("embedding.provider", self.provider)
+        self._log_config_access("embedding.model", self.model)
+        self._log_config_access("embedding.device", getattr(config.embedding, 'device', None))
         self._initialize_embedder()
+
+    def _log_config_access(self, key, value):
+        try:
+            from ..config_access_logger import is_logging_enabled, logger
+            if is_logging_enabled():
+                logger.info(f"embedding_adapter accessed {key} -> {repr(value)}")
+        except Exception:
+            pass
 
     def _initialize_embedder(self):
         """Initialize the appropriate embedder based on configuration."""
@@ -32,15 +41,14 @@ class EmbeddingAdapter:
         """Initialize SentenceTransformers embedder (local)."""
         try:
             from sentence_transformers import SentenceTransformer
-            import os
-
+            
             self.embedder = SentenceTransformer(
-                model_name_or_path=self.model_name,
-                device="cpu",  # Default to CPU, could be made configurable
-                cache_folder=get_hf_home(),
-                local_files_only=False,
+                model_name_or_path=self.model,
+                device=self.config.embedding.device,
+                cache_folder=self.config.embedding.cache_folder or get_hf_home(),
+                local_files_only=self.config.embedding.local_files_only,
             )
-            print(f"Initialized SentenceTransformers with model: {self.model_name}")
+            print(f"Initialized SentenceTransformers with model: {self.model} on device: {self.config.embedding.device}")
 
         except ImportError:
             raise ImportError(
@@ -50,16 +58,17 @@ class EmbeddingAdapter:
     def _initialize_huggingface_api(self):
         """Initialize HuggingFace API embedder (cloud)."""
         try:
-            # Import the HF embedder from pyscrai
             from ...embedding.hf_embedding import HFEmbedder
 
             # Get API token
             hf_token = get_api_key("HF_API_TOKEN")
 
-            # Initialize with the specific model
-            models = [self.model_name] if self.model_name else None
-            self.embedder = HFEmbedder(token=hf_token, models=models)
-            print(f"Initialized HuggingFace API with model: {self.model_name}")
+            # Initialize with model and fallback options
+            self.embedder = HFEmbedder(
+                token=hf_token,
+                models=self.config.embedding.fallback_models
+            )
+            print(f"Initialized HuggingFace API with model: {self.model}")
 
         except ImportError as e:
             raise ImportError(f"Failed to import HuggingFace embedder: {e}")
@@ -91,13 +100,3 @@ class EmbeddingAdapter:
             return self.embedder.embedding_dim
         else:
             return 768  # Default dimension
-            return [self.embedder.embed(text) for text in texts]
-
-    def get_dimension(self) -> int:
-        """Get the embedding dimension."""
-        if self.provider == "sentence_transformers":
-            return self.embedder.get_sentence_embedding_dimension()
-        elif self.provider == "huggingface":
-            # For HuggingFace, we need to make a test embedding to get dimension
-            test_embedding = self.embed_text("test")
-            return len(test_embedding)

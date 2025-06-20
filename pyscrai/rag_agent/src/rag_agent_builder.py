@@ -3,7 +3,7 @@
 import os
 from typing import List, Dict, Any, Optional, Type, Callable
 from .base_rag_agent import BaseRAGAgent
-from .config_loader import AgentConfig, load_config
+from ..config_loader import AgentConfig, load_config
 
 
 class CustomRAGAgent(BaseRAGAgent):
@@ -110,27 +110,32 @@ class RAGAgentBuilder:
         elif self._config_path:
             config = load_config(self._config_path)
         else:
-            # Create default configuration
-            config = self._create_default_config()
-        
+            # Default to templates/concordia.yaml
+            default_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "rag_agent", "templates", "concordia.yaml")
+            config = load_config(default_path)
+
         # Apply any builder-specific overrides
         config = self._apply_overrides(config)
-        
-        # Validate required fields
-        if not self._system_prompt:
-            raise ValueError("System prompt is required. Use with_system_prompt() to set it.")
-        
-        # Create and return the agent
+
+        # Use agent section from config if present
+        agent_section = getattr(config, 'agent', None)
+        system_prompt = self._system_prompt or (agent_section.system_prompt if agent_section and hasattr(agent_section, 'system_prompt') else None)
+        agent_name = self._agent_name or (agent_section.name if agent_section and hasattr(agent_section, 'name') else "CustomRAGAgent")
+        data_sources = self._data_sources or (agent_section.data_sources if agent_section and hasattr(agent_section, 'data_sources') else [])
+
+        if not system_prompt:
+            raise ValueError("System prompt is required. Use with_system_prompt() or provide it in the config agent section.")
+
         return CustomRAGAgent(
             config=config,
-            system_prompt=self._system_prompt,
-            agent_name=self._agent_name,
-            data_sources=self._data_sources
+            system_prompt=system_prompt,
+            agent_name=agent_name,
+            data_sources=data_sources
         )
     
     def _create_default_config(self) -> AgentConfig:
         """Create a default configuration."""
-        from .config_loader import AgentConfig
+        from ..config_loader import AgentConfig
         
         # Create basic default config structure
         default_config = {
@@ -179,47 +184,28 @@ class RAGAgentBuilder:
         return config
 
 
-def create_agent(agent_type: str = "custom", **kwargs) -> BaseRAGAgent:
+
+
+def create_agent(config_file: str = None, **kwargs) -> BaseRAGAgent:
     """
-    Factory function for creating RAG agents.
-    
-    Args:
-        agent_type: Type of agent to create ('custom', 'concordia', 'openrouter')
-        **kwargs: Arguments passed to the agent builder
-    
-    Returns:
-        Configured RAG agent instance
+    Factory function for creating RAG agents based on config file contents.
+    If name/system_prompt/data_sources are provided, use the builder for a custom agent.
+    Otherwise, use the agent section in the config or default to templates/concordia.yaml.
     """
-    if agent_type == "custom":
-        builder = RAGAgentBuilder()
-        
-        # Apply common kwargs
-        if 'name' in kwargs:
-            builder.with_name(kwargs['name'])
-        if 'system_prompt' in kwargs:
-            builder.with_system_prompt(kwargs['system_prompt'])
-        if 'data_sources' in kwargs:
-            builder.with_data_sources(kwargs['data_sources'])
-        if 'config_file' in kwargs:
-            builder.with_config_file(kwargs['config_file'])
-        if 'embedding_provider' in kwargs:
-            builder.with_embedding_provider(kwargs['embedding_provider'])
-        if 'llm_model' in kwargs:
-            builder.with_llm_model(kwargs['llm_model'])
-        
-        return builder.build()
-    if agent_type == "concordia":
-        from ..agents.concordia_assistant import ConcordiaAssistant
-        config_file = kwargs.get('config_file', 'config.yaml')
-        return ConcordiaAssistant(load_config(config_file))
-    
-    if agent_type == "openrouter":
-        from ..agents.openrouter_assistant import OpenRouterAssistant
-        config_file = kwargs.get('config_file', 'config.yaml')
-        return OpenRouterAssistant(load_config(config_file))
-    
-    else:
-        raise ValueError(f"Unknown agent type: {agent_type}")
+    builder = RAGAgentBuilder()
+    if 'name' in kwargs:
+        builder.with_name(kwargs['name'])
+    if 'system_prompt' in kwargs:
+        builder.with_system_prompt(kwargs['system_prompt'])
+    if 'data_sources' in kwargs:
+        builder.with_data_sources(kwargs['data_sources'])
+    if config_file:
+        builder.with_config_file(config_file)
+    if 'embedding_provider' in kwargs:
+        builder.with_embedding_provider(kwargs['embedding_provider'])
+    if 'llm_model' in kwargs:
+        builder.with_llm_model(kwargs['llm_model'])
+    return builder.build()
 
 
 # Template function for quick agent creation

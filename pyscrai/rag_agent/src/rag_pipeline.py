@@ -2,15 +2,20 @@
 
 import os
 from typing import List, Dict, Any, Tuple, Optional
-from .config_loader import AgentConfig, load_config
+
+from ..config_loader import AgentConfig, load_config
 from ..adapters.embedding_adapter import EmbeddingAdapter
 from ..adapters.vector_db_adapter import VectorDBAdapter
 from .chunking import DocumentChunker
 from ..adapters.llm_adapter import LLMAdapter
+from .query_rewriter import QueryRewriter
+from .reranker import Reranker
+from .conversation_history import ConversationHistory
 
 
 class ConcordiaRAGPipeline:
     """Main RAG pipeline for the Concordia Assistant."""
+
 
     def __init__(self, config_path: Optional[str] = None):
         self.config = load_config(config_path)
@@ -18,6 +23,9 @@ class ConcordiaRAGPipeline:
         self.vector_db = None
         self.chunker = None
         self.llm_adapter = None
+        self.query_rewriter = None
+        self.reranker = None
+        self.conversation_history = None
         self._initialized = False
 
     def initialize(self):
@@ -38,7 +46,13 @@ class ConcordiaRAGPipeline:
 
             # Initialize language model
             print("Setting up language model...")
+
             self.llm_adapter = LLMAdapter(self.config)
+            # Initialize Phase 3 modules
+            print("Setting up query rewriter, reranker, and conversation history...")
+            self.query_rewriter = QueryRewriter(self.llm_adapter)
+            self.reranker = Reranker(self.llm_adapter)
+            self.conversation_history = ConversationHistory()
 
             self._initialized = True
             print("RAG Pipeline initialized successfully!")
@@ -124,16 +138,25 @@ class ConcordiaRAGPipeline:
         if not self._initialized:
             self.initialize()
         try:
-            # Generate embedding for the query
-            query_embedding = self.embedding_adapter.embed_text(query_text)
+            # --- Phase 3: Query rewriting ---
+            rewritten_query = query_text
+            if self.query_rewriter:
+                rewritten_query = self.query_rewriter.rewrite(query_text)
 
-            # Retrieve relevant documents using the updated method signature
+            # Generate embedding for the (possibly rewritten) query
+            query_embedding = self.embedding_adapter.embed_text(rewritten_query)
+
+            # Retrieve relevant documents
             results = self.vector_db.query(
-                query_text, self.embedding_adapter, top_k=self.config.rag.top_k
+                rewritten_query, self.embedding_adapter, top_k=self.config.rag.top_k
             )
 
             if not results:
                 return "I couldn't find any relevant information in the documentation to answer your question."
+
+            # --- Phase 3: Reranking (if enabled) ---
+            if getattr(self.config.rag, 'enable_reranking', False) and self.reranker:
+                results = self.reranker.rerank(rewritten_query, results)
 
             # Extract documents and metadata from results
             documents = [result["content"] for result in results]
@@ -145,8 +168,12 @@ class ConcordiaRAGPipeline:
 
             # Generate response using LLM
             response = self._generate_response(
-                query_text, context, include_sources, metadatas
+                rewritten_query, context, include_sources, metadatas
             )
+
+            # --- Phase 3: Conversation history ---
+            if self.conversation_history:
+                self.conversation_history.add_turn(query_text, response)
 
             return response
 

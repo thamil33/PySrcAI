@@ -9,29 +9,21 @@ from typing import Iterable, Optional
 
 import numpy as np
 import requests
-from dotenv import load_dotenv
 
-load_dotenv()
 
 logging.basicConfig(level=logging.ERROR)
-
-DEFAULT_MODELS: list[str] = [
-    "BAAI/bge-base-en-v1.5",
-    "BAAI/bge-small-en-v1.5", 
-    "sentence-transformers/all-MiniLM-L6-v2",
-    "sentence-transformers/all-mpnet-base-v2",
-    "intfloat/e5-base-v2",
-]
 
 
 class HFEmbedder:
     """Embed text using the Hugging Face Inference API."""
 
-    def __init__(self, token: Optional[str] = None, models: Optional[Iterable[str]] = None) -> None:
-        self.token = token or os.getenv("HF_API_TOKEN")
+    def __init__(self, token: str, models: Optional[Iterable[str]] = None) -> None:
+        self.token = token
         if not self.token:
             raise ValueError("HF_API_TOKEN not provided")
-        self.models = list(models) if models else DEFAULT_MODELS
+        self.models = list(models) if models else []
+        if not self.models:
+            raise ValueError("No models provided for HuggingFace embedding")
         self._embedding_dim = None  # Will be determined from first successful embedding
 
     @property
@@ -62,7 +54,3 @@ class HFEmbedder:
                 time.sleep(2)
         logging.error("All models failed. Returning zero vector.")
         return np.zeros(self.embedding_dim)
-
-
-# Backwards compatible helper
-embedder = HFEmbedder()

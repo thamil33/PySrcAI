@@ -4,13 +4,13 @@ import json
 import re
 from typing import List, Dict, Any, Tuple
 from pathlib import Path
-from .config_loader import AssistantConfig
+from ..config_loader import AgentConfig 
 
 
 class DocumentChunker:
     """Document chunker for different file types and strategies."""
     
-    def __init__(self, config: AssistantConfig):
+    def __init__(self, config: AgentConfig):
         self.config = config
         self.chunk_size = config.chunking.chunk_size
         self.overlap = config.chunking.overlap

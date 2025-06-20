@@ -5,7 +5,7 @@ import numpy as np
 from typing import List, Dict, Any, Optional, Tuple
 
 # `AgentConfig` resides in the `src` package; import it explicitly.
-from ..src.config_loader import AgentConfig
+from ..config_loader import AgentConfig
 
 
 class VectorDBAdapter:
@@ -15,7 +15,18 @@ class VectorDBAdapter:
         self.config = config
         self.client = None
         self.collection = None
+        # Log config accesses
+        self._log_config_access("vector_db.persist_directory", getattr(config.vector_db, 'persist_directory', None))
+        self._log_config_access("vector_db.collection_name", getattr(config.vector_db, 'collection_name', None))
         self._initialize_client()
+
+    def _log_config_access(self, key, value):
+        try:
+            from ..config_access_logger import is_logging_enabled, logger
+            if is_logging_enabled():
+                logger.info(f"vector_db_adapter accessed {key} -> {repr(value)}")
+        except Exception:
+            pass
 
     def _initialize_client(self):
         """Initialize the ChromaDB client."""
@@ -121,6 +132,7 @@ class VectorDBAdapter:
         all_chunks = []
         all_metadatas = []
 
+
         for file_path in file_paths:
             if not os.path.exists(file_path):
                 print(f"Warning: File not found: {file_path}")
@@ -128,15 +140,23 @@ class VectorDBAdapter:
 
             print(f"Processing: {file_path}")
 
-            # Chunk the document
-            chunks = chunker.chunk_file(file_path)
+            # Directory
+            if os.path.isdir(file_path):
+                file_chunks = chunker.chunk_directory(file_path)
+            else:
+                ext = os.path.splitext(file_path)[1].lower()
+                if ext == ".json":
+                    file_chunks = chunker.chunk_json_file(file_path)
+                elif ext in [".txt", ".md", ".rst"]:
+                    file_chunks = chunker.chunk_text_file(file_path)
+                else:
+                    print(f"Skipping unsupported file type: {file_path}")
+                    continue
 
-            # Create metadata for each chunk
-            for i, chunk in enumerate(chunks):
+            # file_chunks is a list of (chunk, metadata)
+            for chunk, metadata in file_chunks:
                 all_chunks.append(chunk)
-                all_metadatas.append(
-                    {"source": file_path, "chunk_index": i, "total_chunks": len(chunks)}
-                )
+                all_metadatas.append(metadata)
 
         if not all_chunks:
             print("No documents to process.")

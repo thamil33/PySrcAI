@@ -4,7 +4,6 @@
 # Include base requirements
 -r requirements.txt
 
-sentence-transformers
 
 # CUDA / Torch 
 torch

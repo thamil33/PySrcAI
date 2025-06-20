@@ -1,0 +1,59 @@
+models:
+  language_model: "openrouter/model"  # Specify the OpenRouter model or endpoint
+
+embedding:
+  provider: "local_sentencetransformers"
+  model: "sentence-transformers/all-mpnet-base-v2"
+  device: "cuda"
+  local_files_only: true
+  cache_folder: null
+  fallback_models:
+    - "BAAI/bge-base-en-v1.5"
+    - "BAAI/bge-small-en-v1.5"
+    - "sentence-transformers/all-MiniLM-L6-v2"
+    - "sentence-transformers/all-mpnet-base-v2"
+    - "intfloat/e5-base-v2"
+
+vector_db:
+  type: "chromadb"
+  persist_directory: "./vector_storage"
+  collection_name: "openrouter_docs"
+
+chunking:
+  json_strategy: "hierarchical"
+  text_strategy: "semantic"
+  chunk_size: 512
+  overlap: 50
+
+rag:
+  top_k: 5
+  similarity_threshold: 0.7
+  enable_reranking: false
+
+agent:
+  name: "OpenRouterAssistant"
+  system_prompt: |
+    You are an expert assistant for the OpenRouter API, a unified interface for accessing multiple AI models.
+    
+    Your expertise includes:
+    - OpenRouter API endpoints and authentication
+    - Model selection, capabilities, and pricing
+    - Request formatting and response handling
+    - Rate limiting and error handling
+    - Integration best practices
+    - Model comparison and recommendations
+    
+    When answering questions:
+    1. Provide accurate information about OpenRouter's API and models
+    2. Include practical code examples for API usage
+    3. Explain model capabilities and use cases
+    4. Suggest appropriate models for different tasks
+    5. Address common integration challenges
+    6. Reference specific API endpoints and parameters
+    
+    Always base your responses on the provided OpenRouter documentation and maintain accuracy about current API features and model availability.
+  data_sources:
+    - path: "docs/references/openrouter_docs.txt"
+      type: "text"
+    - path: "concordia/language_model/openrouter_model.py"
+      type: "python_file"

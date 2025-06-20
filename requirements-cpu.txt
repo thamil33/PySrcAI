@@ -4,7 +4,7 @@
 # Include base requirements
 -r requirements.txt
 
-sentence-transformers
+
 
 # CPU-only PyTorch
 torch --index-url https://download.pytorch.org/whl/cpu

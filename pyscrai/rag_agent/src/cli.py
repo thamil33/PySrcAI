@@ -4,7 +4,7 @@ import argparse
 import os
 from typing import List
 from .rag_agent_builder import create_agent, quick_agent
-from .config_loader import load_config
+from ..config_loader import load_config
 
 
 class RAGAgentCLI:
@@ -16,8 +16,7 @@ class RAGAgentCLI:
     def main(self):
         """Main CLI entry point."""
         parser = argparse.ArgumentParser(description="RAG Agent CLI")
-        parser.add_argument("--agent-type", choices=["concordia", "openrouter", "custom"],
-                          default="concordia", help="Type of agent to create")
+        # --agent-type removed; agent selection is now config-driven
         parser.add_argument("--config", help="Path to configuration file")
         parser.add_argument("--ingest", nargs="+", help="Paths to documents to ingest")
         parser.add_argument("--query", help="Query to ask the agent")
@@ -30,16 +29,21 @@ class RAGAgentCLI:
         parser.add_argument("--name", help="Custom agent name")
         parser.add_argument("--system-prompt", help="Custom system prompt")
         parser.add_argument("--data-sources", nargs="+", help="Data source paths for custom agent")
+
+        # Config access logging
+        parser.add_argument("--log-config-access", action="store_true", help="Log all config variable accesses for debugging")
         
         args = parser.parse_args()
         
+        # Set env var for config access logging if enabled
+        if args.log_config_access:
+            os.environ["RAG_AGENT_LOG_CONFIG_ACCESS"] = "1"
+        else:
+            os.environ["RAG_AGENT_LOG_CONFIG_ACCESS"] = "0"
+
         try:
-            # Create agent based on type
-            if args.agent_type == "custom":
-                if not args.name or not args.system_prompt:
-                    print("Error: Custom agents require --name and --system-prompt")
-                    return
-                
+            # Agent selection is now config-driven
+            if args.name and args.system_prompt:
                 self.agent = quick_agent(
                     name=args.name,
                     system_prompt=args.system_prompt,
@@ -48,27 +52,35 @@ class RAGAgentCLI:
                 )
             else:
                 self.agent = create_agent(
-                    agent_type=args.agent_type,
                     config_file=args.config
                 )
-            
+
+            # Auto-ingest default data sources from config if present and not already ingested
+            if hasattr(self.agent.config, 'agent') and self.agent.config.agent and self.agent.config.agent.data_sources:
+                info = self.agent.get_collection_info()
+                if info.get('count', 0) == 0:
+                    default_paths = [ds['path'] for ds in self.agent.config.agent.data_sources if 'path' in ds]
+                    if default_paths:
+                        print(f"Auto-ingesting default data sources: {default_paths}")
+                        self.agent.ingest_documents(default_paths, force_rebuild=args.force_rebuild)
+
             # Handle commands
             if args.clear:
                 self.agent.clear_database()
                 print("Vector database cleared.")
                 return
-            
+
             if args.ingest:
                 print(f"Ingesting documents: {args.ingest}")
                 self.agent.ingest_documents(args.ingest, force_rebuild=args.force_rebuild)
-            
+
             if args.info:
                 self.show_info()
-            
+
             if args.query:
                 response = self.agent.query(args.query)
                 print(f"\nResponse:\n{response}")
-            
+
             if args.interactive:
                 self.interactive_mode()
         
@@ -77,7 +89,26 @@ class RAGAgentCLI:
     
     def interactive_mode(self):
         """Run in interactive question-answering mode."""
-        print(f"\n🤖 {self.agent.get_agent_name()} Interactive Mode")
+        # Print ASCII logo from ascii_logo.txt (search workspace root and parent dirs)
+        possible_paths = [
+            os.path.join(os.getcwd(), "ascii_logo.txt"),
+            os.path.join(os.path.dirname(__file__), "..", "..", "..", "ascii_logo.txt"),
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "ascii_logo.txt")),
+        ]
+        logo_printed = False
+        for logo_path in possible_paths:
+            logo_path = os.path.abspath(logo_path)
+            if os.path.exists(logo_path):
+                try:
+                    with open(logo_path, "r", encoding="utf-8") as f:
+                        print(f.read())
+                    logo_printed = True
+                    break
+                except Exception:
+                    continue
+        if not logo_printed:
+            print("[Warning] ascii_logo.txt not found. Skipping logo display.")
+        print(f"\n {self.agent.get_agent_name()} Interactive Mode")
         print("Type 'quit' to exit, 'info' for collection info, 'clear' to clear database")
         print("-" * 60)
         
