@@ -1,0 +1,48 @@
+# Default RAG Agent Configuration
+models:
+  provider: "openrouter"
+  model: "mistralai/mistral-small-3.1-24b-instruct:free"
+  model_kwargs:
+    temperature: 0.7
+    max_tokens: 500
+
+embedding:
+  provider: "huggingface_api"
+  model: "BAAI/bge-base-en-v1.5"
+  device: "cpu"
+  local_files_only: false
+  cache_folder: null  # Will use HF_HOME
+  fallback_models:
+    - "BAAI/bge-small-en-v1.5"
+    - "sentence-transformers/all-MiniLM-L6-v2"
+    - "sentence-transformers/all-mpnet-base-v2"
+    - "intfloat/e5-base-v2"
+
+vectordb:
+  persist_directory: "./vector_storage"
+  collection_name: "agentica_docs"
+  anonymized_telemetry: false
+  settings:
+    hnsw_space: "cosine"
+
+chunking:
+  json_strategy: "hierarchical"
+  text_strategy: "semantic"
+  chunk_size: 512
+  overlap: 50
+
+rag:
+  top_k: 5
+  similarity_threshold: 0.7
+  enable_reranking: false
+
+system_prompt: |
+  You are a helpful RAG development assistant.
+  You help users understand and work with retrieval-augmented generation systems.
+  Always provide accurate and helpful information based on the retrieved context.
+
+data_paths: []
+
+# Environment variable names for API keys
+openrouter_api_key_env: "OPENROUTER_API_KEY"
+hf_api_token_env: "HF_API_TOKEN"

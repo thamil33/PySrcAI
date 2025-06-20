@@ -1,0 +1,44 @@
+# Local Models RAG Agent Configuration
+models:
+  provider: "lmstudio"  # For local LLM inference
+  model: "local"  # Will use the model loaded in LM Studio
+  model_kwargs:
+    temperature: 0.7
+    max_tokens: 500
+
+embedding:
+  provider: "local_sentencetransformers"  # Use local sentence-transformers
+  model: "sentence-transformers/all-mpnet-base-v2"
+  device: "cuda"  # Use GPU if available, change to "cpu" if no GPU
+  local_files_only: true  # Only use cached models
+  cache_folder: null  # Will use HF_HOME
+  fallback_models:
+    - "sentence-transformers/all-MiniLM-L6-v2"
+    - "BAAI/bge-small-en-v1.5"
+
+vectordb:
+  persist_directory: "./vector_storage"
+  collection_name: "local_rag_docs"
+  anonymized_telemetry: false
+  settings:
+    hnsw_space: "cosine"
+
+chunking:
+  json_strategy: "hierarchical"
+  text_strategy: "semantic"
+  chunk_size: 512
+  overlap: 50
+
+rag:
+  top_k: 5
+  similarity_threshold: 0.7
+  enable_reranking: false
+
+system_prompt: |
+  You are a helpful RAG development assistant using local models.
+  You help users understand and work with retrieval-augmented generation systems.
+  Always provide accurate and helpful information based on the retrieved context.
+
+data_paths: []
+
+# No API keys needed for local setup
