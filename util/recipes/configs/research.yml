@@ -1,0 +1,43 @@
+# Research Assistant RAG Configuration
+models:
+  provider: "openrouter"
+  model: "anthropic/claude-3-haiku"
+  temperature: 0.1
+  max_tokens: 4000
+
+embedding:
+  provider: "local_sentencetransformers"
+  model: "e5-large-v2"
+
+vectordb:
+  provider: "chroma"
+  persist_directory: "./vectorstore/research"
+  collection_name: "research_papers"
+
+chunking:
+  strategy: "recursive"
+  chunk_size: 1500
+  overlap: 400  # Higher overlap for academic content
+
+rag:
+  top_k: 10  # More context for research
+  search_type: "similarity"
+  system_prompt: |
+    You are a research assistant specializing in academic and technical content.
+    
+    Guidelines:
+    1. Provide comprehensive, well-researched answers
+    2. Include specific citations and references
+    3. Explain complex concepts clearly
+    4. Highlight key findings and methodologies
+    5. Note any limitations or gaps in the available information
+    6. Suggest related topics for further exploration
+    
+    Always maintain academic rigor and objectivity in your responses.
+
+agent:
+  name: "Research Assistant"
+  description: "AI assistant for academic and technical research"
+  data_paths:
+    - "./research/papers"
+    - "./research/reports"

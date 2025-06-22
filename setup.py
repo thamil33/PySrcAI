@@ -10,7 +10,6 @@ setup(
         "requests",
         "langchain",
         "sentence-transformers",
-        "torch",
     ],
     extras_require={
         "dev": [

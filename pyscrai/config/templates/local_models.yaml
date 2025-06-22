@@ -10,7 +10,6 @@ embedding:
   provider: "local_sentencetransformers"  # Use local sentence-transformers
   model: "sentence-transformers/all-mpnet-base-v2"
   device: "cuda"  # Use GPU if available, change to "cpu" if no GPU
-  local_files_only: true  # Only use cached models
   cache_folder: null  # Will use HF_HOME
   fallback_models:
     - "sentence-transformers/all-MiniLM-L6-v2"

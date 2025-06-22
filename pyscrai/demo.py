@@ -30,7 +30,7 @@ def create_sample_documents(temp_dir):
         Key features:
         - Vector store integration with ChromaDB
         - Support for OpenRouter and LMStudio LLMs
-        - HuggingFace and local embeddings
+        - local embeddings
         - Flexible document ingestion pipeline
         - Command-line interface
         """)

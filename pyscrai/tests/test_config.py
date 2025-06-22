@@ -32,7 +32,7 @@ def test_default_config():
     assert isinstance(cfg.chunking, ChunkingConfig)
     assert isinstance(cfg.rag, RAGConfig)
     assert cfg.models.provider == "openrouter"
-    assert cfg.embedding.provider == "huggingface_api"
+    assert cfg.embedding.provider == "local_sentencetransformers"
     assert len(cfg.embedding.fallback_models) > 0
     assert cfg.chunking.chunk_size == 512
 
@@ -101,7 +101,6 @@ def test_empty_config_file(tmp_path):
     assert isinstance(cfg, AgentConfig)
     # Should use all default values
     assert cfg.models.provider == "openrouter"
-    assert cfg.embedding.provider == "huggingface_api"
 
 
 def test_load_template():

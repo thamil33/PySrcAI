@@ -9,7 +9,7 @@ models:
 embedding:
   provider: "local_sentencetransformers"
   model: "all-MiniLM-L6-v2"
-  device: "cuda"
+  device: "cpu"
   cache_folder: null  # Will use HF_HOME if set
   fallback_models:
     - "all-MiniLM-L6-v2"

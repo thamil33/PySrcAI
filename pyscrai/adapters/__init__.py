@@ -8,7 +8,6 @@ __all__ = [
     # Embedding adapters
     "BaseEmbedder",
     "create_embedder", 
-    "HuggingFaceEmbeddings",
     "SentenceTransformerEmbeddings",
     
     # LLM adapters

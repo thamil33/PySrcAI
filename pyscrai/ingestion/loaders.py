@@ -35,8 +35,12 @@ class TextLoader:
         Returns:
             List containing a single Document
         """
-        with open(self.file_path, 'r', encoding=self.encoding) as f:
-            content = f.read()
+        try:
+            with open(self.file_path, 'r', encoding=self.encoding) as f:
+                content = f.read()
+        except UnicodeDecodeError as e:
+            print(f"Warning: Skipping {self.file_path}: {e}")
+            return []
         
         metadata = {
             "source": self.file_path,
@@ -72,8 +76,12 @@ class MarkdownLoader:
             return loader.load()
         except ImportError:
             # Fallback to simple text loading
-            with open(self.file_path, 'r', encoding=self.encoding) as f:
-                content = f.read()
+            try:
+                with open(self.file_path, 'r', encoding=self.encoding) as f:
+                    content = f.read()
+            except UnicodeDecodeError as e:
+                print(f"Warning: Skipping {self.file_path}: {e}")
+                return []
             
             metadata = {
                 "source": self.file_path,
@@ -110,8 +118,15 @@ class JSONLoader:
         Returns:
             List of Documents
         """
-        with open(self.file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        try:
+            with open(self.file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except UnicodeDecodeError as e:
+            print(f"Warning: Skipping {self.file_path}: {e}")
+            return []
+        except json.JSONDecodeError as e:
+            print(f"Warning: Skipping {self.file_path} (invalid JSON): {e}")
+            return []
         
         documents = []
         
@@ -190,26 +205,30 @@ class DirectoryLoader:
         """
         documents = []
         
+        file_count = 0
+        doc_count = 0
         for file_path in self.directory_path.glob(self.glob_pattern):
             if not file_path.is_file():
                 continue
-            
             # Check file extension filter
             if self.file_extensions and file_path.suffix.lower() not in self.file_extensions:
                 continue
-            
             # Check exclude patterns
             if any(pattern in str(file_path) for pattern in self.exclude_patterns):
                 continue
-            
             # Load the file based on its extension
             loader = self._get_loader_for_file(file_path)
             if loader:
                 try:
-                    documents.extend(loader.load())
+                    loaded_docs = loader.load()
+                    if loaded_docs:
+                        print(f"✅ Ingested {len(loaded_docs)} document(s) from: {file_path}")
+                        file_count += 1
+                        doc_count += len(loaded_docs)
+                    documents.extend(loaded_docs)
                 except Exception as e:
                     print(f"Warning: Failed to load {file_path}: {e}")
-        
+        print(f"--- Ingestion complete: {file_count} file(s), {doc_count} document(s) loaded ---")
         return documents
     
     def _get_loader_for_file(self, file_path: Path):

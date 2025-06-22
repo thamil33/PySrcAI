@@ -7,7 +7,7 @@ PyScRAI is a comprehensive Retrieval-Augmented Generation (RAG) framework that p
 - ✅ **Vector Store Integration**: ChromaDB support with persistent storage
 - ✅ **Document Ingestion**: Automatic loading and chunking for text, markdown, and JSON files
 - ✅ **Multiple LLM Providers**: Support for OpenRouter and LMStudio
-- ✅ **Flexible Embeddings**: HuggingFace API and local sentence-transformers
+- ✅ **Flexible Embeddings**: local sentence-transformers
 - ✅ **Configuration Management**: YAML-based configuration with templates
 - ✅ **CLI Interface**: Command-line tools for ingestion, querying, and interactive mode
 - ✅ **Extensible Architecture**: Easy to extend with new adapters and components
@@ -77,10 +77,6 @@ models:
     temperature: 0.7
     max_tokens: 500
 
-embedding:
-  provider: "huggingface_api"
-  model: "BAAI/bge-base-en-v1.5"
-
 vectordb:
   persist_directory: "./my_vector_storage"
   collection_name: "my_docs"
@@ -110,7 +106,7 @@ python -m cli --config config.yaml --interactive
 
 ### 4. Available Templates
 
-- `default`: OpenRouter + HuggingFace API (requires API keys)
+- `default`: OpenRouter 
 - `local_models`: LMStudio + local sentence-transformers (fully local)
 - `openrouter`: Optimized for OpenRouter API usage
 
@@ -126,7 +122,6 @@ Set these environment variables for API access:
 
 ```bash
 export OPENROUTER_API_KEY="your_openrouter_key"
-export HF_API_TOKEN="your_huggingface_token"  # Optional, for private models
 ```
 
 ## Project Structure
@@ -135,7 +130,7 @@ export HF_API_TOKEN="your_huggingface_token"  # Optional, for private models
 pyscrai/
 ├── adapters/           # LLM, embedding, and vector store adapters
 │   ├── llm/           # OpenRouter, LMStudio adapters
-│   ├── embeddings/    # HuggingFace, sentence-transformers
+│   ├── embeddings/    # sentence-transformers
 │   └── vectorstore/   # ChromaDB adapter
 ├── agents/            # RAG agent implementations
 ├── cli/               # Command-line interface

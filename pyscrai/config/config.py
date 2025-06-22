@@ -31,20 +31,15 @@ class ModelConfig:
 
 @dataclass
 class EmbeddingConfig:
-    """Embedding model configuration."""
-
-    provider: str = "huggingface_api"
-    model: str = "BAAI/bge-base-en-v1.5"
+    """Embedding model configuration (local sentence-transformers only)."""
+    provider: str = "local_sentencetransformers"
+    model: str = "all-MiniLM-L6-v2"
     device: str = "cpu"
-    local_files_only: bool = False
     fallback_models: List[str] = field(default_factory=lambda: [
-        "BAAI/bge-small-en-v1.5",
-        "sentence-transformers/all-MiniLM-L6-v2",
-        "sentence-transformers/all-mpnet-base-v2",
-        "intfloat/e5-base-v2"
+        "all-MiniLM-L6-v2",
+        "all-mpnet-base-v2"
     ])
     cache_folder: Optional[str] = None
-    hf_api_token_env: Optional[str] = None
 
 
 @dataclass
@@ -81,7 +76,6 @@ class RAGConfig:
 @dataclass
 class AgentConfig:
     """Main configuration class for RAG agents."""
-
     models: ModelConfig = field(default_factory=ModelConfig)
     embedding: EmbeddingConfig = field(default_factory=EmbeddingConfig)
     vectordb: VectorDBConfig = field(default_factory=VectorDBConfig)
@@ -90,7 +84,6 @@ class AgentConfig:
     system_prompt: str = "You are a helpful RAG developer assistant."
     data_paths: List[str] = field(default_factory=list)
     openrouter_api_key_env: str = "OPENROUTER_API_KEY"
-    hf_api_token_env: str = "HF_API_TOKEN"
 
 
 def load_template(name: str = "default") -> AgentConfig:
@@ -134,7 +127,6 @@ def load_config(path: str) -> AgentConfig:
         system_prompt=raw.get("system_prompt", AgentConfig.system_prompt),
         data_paths=raw.get("data_paths", []),
         openrouter_api_key_env=raw.get("openrouter_api_key_env", AgentConfig.openrouter_api_key_env),
-        hf_api_token_env=raw.get("hf_api_token_env", AgentConfig.hf_api_token_env),
     )
     return AgentConfig(
         models=ModelConfig(**raw.get("models", {})),
@@ -145,5 +137,4 @@ def load_config(path: str) -> AgentConfig:
         system_prompt=raw.get("system_prompt", AgentConfig.system_prompt),
         data_paths=raw.get("data_paths", []),
         openrouter_api_key_env=raw.get("openrouter_api_key_env", AgentConfig.openrouter_api_key_env),
-        hf_api_token_env=raw.get("hf_api_token_env", AgentConfig.hf_api_token_env),
     )
