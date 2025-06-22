@@ -1,0 +1,12 @@
+# Optional CPU-only PyTorch dependencies for local model support
+# Install with: pip install -r requirements-cpu.txt
+
+# Include base requirements
+-r requirements.txt
+
+
+
+# CPU-only PyTorch
+torch --index-url https://download.pytorch.org/whl/cpu
+torchvision --index-url https://download.pytorch.org/whl/cpu
+torchaudio --index-url https://download.pytorch.org/whl/cpu
