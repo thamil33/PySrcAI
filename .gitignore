@@ -1,8 +1,13 @@
+docs
+pyscrai/interface
 concordia
+
+
+
 .github
 deprecated
 .vscode
-.venv
+.pyscrai
 **/__pycache__/
 .env
 pyscrai.egg-info
