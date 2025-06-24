@@ -7,6 +7,9 @@ Demonstrates basic RAG functionality with document ingestion and querying.
 import tempfile
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Add the parent directory to Python path for imports
 import sys

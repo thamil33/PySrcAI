@@ -9,7 +9,7 @@ from pyscrai.config.config import (
     AgentConfig,
     load_config,
     load_template,
-    list_templates
+    list_templates,
 )
 
 __all__ = [
@@ -21,5 +21,6 @@ __all__ = [
     "AgentConfig",
     "load_config",
     "load_template",
-    "list_templates"
+    "list_templates",
+
 ]

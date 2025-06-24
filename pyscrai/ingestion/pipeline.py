@@ -20,13 +20,32 @@ class IngestionPipeline:
         Args:
             config: Agent configuration containing all necessary settings
         """
+        import logging, time, pprint
         self.config = config
-        
-        # Initialize components
+        self.logger = logging.getLogger("pyscrai.ingestion.pipeline")
+        self.logger.info("--- FULL AGENT CONFIG ---")
+        self.logger.info(pprint.pformat(vars(config)))
+        self.logger.info("--- EMBEDDING CONFIG ---")
+        self.logger.info(pprint.pformat(vars(config.embedding)))
+        self.logger.info("--- CHUNKING CONFIG ---")
+        self.logger.info(pprint.pformat(vars(config.chunking)))
+        self.logger.info("--- RAG CONFIG ---")
+        self.logger.info(pprint.pformat(vars(config.rag)))
+        start = time.time()
+        self.logger.info("Initializing embedder...")
         self.embeddings = create_embedder(config.embedding)
+        self.logger.info(f"Embedder initialized in {time.time() - start:.2f}s")
+
+        start = time.time()
+        self.logger.info("Initializing vectorstore...")
         self.vectorstore = create_vectorstore(config.vectordb, self.embeddings)
+        self.logger.info(f"Vectorstore initialized in {time.time() - start:.2f}s")
+
+        start = time.time()
+        self.logger.info("Initializing chunker...")
         self.chunker = create_chunker(config.chunking)
-        
+        self.logger.info(f"Chunker initialized in {time.time() - start:.2f}s")
+
         # Preprocessing hooks
         self.preprocessing_hooks: List[Callable[[Document], Document]] = []
     

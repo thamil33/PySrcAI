@@ -18,7 +18,7 @@ class ModelConfig:
     model: str = "mistralai/mistral-small-3.1-24b-instruct:free"
     model_kwargs: Dict[str, Any] = field(
         default_factory=lambda: {
-            "temperature": 0.7,
+            # "temperature": 0.7,
             "max_tokens": 500
         }
     )
@@ -33,8 +33,8 @@ class ModelConfig:
 class EmbeddingConfig:
     """Embedding model configuration (local sentence-transformers only)."""
     provider: str = "local_sentencetransformers"
-    model: str = "all-MiniLM-L6-v2"
-    device: str = "cpu"
+    model: str = "all-mpnet-base-v2"
+    device: str = "cuda"
     fallback_models: List[str] = field(default_factory=lambda: [
         "all-MiniLM-L6-v2",
         "all-mpnet-base-v2"
@@ -47,7 +47,7 @@ class VectorDBConfig:
     """Vector database settings."""
 
     persist_directory: str = "./vector_storage"
-    collection_name: str = " _docs"
+    collection_name: str = " default_docs"
     anonymized_telemetry: bool = False
     settings: Dict[str, Any] = field(default_factory=lambda: {
         "hnsw_space": "cosine"

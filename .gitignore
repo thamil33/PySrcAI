@@ -1,31 +1,15 @@
-docs
 pyscrai/interface
-concordia
 
+concordia_repo
 
+.pyscrai
 
 .github
-deprecated
 .vscode
-.pyscrai
+
 **/__pycache__/
+__pycache__
 .env
 pyscrai.egg-info
-__pycache__
-docs/references/
 .pytest_cache
-.api_docs
 vector_storage
-# API Documentation - exclude build artifacts and auto-generated modules
-# Keep only essential source files needed to rebuild from scratch
-concordia/.api_docs/_build/
-concordia/.api_docs/modules/
-concordia/.api_docs/_static/
-concordia/.api_docs/_templates/
-
-# Keep these essential API docs files:
-# concordia/.api_docs/conf.py
-# concordia/.api_docs/index.rst  
-# concordia/.api_docs/README.md
-# concordia/.api_docs/make.bat
-# concordia/.api_docs/Makefile

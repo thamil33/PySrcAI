@@ -1,9 +1,17 @@
 """Enhanced CLI for   PyScRAI with full functionality."""
 
+
 import argparse
+from json import load
 import sys
 from pathlib import Path
 from typing import Optional
+from dotenv import load_dotenv
+import logging
+import time
+load_dotenv()
+
+
 
 # Update import to use correct package structure
 from ..config.config import load_config, load_template, list_templates
@@ -76,30 +84,65 @@ Examples:
     )
     
     args = parser.parse_args()
-    
+
+    # Setup logging
+    logging.basicConfig(
+        level=logging.INFO if args.verbose else logging.WARNING,
+        format="[%(asctime)s] %(levelname)s %(name)s: %(message)s",
+        datefmt="%H:%M:%S"
+    )
+    logger = logging.getLogger("pyscrai.cli")
+
     # If no action specified, default to info
     if not any([args.ingest, args.query, args.interactive, args.clear, args.info]):
         args.info = True
-    
+
+    import yaml
+    def get_agent_type_from_yaml(path):
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                data = yaml.safe_load(f)
+            # Try both top-level and agent section
+            if isinstance(data, dict):
+                if 'agent_type' in data:
+                    return data['agent_type']
+                if 'agent' in data and isinstance(data['agent'], dict):
+                    return data['agent'].get('agent_type', 'rag')
+        except Exception:
+            pass
+        return 'rag'
+
     try:
         # Create agent
+        start = time.time()
         if args.verbose:
-            print("Loading configuration...")
-        
+            logger.info("Loading configuration...")
+
+        agent_type = 'rag'
+        config_source = None
         if args.config:
-            agent = AgentBuilder.from_config_file(args.config)
+            agent_type = get_agent_type_from_yaml(args.config)
+            agent = AgentBuilder.from_config_file(args.config, agent_type=agent_type)
             config_source = f"config file: {args.config}"
         else:
-            agent = AgentBuilder.from_template(args.template)
+            # Find template YAML path
+            from ..config.templates import get_template_path
+            template_path = get_template_path(args.template)
+            agent_type = get_agent_type_from_yaml(template_path)
+            agent = AgentBuilder.from_template(args.template, agent_type=agent_type)
             config_source = f"template: {args.template}"
-        
+
+        logger.info(f"Agent created using {config_source} in {time.time() - start:.2f}s")
         if args.verbose:
-            print(f"Agent created using {config_source}")
-            print(f"Collection: {agent.config.vectordb.collection_name}")
-            print(f"LLM: {agent.config.models.provider}/{agent.config.models.model}")
-            print(f"Embeddings: {agent.config.embedding.provider}/{agent.config.embedding.model}")
-            print()
-        
+            # Only print vectorstore info if present
+            vectordb = getattr(agent.config, 'vectordb', None)
+            if vectordb and hasattr(vectordb, 'collection_name'):
+                logger.info(f"Collection: {vectordb.collection_name}")
+            logger.info(f"LLM: {agent.config.models.provider}/{agent.config.models.model}")
+            embedding = getattr(agent.config, 'embedding', None)
+            if embedding and hasattr(embedding, 'provider'):
+                logger.info(f"Embeddings: {embedding.provider}/{embedding.model}")
+
         # Execute action
         if args.ingest:
             ingest_documents(agent, args.ingest, args.verbose)
@@ -111,7 +154,7 @@ Examples:
             clear_vectorstore(agent, args.verbose)
         elif args.info:
             show_info(agent, args.verbose)
-            
+
     except KeyboardInterrupt:
         print("\nOperation cancelled.")
         sys.exit(1)
@@ -180,8 +223,9 @@ def interactive_mode(agent):
     """Start interactive REPL mode."""
     print("Starting interactive mode...")
     print(f"Collection: {agent.config.vectordb.collection_name}")
-    print()
+    print("[DEBUG] Entering interactive_loop()...")
     agent.interactive_loop()
+    print("[DEBUG] Exited interactive_loop()")
 
 
 def clear_vectorstore(agent, verbose: bool = False):

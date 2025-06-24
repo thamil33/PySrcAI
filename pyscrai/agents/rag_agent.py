@@ -4,13 +4,16 @@ from typing import List, Optional, Dict, Any
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 
+
 from ..config.config import AgentConfig
 from ..adapters.llm.factory import create_llm
 from ..ingestion.pipeline import IngestionPipeline
-from .base import BaseAgent
+from .base import BaseRAGAgent
+import logging
+import time
 
 
-class RAGAgent(BaseAgent):
+class RAGAgent(BaseRAGAgent):
     """RAG agent implementation leveraging LangChain's retrieval QA chain."""
     
     def __init__(self, config: AgentConfig):
@@ -20,15 +23,21 @@ class RAGAgent(BaseAgent):
             config: Agent configuration
         """
         self.config = config
-        
-        # Initialize LLM
+        self.logger = logging.getLogger("pyscrai.agents.rag_agent")
+        start = time.time()
+        self.logger.info("Initializing LLM...")
         self.llm = create_llm(config.models)
-        
-        # Initialize ingestion pipeline
+        self.logger.info(f"LLM initialized in {time.time() - start:.2f}s")
+
+        start = time.time()
+        self.logger.info("Initializing ingestion pipeline...")
         self.ingestion_pipeline = IngestionPipeline(config)
-        
-        # Create retrieval QA chain
+        self.logger.info(f"Ingestion pipeline initialized in {time.time() - start:.2f}s")
+
+        start = time.time()
+        self.logger.info("Setting up QA chain...")
         self._setup_qa_chain()
+        self.logger.info(f"QA chain setup in {time.time() - start:.2f}s")
     
     def _setup_qa_chain(self):
         """Set up the retrieval QA chain."""
@@ -53,7 +62,7 @@ class RAGAgent(BaseAgent):
             retriever=retriever,
             chain_type_kwargs={
                 "prompt": prompt_template,
-                "verbose": False  # Could be configurable
+                "verbose": True  # Could be configurable
             },
             return_source_documents=True
         )

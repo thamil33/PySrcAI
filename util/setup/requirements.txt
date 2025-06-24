@@ -24,7 +24,7 @@ IPython
 typing-extensions
 jinja2
 hf_xet
-
+huggingface_hub==0.16.4
 
 fastapi
 uvicorn

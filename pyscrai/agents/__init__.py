@@ -4,11 +4,12 @@
 from .base import BaseAgent
 from .rag_agent import RAGAgent
 from .builder import AgentBuilder
-from .document_retrieval_agent import DocumentRetrievalAgent
+from .chat_agent import ChatAgent
 
 __all__ = [
     "BaseAgent",
     "RAGAgent",
     "AgentBuilder",
-    "DocumentRetrievalAgent"
+    "DocumentRetrievalAgent",
+    "ChatAgent"
 ]
