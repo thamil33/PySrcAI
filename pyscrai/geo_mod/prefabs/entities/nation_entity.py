@@ -65,34 +65,27 @@ class NationEntity(prefab_lib.Prefab):
         # First, set up embedder function for the memory
         def simple_embedder(text: str) -> np.ndarray:
             # This is a placeholder embedder that works with Concordia's memory system
-            return model.embed(text)
+            return model.embed_string(text)
             
-        # Create memory factory
-        formative_memory_factory = formative_memories.FormativeMemoryFactory(
+        # Create memory bank using FormativeMemoryFactory
+        memory_factory = formative_memories.FormativeMemoryFactory(
             model=model,
             embedder=simple_embedder,
+            shared_memories=[
+                f"Name: {agent_name}",
+                f"Goal: {goal}",
+                f"Context: {context}",
+            ],
         )
         
-        agent_config = formative_memories.AgentConfig(
-            name=agent_name,
-            goal=goal,
-            context=context,
-        )
-        
-        # Populate the memory bank
-        formative_memory_factory.add_memories(
-            memory=memory_bank,
-            agent_config=agent_config,
-        )
+        # Create the memory bank
+        memory = memory_factory._blank_memory_factory_call()
         
         # Add the nation's core memories
         for mem in [f"I am {agent_name}.", 
                    f"My primary goal is to {goal}", 
                    f"Important context: {context}"]:
-            memory_bank.add(mem)
-
-        # Create the memory component
-        memory = agent_components.memory.AssociativeMemory(memory_bank)
+            memory.add(mem)
 
         # 2. Nation-Specific Components (from params)
         goal_component = agent_components.constant.Constant(
@@ -125,6 +118,7 @@ class NationEntity(prefab_lib.Prefab):
         act_component = agent_components.concat_act_component.ConcatActComponent(
             model=model,
             component_order=component_order,
+            action_spec_name='Action',
         )
 
         # 5. Build and return the final agent object

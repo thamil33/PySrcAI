@@ -69,16 +69,10 @@ class ModeratorGmPrefab(prefab_lib.Prefab):
         components = {}
         
         # Add memory component
-        components[memory_component.DEFAULT_MEMORY_COMPONENT_KEY] = memory_component.AssociativeMemory(memory_bank)
+        components["__memory__"] = memory_component.AssociativeMemory(memory_bank)
         
         # Add observation component that will broadcast observations to entities
-        components[observation_component.DEFAULT_OBSERVATION_COMPONENT_KEY] = observation_component.LastNObservations(
-            history_length=10,
-            pre_act_label="\nRecent observations:"
-        )
-        
-        # Add observation to memory component
-        components["observation_to_memory"] = observation_component.ObservationToMemory()
+        components[observation_component.DEFAULT_OBSERVATION_COMPONENT_KEY] = observation_component.Observation()
         
         # Add system prompt as a constant component
         system_prompt = (

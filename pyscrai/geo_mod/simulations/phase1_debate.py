@@ -3,7 +3,6 @@
 import os
 import sys
 from pathlib import Path
-import datetime
 
 # --- Add project root to sys.path ---
 # This allows us to import modules from pyscrai and concordia
@@ -20,10 +19,10 @@ from concordia.typing import prefab as prefab_lib
 from concordia.language_model import openrouter_model, lmstudio_model, no_language_model
 
 # --- Geo-Mod Imports ---
-from pyscrai.agentica.geo_mod.prefabs.entities.nation_entity import NationEntity
-from pyscrai.agentica.geo_mod.prefabs.game_masters.moderator_gm import ModeratorGmPrefab
-from pyscrai.agentica.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
-from pyscrai.agentica.geo_mod.utils.logging_config import setup_logging
+from pyscrai.geo_mod.prefabs.entities.nation_entity import NationEntity
+from pyscrai.geo_mod.prefabs.game_masters.moderator_gm import ModeratorGmPrefab
+from pyscrai.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
+from pyscrai.geo_mod.utils.logging_config import setup_logging
 
 # --- Environment Setup ---
 from dotenv import load_dotenv
@@ -41,7 +40,7 @@ def main():
     # Set USE_LMSTUDIO=true in your .env file to use a local model.
     use_lmstudio = os.getenv("USE_LMSTUDIO", "false").lower() == "true"
     disable_llm = os.getenv("DISABLE_LANGUAGE_MODEL", "false").lower() == "true"
-    
+
     model = None
     if disable_llm:
         logger.info("Language model is DISABLED.")
@@ -103,18 +102,8 @@ def main():
     # 7. Run the Simulation
     results_log = runnable_simulation.play()
 
-    # 8. Save and Display Results
-    log_dir = project_root / "logs"
-    log_dir.mkdir(exist_ok=True)
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file_path = log_dir / f"phase1_debate_log_{timestamp}.txt"
-
-    with open(log_file_path, "w", encoding="utf-8") as f:
-        f.write(results_log)
-    
-    logger.info(f"Simulation log saved to {log_file_path}")
-
-    # Also print the log to the console
+    # 8. Display Results
+    # For now, we just print the log. We can save it to a file later.
     print("\n--- Simulation Log ---\n")
     print(results_log)
     logger.info("Simulation finished.")
