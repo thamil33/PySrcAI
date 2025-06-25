@@ -1,11 +1,14 @@
-# PyScrAI
+# PySrcAI
+
+## **Update** `v0.7.1` Released
+
+- Released 06/25/2025: Major step forward in the development of PySrcAI
 
 ## 🎯 Project Overview
 
-**`PyScrAI` is a comprehensive framework engineered for broad multi-domain applications while maintaining exceptional quality, performance, and modularity. The platform enables seamless configuration for highly controlled, specialized use cases across diverse sectors and industries.**
+**`PySrcAI` Pronounced _Pie-Scry_, is a comprehensive framework engineered for broad multi-domain applications while maintaining exceptional quality, performance, and modularity. The platform enables seamless configuration for highly controlled, specialized use cases across diverse sectors and industries.**
 
-**`PyScrAI` delivers advanced tooling for creating and deploying sophisticated agent-based scenarios, with particular emphasis on simulations and cognitive reasoning AI applications. The platform integrates multiple leading frameworks and technologies to provide a unified development environment for building enterprise-grade multi-agent systems, simulations, and AI solutions.**
-
+**`PySrcAI` delivers advanced tooling for creating and deploying sophisticated agent-based scenarios, with particular emphasis on simulations and cognitive reasoning AI applications. The platform integrates multiple leading frameworks and technologies to provide a unified development environment for building enterprise-grade multi-agent systems, simulations, and AI solutions.**
 
 ### 🔬 Target Application Domains
 
@@ -17,7 +20,7 @@
 
 ### 🛠️ Technology Stack
 
-**PyScrAI** builds upon and extends industry-leading technologies including:
+**PySrcAI** builds upon and extends industry-leading technologies including:
 
 - **Google DeepMind's Concordia**: Core agent simulation framework
 - **OpenRouter API**: OpenAI-compatible cloud language model endpoints
@@ -31,8 +34,8 @@ This robust technology foundation ensures scalable, performant, and reliable AI 
 
 ## 📁 Project Structure
 
-```
-pyscrai_workstation/
+pysrcai_workstation/
+pysrcai_workstation/
 ├── 📦 concordia/                    # Core Concordia framework
 │   ├── agents/                      # Agent implementations and behaviors
 │   ├── associative_memory/          # Memory systems for agents
@@ -46,7 +49,7 @@ pyscrai_workstation/
 │   ├── thought_chains/              # Agent reasoning systems
 │   └── utils/                       # Utility functions
 │
-├── 📦 pyscrai/                      # Core PyScrai package
+├── 📦 pysrcai/                      # Core PySrcAI package
 │   ├── agentica/                    # Agent framework and tools
 │   └── geo_mod/                     # Geopolitical simulation module
 │       ├── prefabs/                 # Nation entities, moderators
@@ -64,11 +67,11 @@ pyscrai_workstation/
 ├── 📄 pyproject.toml               # Python project configuration
 ├── 📄 setup.py                     # Package installation script
 └── 📄 README.md                    # This file
-```
 
 ## 🧩 Core Components
 
 ### Concordia Framework
+
 Environmental and scenario driven advanced agent cognitive simulation framework providing:
 
 - **Agents**: Sophisticated AI agents with memory, personality, and decision-making
@@ -79,17 +82,21 @@ Environmental and scenario driven advanced agent cognitive simulation framework 
 - **Language Models**: Integration with various LLM providers
 - **Thought Chains**: Complex reasoning and decision-making processes
 
-### PyScrai Package
+### PySrcAI Package
 
 #### Agentica
+
 Tools and frameworks for building AI agents with:
+
 - **Agent lifecycle management**
 - **Behavior configuration systems**
 - **Communication protocols**
 - **Performance monitoring**
 
 #### Geo_mod
+
 Specialized geopolitical simulation framework featuring:
+
 - **Nation Entities**: Configurable country representatives with goals and contexts
 - **Debate Moderators**: AI-powered mediation for international discussions
 - **Scenario Configurations**: Pre-built templates for specific geopolitical situations
@@ -97,43 +104,71 @@ Specialized geopolitical simulation framework featuring:
 
 ## 📚 Documentation System - WIP
 
+## 🔧 Environment Setup & Config
 
-## 🔧 Environment Configuration
+### Python Environment Setup (with UV & CUDA/PyTorch Support)
 
-The project uses environment variables for configuration:
+These steps will set up a fresh Python 3.12 environment using [UV](https://github.com/astral-sh/uv) for dependency management, and install all requirements (including CUDA/PyTorch support) for local model inference.
 
-- **Language Models**: OpenRouter API, LMStudio integration
-- **Storage Paths**: Document and data storage locations
-- **API Tokens**: Hugging Face, GitHub integration
-- **Model Selection**: Configurable AI model backends
+#### 1. Create and Activate Virtual Environment
 
-. **Environment Setup**: Configure your `.env` file with API keys and paths
-. **Virtual Environment**: Activate the `.pyscrai` virtual environment
+(Change to your directory of python 3.12)
 
-
-
-
-
-### **Example Usage**: 
-#### Agentica 
-Running a multiturn interactive llm chatbot with Pyscrai.Agentica: 
-```bash
- python -m pyscrai.agentica.cli --template chat --verbose  --interactive  scenarios in `pyscrai/geo_mod scenarios/
+```powershell
+C:\Users\tyler\AppData\Local\Programs\Python\Python312\python.exe -m venv .pysrcai 
+.\.pysrcai\Scripts\Activate
 ```
- - To run the rag agent, swap out 
- `--template chat`
- with 
- `--template rag` 
 
- #### Geo_Mod  - WIP
+#### 2. Upgrade pip (recommended)
 
+```powershell
+python -m pip install --upgrade pip
+```
+
+#### 3. Install UV (fast Python package manager)
+
+```powershell
+pip install uv
+```
+
+#### 4. Install All Project Requirements (including CUDA/PyTorch)
+
+```powershell
+uv pip install -r requirements.txt
+```
+
+#### 5. (Optional) Install Project in Editable/Dev Mode
+
+```powershell
+uv pip install -e .
+```
+
+You are now ready to use PySrcAI with full CUDA/PyTorch support!
+
+## **Example Usage**
+
+### Agentica Interactive CLI
+
+Running a multi turn interactive llm chatbot with PySrcAI.Agentica:
+
+```bash
+ python -m pysrcai.agentica.cli --verbose  --interactive
+```
+
+- To run the rag agent or any other template, pass the --template arg
+
+```bash
+python -m pysrcai.agentica.cli --template rag
+```
+  
+### Geo_Mod  - WIP
 
 ## 📋 Project Status
 
 This is an active development workstation with ongoing enhancements to:
+
 - Geopolitical simulation capabilities
 - Improving scope, domain and type of simulation capabilities.
-- Advanced, human-like cognitive agent systems. 
-- Integration with more third-party tools, services and API's. 
-- The documentation system is currently under `HEAVY development`. 
----
+- Advanced, human-like cognitive agent systems.
+- Integration with more third-party tools, services and APIs.
+- The documentation system is currently under `HEAVY development`.

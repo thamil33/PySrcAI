@@ -1,18 +1,3 @@
-# Copyright 2023 DeepMind Technologies Limited.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     https://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
 """Install script for setuptools."""
 
 import setuptools
@@ -27,27 +12,27 @@ def _remove_excluded(description: str) -> str:
   return description
 
 
-with open('README.md') as f:
+with open('README.md', 'r', encoding='utf-8') as f:
   LONG_DESCRIPTION = _remove_excluded(f.read())
 
 
 setuptools.setup(
-    name='pyscrai-workstation',
+    name='pysrcai',
     version='1.0.0',
     license='Apache 2.0',
     license_files=['LICENSE'],
-    url='https://github.com/google-deepmind/concordia',
-    download_url='https://github.com/google-deepmind/concordia/releases',
-    author='DeepMind',
-    author_email='noreply@google.com',
+    url='https://github.com/thamil33/PySrcAI',
+    download_url='https://github.com/thamil33/PySrcAI/releases',
+    author='PySrcAI Team',
+    author_email='noreply@pysrcai.org',
     description=(
-        'A library for building a generative model of social interacions.'
+        'A framework for AI agents with geopolitical modeling capabilities.'
     ),
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     keywords=(
         'multi-agent agent-based-simulation generative-agents python'
-        ' machine-learning'
+        ' machine-learning geopolitical-simulations ai-framework'
     ),
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -57,6 +42,7 @@ setuptools.setup(
         'License :: OSI Approved :: Apache Software License',
         'Operating System :: POSIX :: Linux',
         'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
@@ -65,8 +51,8 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     package_data={},
-    # Explicitly include subpackages
-    package_dir={"pyscrai": "pyscrai"},
+    # Explicitly include subpackage
+    package_dir={"pysrcai": "pysrcai"},
     python_requires='>=3.11',
     install_requires=(
         'absl-py',

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.isort]
 profile = "google"
-known_thirdparty = ["concordia"]
+known_thirdparty = ["concordia", "pysrcai"]
 
 [tool.pyink]
 line-length = 80
@@ -24,10 +24,10 @@ pyink-annotation-pragmas = [
 [tool.pytest.ini_options]
 required_plugins = ["pytest-xdist"]
 addopts = "-n auto"
-testpaths = ["concordia", "examples"]
+testpaths = ["concordia", "pysrcai", "examples"]
 
 [tool.pytype]
-inputs = ["concordia", "examples"]
+inputs = ["concordia", "pysrcai", "examples"]
 # Keep going past errors to analyze as many files as possible.
 keep_going = true
 # Run N jobs in parallel. When 'auto' is used, this will be equivalent to the
