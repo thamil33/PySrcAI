@@ -1,6 +1,4 @@
-# PyScrAI Workstation
-
-**Python- based  **
+# PyScrAI
 
 ## 🎯 Project Overview
 
