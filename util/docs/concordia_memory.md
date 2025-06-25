@@ -55,50 +55,7 @@ When an agent decides its next action, it queries **both** memory components to 
 
 ---
 
-#### 4. **Resolving Your `TypeError`**
-
-The previous errors (`TypeError: ... got an unexpected keyword argument 'pre_act_label'` or `'name'`) occurred because we were attempting to instantiate a memory class from `concordia.components.agent` which are wrappers, not the memory modules themselves.
-
-The actual memory modules are in `concordia.associative_memory` and have simpler initializers.
-
-**Correct Approach for `NationEntity`**:
-
-Your `NationEntity` should be built with at least a `FormativeMemories` component to store its goal and context.
-
-```python
-# In pyscrai/geo_mod/prefabs/entities/nation_entity.py
-
-from concordia.associative_memory import formative_memories
-from concordia.components.agent import characteristic
-from concordia.components.agent import identity
-from concordia.entities import entity as entity_lib
-
-# ... inside the build method ...
-
-# 1. Create Formative Memories for core identity and goals
-# The 'shared_memories' will hold the nation's defining context.
-memory = formative_memories.FormativeMemories(
-    model=model,
-    shared_memories=[
-        f"Name: {name}",
-        f"Goal: {goal}",
-        f"Context: {context}",
-    ]
-)
-
-# 2. Create components that USE this memory
-identity_component = identity.Identity(
-    model=model,
-    memory=memory,
-    agent_name=name,
-    # No pre_act_label here for the base component
-)
-
-characteristic_component = characteristic.Characteristic(
-    model=model,
-    memory=memory,
-    # ... other params
-)
-
-# 3. Build the entity with these components
-return
+Use FormativeMemoryFactory: Instead of incorrectly calling a non-existent class, we'll use formative_memories.FormativeMemoryFactory to populate the agent's memory.
+Correct Embedder Function: The simple_embedder function was calling model.embed_string(), but the correct method is model.embed().
+Instantiate AssociativeMemory Component: After populating the memory bank, we'll create an AssociativeMemory component from concordia.components.agent.memory.
+Update Agent's Components: The newly created memory component will be correctly assigned to the agent's component dictionary.
