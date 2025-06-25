@@ -1,7 +1,8 @@
 pyscrai/interface
-
+*.egg-info/
 concordia_repo
-
+pyscrai_workstation.egg-info
+util
 .pyscrai
 
 .github
