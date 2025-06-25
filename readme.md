@@ -1,8 +1,8 @@
 # PySrcAI
 
-## **Update** `v0.7.1` Released
+## **Update** `v0.7.5` Released
 
-- Released 06/25/2025: Major step forward in the development of PySrcAI
+- Released 06/25/2025: Major step forward in the development of PySrcAI. Sameday hotfix v0.7.1 --> v0.7.5
 
 ## 🎯 Project Overview
 
@@ -158,7 +158,7 @@ Running a multi turn interactive llm chatbot with PySrcAI.Agentica:
 - To run the rag agent or any other template, pass the --template arg
 
 ```bash
-python -m pysrcai.agentica.cli --template rag
+python -m pysrcai.agentica.cli --template rag --verbose  --interactive
 ```
   
 ### Geo_Mod  - WIP
