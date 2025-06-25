@@ -32,42 +32,6 @@
 
 This robust technology foundation ensures scalable, performant, and reliable AI agent simulations across diverse application scenarios.
 
-## 📁 Project Structure
-
-pysrcai_workstation/
-pysrcai_workstation/
-├── 📦 concordia/                    # Core Concordia framework
-│   ├── agents/                      # Agent implementations and behaviors
-│   ├── associative_memory/          # Memory systems for agents
-│   ├── clocks/                      # Timing and synchronization
-│   ├── components/                  # Reusable simulation components
-│   ├── document/                    # Document management
-│   ├── environment/                 # Simulation environments and engines
-│   ├── examples/                    # Example simulations and tutorials
-│   ├── language_model/              # LLM integrations (GPT, OpenRouter, LMStudio)
-│   ├── prefabs/                     # Pre-built simulation templates
-│   ├── thought_chains/              # Agent reasoning systems
-│   └── utils/                       # Utility functions
-│
-├── 📦 pysrcai/                      # Core PySrcAI package
-│   ├── agentica/                    # Agent framework and tools
-│   └── geo_mod/                     # Geopolitical simulation module
-│       ├── prefabs/                 # Nation entities, moderators
-│       ├── scenarios/               # Specific simulation configurations
-│       ├── simulations/             # Runnable simulation scripts
-│       └── utils/                   # Logging and helper functions
-│
-├── 📁 util/                         # Project utilities
-│   ├── docs/                        # Documentation files
-│   ├── scripts/                     # Automation and setup scripts
-│   ├── setup/                       # Environment setup tools
-│   └── storage/                     # Data storage utilities
-│
-├── 📄 .env                          # Environment configuration
-├── 📄 pyproject.toml               # Python project configuration
-├── 📄 setup.py                     # Package installation script
-└── 📄 README.md                    # This file
-
 ## 🧩 Core Components
 
 ### Concordia Framework

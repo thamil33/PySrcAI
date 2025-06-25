@@ -1,4 +1,4 @@
-"""Geo_mod - Geopolitical simulation framework integrating with Concordia.
+"""Geo_mod - Geopolitical based simulation framework integrating with Concordia.
 
 This module provides specialized tools for creating geopolitical simulations with:
 - Nation entities representing countries with goals and contexts

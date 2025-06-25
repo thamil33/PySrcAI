@@ -39,7 +39,7 @@ torchvision
 torchaudio 
 --extra-index-url https://download.pytorch.org/whl/cu128
 
-# Documentation generation
+# Documentation
 sphinx
 sphinx-rtd-theme
 sphinx-autodoc-typehints

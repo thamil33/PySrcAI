@@ -1,4 +1,4 @@
-"""pysrcai - Python-based Simulator for Cognitive Reasoning AI.
+"""pysrcai - Python-based Simulator for Cognitive Reasoning AI
 
 This package contains:
 - agentica: Tools and frameworks for building AI agents

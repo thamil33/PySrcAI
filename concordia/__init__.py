@@ -3,7 +3,7 @@
 This library provides tools for building complex agent-based simulations with:
 - Agents with memories, personalities, and decision-making capabilities
 - Associative memory systems for long-term knowledge storage
-- Clock/timing mechanisms for simulation control
+- Clock|timing mechanisms for simulation control
 - Document management for simulation inputs and outputs
 - Environment constructs for agent interactions
 - Language model integrations

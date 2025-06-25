@@ -1,4 +1,4 @@
-"""Factory for creating embedding adapters."""
+"""Factory for creating embedding adapter."""
 
 from typing import Type
 
