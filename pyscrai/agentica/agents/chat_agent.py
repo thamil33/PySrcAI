@@ -36,7 +36,7 @@ class ChatAgent(BaseAgent):
             config: Agent configuration
         """
         self.config = config
-        self.logger = logging.getLogger("pyscrai.agents.chat_agent")
+        self.logger = logging.getLogger("pyscrai.agentica.agents.chat_agent")
         start = time.time()
         self.logger.info("Initializing LLM...")
         self.llm = create_llm(config.models)

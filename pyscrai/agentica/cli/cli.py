@@ -91,7 +91,7 @@ Examples:
         format="[%(asctime)s] %(levelname)s %(name)s: %(message)s",
         datefmt="%H:%M:%S"
     )
-    logger = logging.getLogger("pyscrai.cli")
+    logger = logging.getLogger("pyscrai.agentica.cli")
 
     # If no action specified, default to info
     if not any([args.ingest, args.query, args.interactive, args.clear, args.info]):

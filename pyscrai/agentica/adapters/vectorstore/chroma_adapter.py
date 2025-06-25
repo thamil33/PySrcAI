@@ -14,7 +14,7 @@ from langchain.schema import Document
 from langchain.embeddings.base import Embeddings
 
 from .base import BaseVectorStore
-from pyscrai.config.config import VectorDBConfig
+from pyscrai.agentica.config.config import VectorDBConfig
 
 
 class ChromaVectorStore(BaseVectorStore):

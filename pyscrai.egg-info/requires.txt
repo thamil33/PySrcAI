@@ -1,0 +1,12 @@
+pyyaml
+numpy
+requests
+langchain
+sentence-transformers
+
+[dev]
+pytest
+pytest-cov
+black
+isort
+mypy

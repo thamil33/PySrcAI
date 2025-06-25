@@ -13,7 +13,7 @@ from langchain_community.document_loaders import (
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from pyscrai.config.config import ChunkingConfig
+from pyscrai.agentica.config.config import ChunkingConfig
 
 
 class TextLoader:

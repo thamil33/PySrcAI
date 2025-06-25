@@ -1,6 +1,6 @@
-"""Configuration module for   PyScrai."""
+"""Configuration module for   pyscrai.agentica."""
 
-from pyscrai.config.config import (
+from pyscrai.agentica.config.config import (
     ModelConfig,
     EmbeddingConfig,
     VectorDBConfig,

@@ -20,10 +20,10 @@ from concordia.typing import prefab as prefab_lib
 from concordia.language_model import openrouter_model, lmstudio_model, no_language_model
 
 # --- Geo-Mod Imports ---
-from pyscrai.geo_mod.prefabs.entities.nation_entity import NationEntity
-from pyscrai.geo_mod.prefabs.game_masters.moderator_gm import ModeratorGmPrefab
-from pyscrai.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
-from pyscrai.geo_mod.utils.logging_config import setup_logging
+from pyscrai.agentica.geo_mod.prefabs.entities.nation_entity import NationEntity
+from pyscrai.agentica.geo_mod.prefabs.game_masters.moderator_gm import ModeratorGmPrefab
+from pyscrai.agentica.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
+from pyscrai.agentica.geo_mod.utils.logging_config import setup_logging
 
 # --- Environment Setup ---
 from dotenv import load_dotenv

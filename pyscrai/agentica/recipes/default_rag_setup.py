@@ -20,8 +20,8 @@ import time
 from pathlib import Path
 from dotenv import load_dotenv
 
-from pyscrai.config.config import AgentConfig, load_template
-from pyscrai.agents.builder import AgentBuilder
+from pyscrai.agentica.config.config import AgentConfig, load_template
+from pyscrai.agentica.agents.builder import AgentBuilder
 
 
 def main():
@@ -114,7 +114,7 @@ def main():
         # Interactive mode prompt
         print("\n🎯 RAG setup complete!")
         print("To start interactive mode, run:")
-        print("  python -m pyscrai.cli --config config/default.yml --interactive")
+        print("  python -m pyscrai.agentica.cli --config config/default.yml --interactive")
         
     finally:
         # Proper cleanup to avoid Windows file locking issues

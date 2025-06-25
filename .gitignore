@@ -10,6 +10,6 @@ concordia_repo
 **/__pycache__/
 __pycache__
 .env
-pyscrai.egg-info
+pyscrai.agentica.egg-info
 .pytest_cache
 vector_storage

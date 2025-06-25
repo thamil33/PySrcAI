@@ -4,8 +4,8 @@ import pytest
 from unittest.mock import Mock, patch
 import numpy as np
 
-from pyscrai.config.config import EmbeddingConfig
-from pyscrai.adapters.embeddings import (
+from pyscrai.agentica.config.config import EmbeddingConfig
+from pyscrai.agentica.adapters.embeddings import (
     BaseEmbedder,
     create_embedder,
     SentenceTransformerEmbeddings
@@ -43,7 +43,7 @@ def mock_st_config():
 
 
 
-@patch('pyscrai.adapters.embeddings.sentence_transformers.SentenceTransformer')
+@patch('pyscrai.agentica.adapters.embeddings.sentence_transformers.SentenceTransformer')
 def test_sentence_transformer_embeddings(mock_st, mock_st_config):
     """Test sentence-transformers embeddings."""
     # Mock successful model loading and encoding

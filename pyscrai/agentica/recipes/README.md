@@ -1,6 +1,6 @@
 # PySCRAI Recipe Examples
 
-This directory contains practical examples and setup scripts for PySCRAI.
+This directory contains practical examples and setup scripts for pyscrai.agentica.
 
 ## Available Recipes
 
@@ -55,7 +55,7 @@ Collection of YAML configuration templates for different scenarios.
 python recipes/config_examples.py
 
 # Use a generated config
-python -m pyscrai.cli --config pyscrai/recipes/configs/langchain_docs.yml --interactive
+python -m pyscrai.agentica.cli --config pyscrai/recipes/configs/langchain_docs.yml --interactive
 ```
 
 ### 4. OpenRouter LangGraph Example (`openrouter_langgraph_example.py`)
@@ -89,7 +89,7 @@ Demonstrates integration with LangGraph for complex workflows.
 
 5. **Try Interactive Mode:**
    ```bash
-   python -m pyscrai.cli --config recipes/configs/langchain_docs.yml --interactive
+   python -m pyscrai.agentica.cli --config recipes/configs/langchain_docs.yml --interactive
    ```
 
 ## Configuration Templates

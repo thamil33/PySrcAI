@@ -6,9 +6,9 @@ import shutil
 from unittest.mock import Mock, patch
 from pathlib import Path
 
-from pyscrai.config.config import VectorDBConfig
-from pyscrai.adapters.vectorstore import ChromaVectorStore, create_vectorstore
-from pyscrai.adapters.embeddings.base import BaseEmbedder
+from pyscrai.agentica.config.config import VectorDBConfig
+from pyscrai.agentica.adapters.vectorstore import ChromaVectorStore, create_vectorstore
+from pyscrai.agentica.adapters.embeddings.base import BaseEmbedder
 from langchain.schema import Document
 
 
@@ -58,7 +58,7 @@ def test_documents():
     ]
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_vectorstore_initialization(mock_chroma, vector_config, mock_embeddings):
     """Test ChromaVectorStore initialization."""
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
@@ -68,7 +68,7 @@ def test_chroma_vectorstore_initialization(mock_chroma, vector_config, mock_embe
     mock_chroma.assert_called_once()
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_add_documents(mock_chroma, vector_config, mock_embeddings, test_documents):
     """Test adding documents to ChromaVectorStore."""
     mock_vectorstore = Mock()
@@ -82,7 +82,7 @@ def test_chroma_add_documents(mock_chroma, vector_config, mock_embeddings, test_
     mock_vectorstore.add_documents.assert_called_once_with(test_documents)
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_similarity_search(mock_chroma, vector_config, mock_embeddings):
     """Test similarity search in ChromaVectorStore."""
     mock_vectorstore = Mock()
@@ -103,7 +103,7 @@ def test_chroma_similarity_search(mock_chroma, vector_config, mock_embeddings):
     )
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_similarity_search_with_score(mock_chroma, vector_config, mock_embeddings):
     """Test similarity search with scores in ChromaVectorStore."""
     mock_vectorstore = Mock()
@@ -126,7 +126,7 @@ def test_chroma_similarity_search_with_score(mock_chroma, vector_config, mock_em
     )
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_delete(mock_chroma, vector_config, mock_embeddings):
     """Test deleting documents from ChromaVectorStore."""
     mock_vectorstore = Mock()
@@ -140,7 +140,7 @@ def test_chroma_delete(mock_chroma, vector_config, mock_embeddings):
     mock_vectorstore.delete.assert_called_once_with(ids=["doc1", "doc2"])
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_clear(mock_chroma, vector_config, mock_embeddings):
     """Test clearing ChromaVectorStore."""
     mock_collection = Mock()
@@ -159,7 +159,7 @@ def test_chroma_clear(mock_chroma, vector_config, mock_embeddings):
     mock_collection.delete.assert_called_once_with(ids=["doc1", "doc2", "doc3"])
 
 
-@patch('pyscrai.adapters.vectorstore.chroma_adapter.Chroma')
+@patch('pyscrai.agentica.adapters.vectorstore.chroma_adapter.Chroma')
 def test_chroma_collection_info(mock_chroma, vector_config, mock_embeddings):
     """Test getting collection info from ChromaVectorStore."""
     mock_collection = Mock()

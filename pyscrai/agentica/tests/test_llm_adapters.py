@@ -5,8 +5,8 @@ from unittest.mock import Mock, patch, MagicMock
 import json
 import requests
 
-from pyscrai.config.config import ModelConfig
-from pyscrai.adapters.llm import (
+from pyscrai.agentica.config.config import ModelConfig
+from pyscrai.agentica.adapters.llm import (
     OpenRouterLLM,
     LMStudioLLM,
     create_llm

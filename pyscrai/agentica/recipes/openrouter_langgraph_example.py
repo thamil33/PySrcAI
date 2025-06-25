@@ -6,8 +6,8 @@ from langchain_core.messages import HumanMessage, AIMessage
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 
-from pyscrai.config.config import ModelConfig, AgentConfig
-from pyscrai.adapters.llm import OpenRouterLLM
+from pyscrai.agentica.config.config import ModelConfig, AgentConfig
+from pyscrai.agentica.adapters.llm import OpenRouterLLM
 from dotenv import load_dotenv
 
 # Load environment variables

@@ -15,7 +15,7 @@ load_dotenv()
 import sys
 sys.path.insert(0, str(Path(__file__).parent))
 
-from pyscrai.agents.builder import AgentBuilder
+from pyscrai.agentica.agents.builder import AgentBuilder
 
 
 def create_sample_documents(temp_dir):
@@ -154,9 +154,9 @@ def main():
         print("\n" + "=" * 50)
         print("🎉 Demo completed!")
         print("\nTo try interactive mode, run:")
-        print("python -m pyscrai.cli --template default --interactive")
+        print("python -m pyscrai.agentica.cli --template default --interactive")
         print("\nOr for more options:")
-        print("python -m pyscrai.cli --help")
+        print("python -m pyscrai.agentica.cli --help")
 
 
 if __name__ == "__main__":

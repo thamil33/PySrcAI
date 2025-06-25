@@ -1,11 +1,11 @@
-"""Configuration template handling for   PyScrai."""
+"""Configuration template handling for   pyscrai.agentica."""
 
 import os
 import yaml
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
-from pyscrai.config.config import AgentConfig
+from pyscrai.agentica.config.config import AgentConfig
 
 
 def _env_interpolate(value: str) -> str:

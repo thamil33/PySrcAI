@@ -65,6 +65,8 @@ setuptools.setup(
     ],
     packages=setuptools.find_packages(),
     package_data={},
+    # Explicitly include subpackages
+    package_dir={"pyscrai": "pyscrai"},
     python_requires='>=3.11',
     install_requires=(
         'absl-py',

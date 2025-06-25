@@ -22,7 +22,7 @@ class IngestionPipeline:
         """
         import logging, time, pprint
         self.config = config
-        self.logger = logging.getLogger("pyscrai.ingestion.pipeline")
+        self.logger = logging.getLogger("pyscrai.agentica.ingestion.pipeline")
         self.logger.info("--- FULL AGENT CONFIG ---")
         self.logger.info(pprint.pformat(vars(config)))
         self.logger.info("--- EMBEDDING CONFIG ---")

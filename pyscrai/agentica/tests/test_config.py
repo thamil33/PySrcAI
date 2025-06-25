@@ -1,4 +1,4 @@
-from pyscrai.config import (
+from pyscrai.agentica.config import (
     load_config, load_template, list_templates, AgentConfig, ModelConfig, EmbeddingConfig,
     VectorDBConfig, ChunkingConfig, RAGConfig
 )

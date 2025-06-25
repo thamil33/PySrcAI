@@ -6,10 +6,10 @@ import json
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from pyscrai.config.config import AgentConfig, ChunkingConfig, VectorDBConfig, EmbeddingConfig
-from pyscrai.ingestion.pipeline import IngestionPipeline
-from pyscrai.ingestion.loaders import TextLoader, JSONLoader, DirectoryLoader
-from pyscrai.ingestion.chunkers import TextChunker, SemanticChunker
+from pyscrai.agentica.config.config import AgentConfig, ChunkingConfig, VectorDBConfig, EmbeddingConfig
+from pyscrai.agentica.ingestion.pipeline import IngestionPipeline
+from pyscrai.agentica.ingestion.loaders import TextLoader, JSONLoader, DirectoryLoader
+from pyscrai.agentica.ingestion.chunkers import TextChunker, SemanticChunker
 from langchain.schema import Document
 
 
@@ -185,9 +185,9 @@ This is content under header 2."""
             assert chunk.metadata["chunking_strategy"] == "semantic"
 
 
-@patch('pyscrai.ingestion.pipeline.create_chunker')
-@patch('pyscrai.ingestion.pipeline.create_vectorstore')
-@patch('pyscrai.ingestion.pipeline.create_embedder')
+@patch('pyscrai.agentica.ingestion.pipeline.create_chunker')
+@patch('pyscrai.agentica.ingestion.pipeline.create_vectorstore')
+@patch('pyscrai.agentica.ingestion.pipeline.create_embedder')
 class TestIngestionPipeline:
     """Tests for IngestionPipeline."""
     

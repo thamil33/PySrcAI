@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Add the pyscrai path so we can import the OpenRouterLLM directly
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'pyscrai'))
 
-from pyscrai.adapters.llm.openrouter_adapter import OpenRouterLLM
+from pyscrai.agentica.adapters.llm.openrouter_adapter import OpenRouterLLM
 
 load_dotenv()
 

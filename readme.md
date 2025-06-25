@@ -1,129 +1,141 @@
-# Concordia
+# PyScrAI Workstation
 
-*A library for generative social simulation*
+**Python- based  **
 
-<!-- GITHUB -->
-[![Python](https://img.shields.io/pypi/pyversions/gdm-concordia.svg)](https://pypi.python.org/pypi/gdm-concordia)
-[![PyPI version](https://img.shields.io/pypi/v/gdm-concordia.svg)](https://pypi.python.org/pypi/gdm-concordia)
-[![PyPI tests](../../actions/workflows/pypi-test.yml/badge.svg)](../../actions/workflows/pypi-test.yml)
-[![Tests](../../actions/workflows/test-concordia.yml/badge.svg)](../../actions/workflows/test-concordia.yml)
-[![Examples](../../actions/workflows/test-examples.yml/badge.svg)](../../actions/workflows/test-examples.yml)
-<!-- /GITHUB -->
+## 🎯 Project Overview
 
-[Concordia Tech Report](https://arxiv.org/abs/2312.03664)
+**`PyScrAI` is a comprehensive framework engineered for broad multi-domain applications while maintaining exceptional quality, performance, and modularity. The platform enables seamless configuration for highly controlled, specialized use cases across diverse sectors and industries.**
 
-## About
+**`PyScrAI` delivers advanced tooling for creating and deploying sophisticated agent-based scenarios, with particular emphasis on simulations and cognitive reasoning AI applications. The platform integrates multiple leading frameworks and technologies to provide a unified development environment for building enterprise-grade multi-agent systems, simulations, and AI solutions.**
 
-Concordia is a library to facilitate construction and use of generative
-agent-based models to simulate interactions of agents in grounded physical,
-social, or digital space. It makes it easy and flexible to define environments
-using an interaction pattern borrowed from tabletop role-playing games in which
-a special agent called the Game Master (GM) is responsible for simulating the
-environment where player agents interact (like a narrator in an interactive
-story). Agents take actions by describing what they want to do in natural
-language. The GM then translates their actions into appropriate implementations.
-In a simulated physical world, the GM would check the physical plausibility of
-agent actions and describe their effects. In digital environments that simulate
-technologies such as apps and services, the GM may, based on agent input, handle
-necessary API calls to integrate with external tools.
 
-Concordia supports a wide array of applications, ranging from social science
-research and AI ethics to cognitive neuroscience and economics; Additionally,
-it also can be leveraged for generating data for personalization applications
-and for conducting performance evaluations of real services through simulated
-usage.
+### 🔬 Target Application Domains
 
-Concordia requires access to a standard LLM API, and optionally may also
-integrate with real applications and services.
+- **Academic Research**: Political science, international relations, and AI safety research
+- **Policy Analysis**: Strategic scenario planning for government agencies and NGOs  
+- **AI Development**: Multi-agent system research, development, and deployment
+- **Educational**: Advanced instruction in complex systems and AI methodologies
+- **Entertainment**: Interactive storytelling, gaming applications, and immersive experiences
 
-## Installation
+### 🛠️ Technology Stack
 
-### `pip` install
+**PyScrAI** builds upon and extends industry-leading technologies including:
 
-[Concordia is available on PyPI](https://pypi.python.org/pypi/gdm-concordia)
-and can be installed using:
+- **Google DeepMind's Concordia**: Core agent simulation framework
+- **OpenRouter API**: OpenAI-compatible cloud language model endpoints
+- **LM Studio**: Local generative language model deployment
+- **LangGraph**: Advanced agent workflow orchestration
+- **Sentence-Transformers**: Semantic embedding and retrieval systems
+- **PyTorch**: Deep learning infrastructure
+- **NVIDIA CUDA SDK**: Accelerated local model inference
 
-```shell
-pip install gdm-concordia
+This robust technology foundation ensures scalable, performant, and reliable AI agent simulations across diverse application scenarios.
+
+## 📁 Project Structure
+
+```
+pyscrai_workstation/
+├── 📦 concordia/                    # Core Concordia framework
+│   ├── agents/                      # Agent implementations and behaviors
+│   ├── associative_memory/          # Memory systems for agents
+│   ├── clocks/                      # Timing and synchronization
+│   ├── components/                  # Reusable simulation components
+│   ├── document/                    # Document management
+│   ├── environment/                 # Simulation environments and engines
+│   ├── examples/                    # Example simulations and tutorials
+│   ├── language_model/              # LLM integrations (GPT, OpenRouter, LMStudio)
+│   ├── prefabs/                     # Pre-built simulation templates
+│   ├── thought_chains/              # Agent reasoning systems
+│   └── utils/                       # Utility functions
+│
+├── 📦 pyscrai/                      # Core PyScrai package
+│   ├── agentica/                    # Agent framework and tools
+│   └── geo_mod/                     # Geopolitical simulation module
+│       ├── prefabs/                 # Nation entities, moderators
+│       ├── scenarios/               # Specific simulation configurations
+│       ├── simulations/             # Runnable simulation scripts
+│       └── utils/                   # Logging and helper functions
+│
+├── 📁 util/                         # Project utilities
+│   ├── docs/                        # Documentation files
+│   ├── scripts/                     # Automation and setup scripts
+│   ├── setup/                       # Environment setup tools
+│   └── storage/                     # Data storage utilities
+│
+├── 📄 .env                          # Environment configuration
+├── 📄 pyproject.toml               # Python project configuration
+├── 📄 setup.py                     # Package installation script
+└── 📄 README.md                    # This file
 ```
 
-### Manual install
+## 🧩 Core Components
 
-If you want to work on the Concordia source code, you can perform an editable
-installation as follows:
+### Concordia Framework
+Environmental and scenario driven advanced agent cognitive simulation framework providing:
 
-1.  Clone Concordia:
+- **Agents**: Sophisticated AI agents with memory, personality, and decision-making
+- **Associative Memory**: Long-term knowledge storage and retrieval systems
+- **Game Clocks**: Temporal control and synchronization for simulations
+- **Components**: Modular building blocks for agent behaviors
+- **Environment Engine**: Simulation runtime and interaction management
+- **Language Models**: Integration with various LLM providers
+- **Thought Chains**: Complex reasoning and decision-making processes
 
-    ```shell
-    git clone -b main https://github.com/google-deepmind/concordia
-    cd concordia
-    ```
+### PyScrai Package
 
-2.  Install Concordia:
+#### Agentica
+Tools and frameworks for building AI agents with:
+- **Agent lifecycle management**
+- **Behavior configuration systems**
+- **Communication protocols**
+- **Performance monitoring**
 
-    ```shell
-    pip install --editable .[dev]
-    ```
+#### Geo_mod
+Specialized geopolitical simulation framework featuring:
+- **Nation Entities**: Configurable country representatives with goals and contexts
+- **Debate Moderators**: AI-powered mediation for international discussions
+- **Scenario Configurations**: Pre-built templates for specific geopolitical situations
+- **Turn-based Simulations**: Structured interaction protocols
 
-3.  (Optional) Test the installation:
+## 📚 Documentation System - WIP
 
-    ```shell
-    pytest --pyargs concordia
-    ```
 
-### Devcontainer
+## 🔧 Environment Configuration
 
-This project includes a pre-configured development environment
-([devcontainer](https://containers.dev)).
+The project uses environment variables for configuration:
 
-You can launch a working development environment with one click, using e.g.
-[Github Codespaces](https://github.com/features/codespaces) or the
-[VSCode Containers](https://code.visualstudio.com/docs/remote/containers-tutorial)
-extension.
+- **Language Models**: OpenRouter API, LMStudio integration
+- **Storage Paths**: Document and data storage locations
+- **API Tokens**: Hugging Face, GitHub integration
+- **Model Selection**: Configurable AI model backends
 
-## Bring your own LLM
+. **Environment Setup**: Configure your `.env` file with API keys and paths
+. **Virtual Environment**: Activate the `.pyscrai` virtual environment
 
-Concordia requires a access to an LLM API. Any LLM API that supports sampling
-text should work. The quality of the results you get depends on which LLM you
-select. Some are better at role-playing than others. You must also provide a
-text embedder for the associative memory. Any fixed-dimensional embedding works
-for this. Ideally it would be one that works well for sentence similarity or
-semantic search.
 
-## Example usage
 
-Find below an illustrative social simulation where 4 friends are stuck in a
-snowed in pub. Two of them have a dispute over a crashed car.
 
-The agents are built using a simple reasoning inspired by March and Olsen (2011)
-who posit that humans generally act as though they choose their actions by
-answering three key questions:
 
-1. What kind of situation is this?
-2. What kind of person am I?
-3. What does a person such as I do in a situation such as this?
-
-The agents used in the following example implement exactly these questions:
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.sandbox.google.com/github/google-deepmind/concordia/blob/main/examples/tutorial.ipynb)
-
-## Citing Concordia
-
-If you use Concordia in your work, please cite the accompanying article:
-
-```bibtex
-@article{vezhnevets2023generative,
-  title={Generative agent-based modeling with actions grounded in physical,
-  social, or digital space using Concordia},
-  author={Vezhnevets, Alexander Sasha and Agapiou, John P and Aharon, Avia and
-  Ziv, Ron and Matyas, Jayd and Du{\'e}{\~n}ez-Guzm{\'a}n, Edgar A and
-  Cunningham, William A and Osindero, Simon and Karmon, Danny and
-  Leibo, Joel Z},
-  journal={arXiv preprint arXiv:2312.03664},
-  year={2023}
-}
+### **Example Usage**: 
+#### Agentica 
+Running a multiturn interactive llm chatbot with Pyscrai.Agentica: 
+```bash
+ python -m pyscrai.agentica.cli --template chat --verbose  --interactive  scenarios in `pyscrai/geo_mod scenarios/
 ```
+ - To run the rag agent, swap out 
+ `--template chat`
+ with 
+ `--template rag` 
 
-## Disclaimer
+ #### Geo_Mod  - WIP
 
-This is not an officially supported Google product.
+
+## 📋 Project Status
+
+This is an active development workstation with ongoing enhancements to:
+- Geopolitical simulation capabilities
+- Improving scope, domain and type of simulation capabilities.
+- Advanced, human-like cognitive agent systems. 
+- Integration with more third-party tools, services and API's. 
+- The documentation system is currently under `HEAVY development`. 
+---

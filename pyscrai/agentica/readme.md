@@ -1,5 +1,14 @@
 # PyScRAI - Enhanced RAG Development Framework
 
+```bash
+python -m pyscrai.agentica.cli --template rag --verbose  --interactive 
+
+python -m pyscrai.agentica.cli --template chat --verbose  --interactive 
+
+```
+
+
+
 PyScRAI is a comprehensive Retrieval-Augmented Generation (RAG) framework that provides easy-to-use tools for building, configuring, and deploying RAG applications.
 
 ## Features
@@ -44,8 +53,8 @@ python -m cli.py --template rag --interactive
 #### Using the Python API
 
 ```python
-from pyscrai.agents.builder import AgentBuilder
-from pyscrai.config.config import AgentConfig
+from pyscrai.agentica.agents.builder import AgentBuilder
+from pyscrai.agentica.config.config import AgentConfig
 
 # Create agent with default configuration
 agent = AgentBuilder.create_default()
@@ -145,7 +154,7 @@ pyscrai/
 ### Custom Preprocessing
 
 ```python
-from pyscrai.agents.builder import AgentBuilder
+from pyscrai.agentica.agents.builder import AgentBuilder
 
 def my_preprocessing_hook(document):
     # Custom document preprocessing

@@ -2,7 +2,7 @@
 
 import os
 from dotenv import load_dotenv
-from pyscrai.adapters.llm import OpenRouterLLM
+from pyscrai.agentica.adapters.llm import OpenRouterLLM
 
 # Load environment variables
 load_dotenv()

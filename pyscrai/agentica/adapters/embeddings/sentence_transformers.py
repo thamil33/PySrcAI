@@ -22,7 +22,7 @@ class SentenceTransformerEmbeddings(BaseEmbedder):
         """
         import pprint
         self.config = config
-        self.logger = logging.getLogger("pyscrai.embeddings.sentence_transformers")
+        self.logger = logging.getLogger("pyscrai.agentica.embeddings.sentence_transformers")
         self.logger.info("--- EMBEDDING CONFIG PASSED TO EMBEDDER ---")
         self.logger.info(pprint.pformat(vars(config)))
         start = time.time()
