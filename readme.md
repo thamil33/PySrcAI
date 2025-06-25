@@ -125,7 +125,7 @@ Running a multi turn interactive llm chatbot with PySrcAI.Agentica:
 python -m pysrcai.agentica.cli --template rag --verbose  --interactive
 ```
   
-### Geo_Mod  - WIP
+### Geo_Mod_Usage  - WIP
 
 ## 📋 Project Status
 
