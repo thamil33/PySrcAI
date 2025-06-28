@@ -66,7 +66,7 @@ The resolved event was: Event: **Revised Statements:**
 The United Nations convened a special session to host a direct, moderated debate between the representatives of Russia and Ukraine. The goal was for each nation to clearly state its position and desired outcomes regarding the ongoing conflict.
 
 **Putative Event:**
-The representative of Ukraine took the floor at the United Nations special session. The representative spoke: "Distinguished delegates, ladies and gentlemen, Ukraine stands before this esteemed assembly today to reiterate its sovereign right to defend itself against an unprovoked act of aggression. Since 2014, our nation has been subjected to illegal annexations and occupations, most notably in Crimea and the Donbas region. These actions are clear violations of international law and the principles of territorial integrity and sovereignty that this body holds dear. We are grateful for the significant military and financial aid provided by our Western allies. This support has been crucial in our efforts to defend our people and reclaim our territories. However, our struggle is far from over. We seek the full withdrawal of foreign troops from our internationally recognized borders and the restoration of our territorial integrity. Ukraine's primary goal is to defend our national sovereignty and pursue deeper integration with Western political and security structures, such as the European Union and NATO. We believe that this integration will not only strengthen our security but also contribute to the stability and prosperity of the entire region. We call upon all member states to condemn these acts of aggression and to support Ukraine in its quest for peace and sovereignty. The world must stand united against any attempts to redraw borders by force. We urge the international community to take concrete actions to hold those responsible accountable and to ensure that the principles of international law are upheld. Thank you."    
+The representative of Ukraine took the floor at the United Nations special session. The representative spoke: "Distinguished delegates, ladies and gentlemen, Ukraine stands before this esteemed assembly today to reiterate its sovereign right to defend itself against an unprovoked act of aggression. Since 2014, our nation has been subjected to illegal annexations and occupations, most notably in Crimea and the Donbas region. These actions are clear violations of international law and the principles of territorial integrity and sovereignty that this body holds dear. We are grateful for the significant military and financial aid provided by our Western allies. This support has been crucial in our efforts to defend our people and reclaim our territories. However, our struggle is far from over. We seek the full withdrawal of foreign troops from our internationally recognized borders and the restoration of our territorial integrity. Ukraine's primary goal is to defend our national sovereignty and pursue deeper integration with Western political and security structures, such as the European Union and NATO. We believe that this integration will not only strengthen our security but also contribute to the stability and prosperity of the entire region. We call upon all member states to condemn these acts of aggression and to support Ukraine in its quest for peace and sovereignty. The world must stand united against any attempts to redraw borders by force. We urge the international community to take concrete actions to hold those responsible accountable and to ensure that the principles of international law are upheld. Thank you."
 
 This statement emphasized Ukraine's sovereignty, the need for territorial integrity, and the importance of international support and integration with Western structures.
 
@@ -100,7 +100,7 @@ This is a social science experiment. It is structured as a tabletop role...
 This is a social science experiment. It is structured as a tabletop role...
 [07:11:14] concordia.openrouter.mistralai/mistral-small-3.1-24b-instruct:free: LLM Call from Thread(ThreadPoolExecutor-47_1) | Caller: C:\Users\tyler\dev\__pysrcai\concordia\document\interactive_document.py:164 | Model: mistralai/mistral-small-3.1-24b-instruct:free | Prompt: Game master instructions: :
 This is a social science experiment. It is structured as a tabletop role...
-Entity Ukraine observed: //Current// Ukraine observes that the room falls silent for a moment after their representative finishes speaking, the weight of their words hanging in the air. The moderator of the session, a seasoned diplomat from a neutral country, nods solemnly and turns to the Russian representative, inviting them to take the floor. The eyes of many delegates in the room shift towards Russia's representative, awaiting their response. The atmosphere is tense, with a mix of anticipation and apprehension palpable among the attendees. 
+Entity Ukraine observed: //Current// Ukraine observes that the room falls silent for a moment after their representative finishes speaking, the weight of their words hanging in the air. The moderator of the session, a seasoned diplomat from a neutral country, nods solemnly and turns to the Russian representative, inviting them to take the floor. The eyes of many delegates in the room shift towards Russia's representative, awaiting their response. The atmosphere is tense, with a mix of anticipation and apprehension palpable among the attendees.
 [07:11:17] concordia.openrouter.mistralai/mistral-small-3.1-24b-instruct:free: LLM Call from Thread(ThreadPoolExecutor-56_0) | Caller: C:\Users\tyler\dev\__pysrcai\concordia\document\interactive_document.py:164 | Model: mistralai/mistral-small-3.1-24b-instruct:free | Prompt: Statements:
 Story so far (ordered from oldest to most recent events):
 0).  A special session of the ...
@@ -113,7 +113,7 @@ Entity Russia is next to act. They must respond  in the format: "ActionSpec(call
 [07:11:32] concordia.openrouter.mistralai/mistral-small-3.1-24b-instruct:free: LLM Call from EntityAgentWithLogging(Russia) | Caller: C:\Users\tyler\dev\__pysrcai\concordia\document\interactive_document.py:164 | Model: mistralai/mistral-small-3.1-24b-instruct:free | Prompt:
 Key context for Russia::
 Russia views the eastward expansion of NATO as a direct threat to its secu...
-Entity Russia chose action: Russia Given the context and the immediate observation, Russia is likely to respond in a manner that aligns with its key goals and recent statements. Here is a possible response from Russia:  
+Entity Russia chose action: Russia Given the context and the immediate observation, Russia is likely to respond in a manner that aligns with its key goals and recent statements. Here is a possible response from Russia:
 
 ``` //Immediate// Russia observes the representative of Ukraine concluding their plea to the United Nations. The room falls silent as the moderator prepares to acknowledge Ukraine's statement and invite Russia to respond. The atmosphere is tense, with many delegates exchanging glances and murmurs filling the air.
 
@@ -129,7 +129,7 @@ Secondly, the so-called 'special military operation' in Ukraine is aimed at demi
 
 Thirdly, Crimea is an integral part of the Russian Federation. The people of Crimea chose to join Russia through a democratic referendum, and we will not accept any attempts to challenge this decision.
 
-We reiterate our commitment to a peaceful resolution and are open to dialogue. However, we will not compromise on our national security and the protection of our interests. We call on the international community to support a diplomatic solution that respects the sovereignty and territorial integrity of all nations involved.     
+We reiterate our commitment to a peaceful resolution and are open to dialogue. However, we will not compromise on our national security and the protection of our interests. We call on the international community to support a diplomatic solution that respects the sovereignty and territorial integrity of all nations involved.
 
 Thank you."
 
@@ -152,7 +152,7 @@ Secondly, the so-called 'special military operation' in Ukraine is aimed at demi
 
 Thirdly, Crimea is an integral part of the Russian Federation. The people of Crimea chose to join Russia through a democratic referendum, and we will not accept any attempts to challenge this decision.
 
-We reiterate our commitment to a peaceful resolution and are open to dialogue. However, we will not compromise on our national security and the protection of our interests. We call on the international community to support a diplomatic solution that respects the sovereignty and territorial integrity of all nations involved.     
+We reiterate our commitment to a peaceful resolution and are open to dialogue. However, we will not compromise on our national security and the protection of our interests. We call on the international community to support a diplomatic solution that respects the sovereignty and territorial integrity of all nations involved.
 
 Thank you."
 
@@ -240,7 +240,7 @@ Distinguished Delegates,
 
 We gather here today in the shadow of an unprovoked and ongoing aggression against our sovereign nation, Ukraine. Our people are suffering, our lands are occupied, and our sovereignty is under threat. We stand before you not just as representatives of a nation, but as defenders of international law, human rights, and the principles of sovereignty and territorial integrity that are the very foundation of this United Nations.
 
-Ukraine has been a sovereign and independent state since its declaration of independence in 1991. Our borders, as recognized by the international community, include Crimea and the Donbas region. Since 2014, these territories have been illegally occupied and annexed, in clear violation of international law and the UN Charter.    
+Ukraine has been a sovereign and independent state since its declaration of independence in 1991. Our borders, as recognized by the international community, include Crimea and the Donbas region. Since 2014, these territories have been illegally occupied and annexed, in clear violation of international law and the UN Charter.
 
 We are here to demand justice and accountability. We call for the immediate and unconditional withdrawal of all foreign troops from our internationally recognized borders. We call for the restoration of Ukraine's territorial integrity and the return of all occupied lands.
 
@@ -253,7 +253,7 @@ Thank you."
 ---
 
 This statement reflects Ukraine's primary goals and the context provided, emphasizing the defense of national sovereignty, territorial integrity, and the pursuit of deeper integration with Western political and security structures.
-The suggested action or event to resolve was: Ukraine In the context of the United Nations General Assembly session described, Ukraine's representative would likely deliver a speech that emphasizes the following points: 
+The suggested action or event to resolve was: Ukraine In the context of the United Nations General Assembly session described, Ukraine's representative would likely deliver a speech that emphasizes the following points:
 
 ---
 
@@ -265,7 +265,7 @@ Distinguished Delegates,
 
 We gather here today in the shadow of an unprovoked and ongoing aggression against our sovereign nation, Ukraine. Our people are suffering, our lands are occupied, and our sovereignty is under threat. We stand before you not just as representatives of a nation, but as defenders of international law, human rights, and the principles of sovereignty and territorial integrity that are the very foundation of this United Nations.
 
-Ukraine has been a sovereign and independent state since its declaration of independence in 1991. Our borders, as recognized by the international community, include Crimea and the Donbas region. Since 2014, these territories have been illegally occupied and annexed, in clear violation of international law and the UN Charter.    
+Ukraine has been a sovereign and independent state since its declaration of independence in 1991. Our borders, as recognized by the international community, include Crimea and the Donbas region. Since 2014, these territories have been illegally occupied and annexed, in clear violation of international law and the UN Charter.
 
 We are here to demand justice and accountability. We call for the immediate and unconditional withdrawal of all foreign troops from our internationally recognized borders. We call for the restoration of Ukraine's territorial integrity and the return of all occupied lands.
 
@@ -302,7 +302,7 @@ The room remained tense as delegates absorbed Russia's response, awaiting furthe
 
 ---
 
-**Putative Event:** Ukraine's representative, Andriy, delivered a speech emphasizing the following points:    
+**Putative Event:** Ukraine's representative, Andriy, delivered a speech emphasizing the following points:
 
 "Ladies and Gentlemen, Distinguished Delegates, we gather here today in the shadow of an unprovoked and ongoing aggression against our sovereign nation, Ukraine. Our people are suffering, our lands are occupied, and our sovereignty is under threat. We stand before you not just as representatives of a nation, but as defenders of international law, human rights, and the principles of sovereignty and territorial integrity that are the very foundation of this United Nations. Ukraine has been a sovereign and independent state since its declaration of independence in 1991. Our borders, as recognized by the international community, include Crimea and the Donbas region. Since 2014, these territories have been illegally occupied and annexed, in clear violation of international law and the UN Charter. We are here to demand justice and accountability. We call for the immediate and unconditional withdrawal of all foreign troops from our internationally recognized borders. We call for the restoration of Ukraine's territorial integrity and the return of all occupied lands. Ukraine is grateful for the significant military and financial aid provided by our Western allies. This support is crucial in our defense against aggression and in our efforts to reclaim our territories. However, we also seek deeper integration with Western political and security structures, such as the European Union and NATO, to strengthen our sovereignty and ensure our long-term security. We urge all member states to stand with Ukraine in this time of need. Your support, both moral and material, is vital. We call on the international community to hold the aggressor accountable and to uphold the principles of sovereignty and territorial integrity that are the bedrock of this organization. Thank you."
 
@@ -367,7 +367,7 @@ Secondly, we initiated the 'special military operation' in Ukraine with the clea
 
 Thirdly, Crimea is an integral part of the Russian Federation. The people of Crimea exercised their right to self-determination in a democratic referendum, and we respect their choice.
 
-We urge the international community to understand that our actions are not driven by aggression but by the necessity to protect our national interests and the rights of Russian-speaking populations. We call for a diplomatic solution that respects the sovereignty and territorial integrity of all countries, including Russia.      
+We urge the international community to understand that our actions are not driven by aggression but by the necessity to protect our national interests and the rights of Russian-speaking populations. We call for a diplomatic solution that respects the sovereignty and territorial integrity of all countries, including Russia.
 
 Thank you."
 
@@ -391,7 +391,7 @@ Secondly, we initiated the 'special military operation' in Ukraine with the clea
 
 Thirdly, Crimea is an integral part of the Russian Federation. The people of Crimea exercised their right to self-determination in a democratic referendum, and we respect their choice.
 
-We urge the international community to understand that our actions are not driven by aggression but by the necessity to protect our national interests and the rights of Russian-speaking populations. We call for a diplomatic solution that respects the sovereignty and territorial integrity of all countries, including Russia.      
+We urge the international community to understand that our actions are not driven by aggression but by the necessity to protect our national interests and the rights of Russian-speaking populations. We call for a diplomatic solution that respects the sovereignty and territorial integrity of all countries, including Russia.
 
 Thank you."
 

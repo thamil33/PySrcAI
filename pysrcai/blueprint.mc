@@ -5,7 +5,7 @@ This document provides a comprehensive analysis of Concordia framework features 
 ## Executive Summary
 
 Our current geo_mod implementation represents a minimal viable geopolitical simulation using:
-- Basic nation entities with memory and goals  
+- Basic nation entities with memory and goals
 - Simple debate scenarios
 - Generic game master for turn management
 - Basic logging utilities
@@ -300,7 +300,7 @@ However, Concordia offers a vast ecosystem of sophisticated components that coul
 Our current geo_mod implementation provides a solid foundation for geopolitical simulation but represents only a small fraction of Concordia's capabilities. The missing features outlined above could transform our framework from a simple debate system into a comprehensive international relations modeling platform capable of:
 
 - Realistic multi-track diplomacy
-- Economic warfare and sanctions modeling  
+- Economic warfare and sanctions modeling
 - Crisis escalation and de-escalation dynamics
 - Public opinion and domestic political constraints
 - Complex multi-actor scenarios with dozens of nations

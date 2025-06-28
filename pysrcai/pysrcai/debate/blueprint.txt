@@ -1,7 +1,7 @@
-- Study pysrcai\geo_mod for reference, as it is a fully functioning module. The major difference will be for this cycle of development in the  pysrcai\pysrcai\debate implementation, we want to initially make everything as modular and scalable as possible, not locking into any specific debate, allowing room for these to be crafted in the scenarios themselves. 
+- Study pysrcai\geo_mod for reference, as it is a fully functioning module. The major difference will be for this cycle of development in the  pysrcai\pysrcai\debate implementation, we want to initially make everything as modular and scalable as possible, not locking into any specific debate, allowing room for these to be crafted in the scenarios themselves.
 
 - This will also serve as future proof of concecpt for other simulation modules. So lets take our time, aiming for extensibility and modularity, using configs or other easily viewable and editable central sources of truth.
 
-    - Keep as many componenets seperate from the main files, dynamic and modular. Use of yaml or json config files to set parameters and extend the base scenario. 
+    - Keep as many componenets seperate from the main files, dynamic and modular. Use of yaml or json config files to set parameters and extend the base scenario.
     - The base theme of this module will be Debates, I have set up the basic directory structure and even created place holder files, unless you have a specific reason not to, use these.
-    - We need to focus on having logging, constraints on length of responses, and a simple and clear 
+    - We need to focus on having logging, constraints on length of responses, and a simple and clear

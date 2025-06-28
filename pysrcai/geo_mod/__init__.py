@@ -17,7 +17,7 @@ __version__ = "1.0.0"
 from pysrcai.geo_mod.prefabs.entities import nation_entity
 from pysrcai.geo_mod.prefabs.entities import moderator_entity
 from pysrcai.geo_mod.scenarios import russia_ukraine_debate
-from pysrcai.geo_mod.scenarios import russia_ukraine_debate_phase2
+from pysrcai.geo_mod.scenarios import russia_ukraine_debate
 from pysrcai.geo_mod.simulations import debate
-from pysrcai.geo_mod.simulations import phase2_debate_fixed
+from pysrcai.geo_mod.simulations import debate
 from pysrcai.geo_mod.utils import logging_config

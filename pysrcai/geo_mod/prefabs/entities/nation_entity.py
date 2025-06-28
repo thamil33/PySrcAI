@@ -90,7 +90,7 @@ class NationEntity(prefab_lib.Prefab):
             opening = word_limits['opening_statements']
             rebuttals = word_limits['rebuttals']
             final = word_limits['final_arguments']
-            
+
             response_limit = (f"RESPONSE LIMIT: I will limit my opening statements to {opening['min']}-{opening['max']} words, "
                             f"rebuttals to {rebuttals['min']}-{rebuttals['max']} words, and final arguments to "
                             f"{final['min']}-{final['max']} words to maintain clarity and respect time constraints.")

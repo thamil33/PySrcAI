@@ -65,13 +65,13 @@ class ModeratorEntity(prefab_lib.Prefab):
             history_length=20,  # Longer history for debate context
             pre_act_label=f'\nRecent debate events and statements:'
         )
-        
+
         # Create a memory bank with formative memories for the moderator
         embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
         def simple_embedder(text: str) -> np.ndarray:
             return embedder.encode(text)
-            
+
         # Create memory bank using FormativeMemoryFactory
         memory_factory = formative_memories.FormativeMemoryFactory(
             model=model,
@@ -84,10 +84,10 @@ class ModeratorEntity(prefab_lib.Prefab):
                 "Assessment Criteria: Logic, evidence, persuasiveness, international law",
             ],
         )
-        
+
         # Create the raw memory bank
         raw_memory_bank = memory_factory._blank_memory_factory_call()
-        
+
         # Add the moderator's core memories to the raw bank
         for mem in [
             f"I am {agent_name}, a neutral representative.",
@@ -98,7 +98,7 @@ class ModeratorEntity(prefab_lib.Prefab):
             "At the end of the debate, I must declare a winner with detailed reasoning.",
         ]:
             raw_memory_bank.add(mem)
-            
+
         # Wrap the memory bank in an AssociativeMemory component
         memory = agent_components.memory.AssociativeMemory(raw_memory_bank)
 
@@ -107,12 +107,12 @@ class ModeratorEntity(prefab_lib.Prefab):
             state=goal,
             pre_act_label=f'\n{agent_name}\'s role:'
         )
-        
+
         context_component = agent_components.constant.Constant(
             state=context,
             pre_act_label=f'\nBackground for {agent_name}:'
         )
-        
+
         # Add judgment criteria component
         judgment_criteria = (
             "Assessment Criteria for Debate Winner:\n"
@@ -123,7 +123,7 @@ class ModeratorEntity(prefab_lib.Prefab):
             "5. Diplomatic Merit: Are solutions practical and achievable?\n"
             "You must weigh all these factors and declare a clear winner with detailed reasoning."
         )
-        
+
         judgment_component = agent_components.constant.Constant(
             state=judgment_criteria,
             pre_act_label=f'\nJudgment criteria:'

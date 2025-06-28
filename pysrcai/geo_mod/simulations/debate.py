@@ -1,114 +1,123 @@
-"""Main runnable script for the Phase 1 geopolitical debate simulation."""
+"""Geopolitical debate simulation with scene-based structure using D&D GameMaster."""
 
-import os
 import sys
+import logging
 from pathlib import Path
 
 # --- Add project root to sys.path ---
-# This allows us to import modules from pysrcai and concordia
 project_root = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(project_root))
 # -----------------------------------
 
-import sentence_transformers
-from concordia.prefabs.simulation import generic as simulation
-from concordia.typing import prefab as prefab_lib
-
-# --- Model Imports ---
-# We need to handle both OpenRouter and a local model provider like LMStudio
-from concordia.language_model import openrouter_model, lmstudio_model, no_language_model
+import numpy as np
+from concordia.prefabs.simulation import generic as simulation_prefab
+from concordia.language_model import openrouter_model
+from sentence_transformers import SentenceTransformer
 
 # --- Geo-Mod Imports ---
 from pysrcai.geo_mod.prefabs.entities.nation_entity import NationEntity
-from pysrcai.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
+from pysrcai.geo_mod.prefabs.entities.moderator_entity import ModeratorEntity
+from pysrcai.geo_mod.scenarios.russia_ukraine_debate import (
+    PREMISE, INSTANCES
+)
 from pysrcai.geo_mod.utils.logging_config import setup_logging
 
-# --- Concordia Prefabs ---
-from concordia.prefabs.game_master import dialogic_and_dramaturgic as dd_gamemaster
+# Import D&D GameMaster
+from concordia.prefabs.game_master import dialogic_and_dramaturgic as dd_gm
 
-# --- Environment Setup ---
-from dotenv import load_dotenv
-load_dotenv()
+# --- Constants ---
+OPENROUTER_MODEL = "mistralai/mistral-small-3.1-24b-instruct:free"
+SIMULATION_NAME = "Russia-Ukraine UN Debate"
 
-# --- Main Simulation Logic ---
+
 def main():
-    """Sets up and runs the geopolitical debate simulation."""
-    # 1. Configure Logging
-    logger = setup_logging()
-    logger.info("Starting Phase 1: Geopolitical Debate Simulation.")
+    """Run the geopolitical debate simulation using D&D GameMaster."""
 
-    # 2. Configure Language Model
-    # Use an environment variable to easily switch between models.
-    # Set USE_LMSTUDIO=true in your .env file to use a local model.
-    use_lmstudio = os.getenv("USE_LMSTUDIO", "false").lower() == "true"
-    disable_llm = os.getenv("DISABLE_LANGUAGE_MODEL", "false").lower() == "true"
+    # 1. Setup logging
+    logger = setup_logging(level=logging.INFO)
+    logger.info("Starting Module: Scene-Based Geopolitical Debate Simulation.")
 
-    model = None
-    if disable_llm:
-        logger.info("Language model is DISABLED.")
-        model = no_language_model.NoLanguageModel()
-    elif use_lmstudio:
-        logger.info("Using LMStudio model.")
-        base_url = os.getenv("LMSTUDIO_API_BASE", "http://localhost:1234/v1")
-        model_name = os.getenv("LMSTUDIO_MODEL_NAME", "local-model")
-        model = lmstudio_model.LMStudioLanguageModel(
-            model_name=model_name,
-            base_url=base_url,
-            verbose_logging=True,
-        )
-    else:
-        logger.info("Using OpenRouter model.")
-        api_key = os.environ.get('OPENROUTER_API_KEY')
-        model_name = os.environ.get('MODEL_NAME', 'mistralai/mistral-small-3.1-24b-instruct:free')
-        if not api_key:
-            raise ValueError("OPENROUTER_API_KEY not found in environment.")
+    # 2. Initialize the language model
+    try:
         model = openrouter_model.OpenRouterLanguageModel(
-            api_key=api_key,
-            model_name=model_name,
-            verbose_logging=False,
+            model_name=OPENROUTER_MODEL,
+            api_key=None,  # Reads from OPENROUTER_API_KEY environment variable
         )
+        logger.info("Using OpenRouter model.")
+    except Exception as e:
+        logger.error(f"Failed to initialize OpenRouter model: {e}")
+        logger.info("Falling back to a mock model for testing.")
+        from concordia.testing import mock_model
+        model = mock_model.MockModel()
 
-    # 3. Configure Sentence Embedder
-    if disable_llm:
-        embedder = lambda _: [0.0] * 768 # Return a dummy vector
-    else:
-        st_model = sentence_transformers.SentenceTransformer(
-            'sentence-transformers/all-mpnet-base-v2'
-        )
-        embedder = lambda x: st_model.encode(x, show_progress_bar=False)
-    logger.info("Sentence embedder configured.")
+    # 3. Configure the sentence embedder
+    try:
+        embedder = SentenceTransformer("all-MiniLM-L6-v2")
+        def embed_fn(text: str) -> np.ndarray:
+            return embedder.encode(text)
+        logger.info("Sentence embedder configured.")
+    except Exception as e:
+        logger.error(f"Failed to load sentence embedder: {e}")
+        # Use a simple mock embedder for testing
+        def embed_fn(text: str) -> np.ndarray:
+            return np.random.randn(384)  # Mock 384-dimensional embedding
 
-    # 4. Map Prefab Strings to Classes
-    # This connects the scenario data to our prefab implementations.
+    # 4. Create prefab instances
     prefabs = {
         'nation_entity': NationEntity(),
-        'generic_gm': dd_gamemaster.GameMaster(),
+        'moderator_entity': ModeratorEntity(),
+        'dialogic_and_dramaturgic_gm': dd_gm.GameMaster(),
     }
 
-    # 5. Create the Main Simulation Configuration
-    config = prefab_lib.Config(
-        default_premise=PREMISE,
+    # 5. Create simulation configuration
+    config = simulation_prefab.Config(
         prefabs=prefabs,
         instances=INSTANCES,
+        default_premise=PREMISE,
+        default_max_steps=20,  # Allow enough steps for full debate
     )
+
     logger.info("Simulation config created.")
 
-    # 6. Initialize the Simulation
-    runnable_simulation = simulation.Simulation(
+    # 6. Initialize and run the simulation
+    runnable_simulation = simulation_prefab.Simulation(
         config=config,
         model=model,
-        embedder=embedder,
+        embedder=embed_fn,
     )
+
     logger.info("Simulation object initialized. Starting the simulation...")
 
-    # 7. Run the Simulation
-    results_log = runnable_simulation.play()
+    try:
+        # Run the simulation
+        results_log = runnable_simulation.play()
 
-    # 8. Display Results
-    # For now, we just print the log. We can save it to a file later.
-    print("\n--- Simulation Log ---\n")
-    print(results_log)
-    logger.info("Simulation finished.")
+        logger.info("Scene-based simulation completed successfully!")
+
+        # 7. Print final summary
+        print("\n" + "="*80)
+        print(f"SIMULATION COMPLETE: {SIMULATION_NAME}")
+        print("="*80)
+        print(f"Entities: {[entity.name for entity in runnable_simulation.get_entities()]}")
+        print(f"Game Masters: {[gm.name for gm in runnable_simulation.get_game_masters()]}")
+        print("\nSimulation used Dialogic & Dramaturgic GameMaster with built-in scene management.")
+        print("The D&D GameMaster automatically handled scene transitions and structured debate flow.")
+        print("\n" + "="*80)
+
+        # Optionally save the HTML log
+        html_log_path = Path("geo_mod_debate_results.html")
+        with open(html_log_path, 'w', encoding='utf-8') as f:
+            f.write(results_log)
+        logger.info(f"Detailed HTML results saved to: {html_log_path}")
+
+    except KeyboardInterrupt:
+        logger.info("Simulation interrupted by user.")
+        print("\nSimulation interrupted.")
+    except Exception as e:
+        logger.error(f"Simulation failed: {e}")
+        print(f"Simulation error: {e}")
+        raise
+
 
 if __name__ == "__main__":
     main()
