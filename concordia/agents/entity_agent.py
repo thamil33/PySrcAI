@@ -12,9 +12,6 @@ from concordia.typing import entity_component
 from concordia.utils import concurrency
 from typing_extensions import override
 
-# TODO: b/313715068 - remove disable once pytype bug is fixed.
-# pytype: disable=override-error
-
 
 class EntityAgent(entity_component.EntityWithComponents):
   """An agent that has its functionality defined by components.
