@@ -24,7 +24,7 @@ from pysrcai.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
 from pysrcai.geo_mod.utils.logging_config import setup_logging
 
 # --- Concordia Prefabs ---
-from concordia.prefabs.game_master import generic as generic_gm
+from concordia.prefabs.game_master import dialogic_and_dramaturgic as dd_gamemaster
 
 # --- Environment Setup ---
 from dotenv import load_dotenv
@@ -65,7 +65,7 @@ def main():
         model = openrouter_model.OpenRouterLanguageModel(
             api_key=api_key,
             model_name=model_name,
-            verbose_logging=True,
+            verbose_logging=False,
         )
 
     # 3. Configure Sentence Embedder
@@ -82,7 +82,7 @@ def main():
     # This connects the scenario data to our prefab implementations.
     prefabs = {
         'nation_entity': NationEntity(),
-        'generic_gm': generic_gm.GameMaster(),
+        'generic_gm': dd_gamemaster.GameMaster(),
     }
 
     # 5. Create the Main Simulation Configuration

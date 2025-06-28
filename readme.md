@@ -124,8 +124,8 @@ Running a multi turn interactive llm chatbot with PySrcAI.Agentica:
 ```bash
 python -m pysrcai.agentica.cli --template rag --verbose  --interactive
 ```
-  C:\Users\tyler\dev\__pysrcai\iching.txt
 
+  C:\Users\tyler\dev\__pysrcai\iching.txt
 
 ## 📋 Project Status
 

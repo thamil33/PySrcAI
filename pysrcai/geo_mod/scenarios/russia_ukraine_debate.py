@@ -40,7 +40,7 @@ INSTANCES = [
         prefab='generic_gm',  # Use the generic game master prefab
         role=prefab_lib.Role.GAME_MASTER,
         params={
-            'name': "UN Moderator",
+            'name': "Simulation Orchestrator",
             'acting_order': 'fixed',  # Fixed order turns
         },
     ),

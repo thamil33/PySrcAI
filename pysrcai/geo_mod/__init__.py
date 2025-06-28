@@ -15,7 +15,6 @@ __version__ = "1.0.0"
 
 # Import key components for easy access
 from pysrcai.geo_mod.prefabs.entities import nation_entity
-from pysrcai.geo_mod.prefabs.game_masters import moderator_gm
 from pysrcai.geo_mod.scenarios import russia_ukraine_debate
-from pysrcai.geo_mod.simulations import phase1_debate
+from pysrcai.geo_mod.simulations import debate
 from pysrcai.geo_mod.utils import logging_config
