@@ -35,7 +35,7 @@ class TestOpenRouterLLM:
             model=mock_config.model,
             **mock_config.model_kwargs
         )
-        
+
         assert llm.model == mock_config.model
         assert llm.temperature == 0.7
         assert llm.max_tokens == 500
@@ -62,13 +62,13 @@ class TestOpenRouterLLM:
         }
         mock_response.raise_for_status.return_value = None
         mock_post.return_value = mock_response
-        
+
         llm = OpenRouterLLM(model="test-model")
         result = llm._call("Test prompt")
-        
+
         assert result == "Test response"
         assert mock_post.called
-        
+
         # Verify request was made with correct parameters
         call_args = mock_post.call_args
         assert call_args[1]['json']['model'] == "test-model"
@@ -89,10 +89,10 @@ class TestOpenRouterLLM:
         }
         mock_response.raise_for_status.return_value = None
         mock_post.return_value = mock_response
-        
+
         llm = OpenRouterLLM(model="test-model")
         result = llm._call("Test prompt", stop=["END", "STOP"])
-        
+
         # Verify stop sequences were included
         call_args = mock_post.call_args
         assert call_args[1]['json']['stop'] == ["END", "STOP"]
@@ -104,7 +104,7 @@ class TestOpenRouterLLM:
         # Mock first request failure, second success
         mock_response_fail = Mock()
         mock_response_fail.raise_for_status.side_effect = requests.exceptions.RequestException("API Error")
-        
+
         mock_response_success = Mock()
         mock_response_success.json.return_value = {
             "choices": [{
@@ -114,12 +114,12 @@ class TestOpenRouterLLM:
             }]
         }
         mock_response_success.raise_for_status.return_value = None
-        
+
         mock_post.side_effect = [mock_response_fail, mock_response_success]
-        
+
         llm = OpenRouterLLM(model="test-model", max_retries=1, retry_delay=0.1)
         result = llm._call("Test prompt")
-        
+
         assert result == "Success after retry"
         assert mock_post.call_count == 2
 
@@ -136,10 +136,10 @@ class TestOpenRouterLLM:
             b'data: [DONE]'
         ]
         mock_post.return_value = mock_response
-        
+
         llm = OpenRouterLLM(model="test-model")
         chunks = list(llm._stream("Test prompt"))
-        
+
         assert len(chunks) == 2
         assert chunks[0].text == "Hello"
         assert chunks[1].text == " world"
@@ -157,10 +157,10 @@ class TestOpenRouterLLM:
         }
         mock_response.raise_for_status.return_value = None
         mock_get.return_value = mock_response
-        
+
         llm = OpenRouterLLM(model="test-model")
         models = llm.get_available_models()
-        
+
         assert len(models) == 2
         assert models[0]["id"] == "model1"
 
@@ -171,7 +171,7 @@ class TestLMStudioLLM:
     def test_initialization(self):
         """Test LMStudio LLM initialization."""
         llm = LMStudioLLM(model="test-model", temperature=0.5)
-        
+
         assert llm.model == "test-model"
         assert llm.model_kwargs["temperature"] == 0.5
         assert llm._llm_type == "lmstudio"
@@ -180,7 +180,7 @@ class TestLMStudioLLM:
         """Test placeholder implementation."""
         llm = LMStudioLLM(model="test-model")
         result = llm._call("Test prompt")
-        
+
         assert "Simulated response for: Test prompt" in result
 
 
@@ -194,10 +194,10 @@ class TestLLMFactory:
             model="test-model",
             model_kwargs={"temperature": 0.8}
         )
-        
+
         with patch.dict('os.environ', {'OPENROUTER_API_KEY': 'test-key'}):
             llm = create_llm(config)
-            
+
         assert isinstance(llm, OpenRouterLLM)
         assert llm.model == "test-model"
         assert llm.temperature == 0.8
@@ -209,9 +209,9 @@ class TestLLMFactory:
             model="test-model",
             model_kwargs={"temperature": 0.9}
         )
-        
+
         llm = create_llm(config)
-        
+
         assert isinstance(llm, LMStudioLLM)
         assert llm.model == "test-model"
 
@@ -221,6 +221,6 @@ class TestLLMFactory:
             provider="unsupported",
             model="test-model"
         )
-        
+
         with pytest.raises(ValueError, match="Unsupported LLM provider: unsupported"):
             create_llm(config)

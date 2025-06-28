@@ -1,4 +1,4 @@
- 
+
 
 """A context processor component that does nothing."""
 

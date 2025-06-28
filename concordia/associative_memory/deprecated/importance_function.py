@@ -1,4 +1,4 @@
- 
+
 
 """Memory importance function."""
 

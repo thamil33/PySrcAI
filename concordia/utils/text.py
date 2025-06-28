@@ -1,4 +1,4 @@
- 
+
 
 
 """String formatting utilities."""

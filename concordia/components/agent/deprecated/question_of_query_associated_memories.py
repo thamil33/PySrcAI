@@ -1,4 +1,4 @@
- 
+
 
 """Agent question by query component."""
 

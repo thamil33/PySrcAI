@@ -1,4 +1,4 @@
- 
+
 
 
 """An abstract class of a clock for synchronising the simulation."""

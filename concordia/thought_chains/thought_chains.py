@@ -1,4 +1,4 @@
- 
+
 
 
 """Chain of thoughts abstraction for simulacra and game master."""

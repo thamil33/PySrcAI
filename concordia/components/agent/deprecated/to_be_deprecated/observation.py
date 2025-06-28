@@ -1,4 +1,4 @@
- 
+
 
 
 """Agent components for representing observation stream."""

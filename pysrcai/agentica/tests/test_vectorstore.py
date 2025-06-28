@@ -14,10 +14,10 @@ from langchain.schema import Document
 
 class MockEmbeddings(BaseEmbedder):
     """Mock embeddings for testing."""
-    
+
     def embed_documents(self, texts):
         return [[1.0, 0.0, 0.0] for _ in texts]
-    
+
     def embed_query(self, text):
         return [1.0, 0.0, 0.0]
 
@@ -62,7 +62,7 @@ def test_documents():
 def test_chroma_vectorstore_initialization(mock_chroma, vector_config, mock_embeddings):
     """Test ChromaVectorStore initialization."""
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
-    
+
     assert vectorstore.config == vector_config
     assert vectorstore.embeddings == mock_embeddings
     mock_chroma.assert_called_once()
@@ -74,10 +74,10 @@ def test_chroma_add_documents(mock_chroma, vector_config, mock_embeddings, test_
     mock_vectorstore = Mock()
     mock_vectorstore.add_documents.return_value = ["doc1", "doc2", "doc3"]
     mock_chroma.return_value = mock_vectorstore
-    
+
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
     doc_ids = vectorstore.add_documents(test_documents)
-    
+
     assert doc_ids == ["doc1", "doc2", "doc3"]
     mock_vectorstore.add_documents.assert_called_once_with(test_documents)
 
@@ -90,10 +90,10 @@ def test_chroma_similarity_search(mock_chroma, vector_config, mock_embeddings):
         Document(page_content="Relevant document", metadata={"source": "test.txt"})
     ]
     mock_chroma.return_value = mock_vectorstore
-    
+
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
     results = vectorstore.similarity_search("test query", k=5)
-    
+
     assert len(results) == 1
     assert results[0].page_content == "Relevant document"
     mock_vectorstore.similarity_search.assert_called_once_with(
@@ -111,10 +111,10 @@ def test_chroma_similarity_search_with_score(mock_chroma, vector_config, mock_em
         (Document(page_content="Relevant document", metadata={"source": "test.txt"}), 0.95)
     ]
     mock_chroma.return_value = mock_vectorstore
-    
+
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
     results = vectorstore.similarity_search_with_score("test query", k=3)
-    
+
     assert len(results) == 1
     doc, score = results[0]
     assert doc.page_content == "Relevant document"
@@ -132,10 +132,10 @@ def test_chroma_delete(mock_chroma, vector_config, mock_embeddings):
     mock_vectorstore = Mock()
     mock_vectorstore.delete.return_value = None
     mock_chroma.return_value = mock_vectorstore
-    
+
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
     success = vectorstore.delete(["doc1", "doc2"])
-    
+
     assert success is True
     mock_vectorstore.delete.assert_called_once_with(ids=["doc1", "doc2"])
 
@@ -146,14 +146,14 @@ def test_chroma_clear(mock_chroma, vector_config, mock_embeddings):
     mock_collection = Mock()
     mock_collection.get.return_value = {"ids": ["doc1", "doc2", "doc3"]}
     mock_collection.delete.return_value = None
-    
+
     mock_vectorstore = Mock()
     mock_vectorstore._collection = mock_collection
     mock_chroma.return_value = mock_vectorstore
-    
+
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
     success = vectorstore.clear()
-    
+
     assert success is True
     mock_collection.get.assert_called_once()
     mock_collection.delete.assert_called_once_with(ids=["doc1", "doc2", "doc3"])
@@ -164,14 +164,14 @@ def test_chroma_collection_info(mock_chroma, vector_config, mock_embeddings):
     """Test getting collection info from ChromaVectorStore."""
     mock_collection = Mock()
     mock_collection.count.return_value = 42
-    
+
     mock_vectorstore = Mock()
     mock_vectorstore._collection = mock_collection
     mock_chroma.return_value = mock_vectorstore
-    
+
     vectorstore = ChromaVectorStore(vector_config, mock_embeddings)
     info = vectorstore.get_collection_info()
-    
+
     assert info["name"] == "test_collection"
     assert info["count"] == 42
     assert info["persist_directory"] == vector_config.persist_directory

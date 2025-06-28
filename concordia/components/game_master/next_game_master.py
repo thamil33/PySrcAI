@@ -1,4 +1,4 @@
- 
+
 
 """Component helping a game master pick which game master to use next."""
 
@@ -142,7 +142,7 @@ class FormativeMemoriesInitializer(
       pre_act_label: str = '',
   ):
     """A component that generates a backstory for each player entity.
-    
+
     As this is an initializer, it should only be called once per episode. To
     achieve this, it returns the name of the next game master once it finishes.
     The idea is to use one game master (with this component) for initialization,

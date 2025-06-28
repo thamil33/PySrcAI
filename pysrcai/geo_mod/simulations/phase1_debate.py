@@ -20,9 +20,11 @@ from concordia.language_model import openrouter_model, lmstudio_model, no_langua
 
 # --- Geo-Mod Imports ---
 from pysrcai.geo_mod.prefabs.entities.nation_entity import NationEntity
-from pysrcai.geo_mod.prefabs.game_masters.moderator_gm import ModeratorGmPrefab
 from pysrcai.geo_mod.scenarios.russia_ukraine_debate import PREMISE, INSTANCES
 from pysrcai.geo_mod.utils.logging_config import setup_logging
+
+# --- Concordia Prefabs ---
+from concordia.prefabs.game_master import generic as generic_gm
 
 # --- Environment Setup ---
 from dotenv import load_dotenv
@@ -80,7 +82,7 @@ def main():
     # This connects the scenario data to our prefab implementations.
     prefabs = {
         'nation_entity': NationEntity(),
-        'moderator_gm': ModeratorGmPrefab(),
+        'generic_gm': generic_gm.GameMaster(),
     }
 
     # 5. Create the Main Simulation Configuration

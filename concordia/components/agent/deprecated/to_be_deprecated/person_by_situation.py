@@ -1,4 +1,4 @@
- 
+
 
 """Agent component for self perception."""
 import datetime

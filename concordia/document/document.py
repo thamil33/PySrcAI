@@ -1,4 +1,4 @@
- 
+
 
 
 """A document that is built from a chain of text."""

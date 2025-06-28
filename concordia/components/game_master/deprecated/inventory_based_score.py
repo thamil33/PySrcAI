@@ -1,4 +1,4 @@
- 
+
 
 """A component to assign a score based on possession of certain items."""
 
@@ -28,7 +28,7 @@ class Score(component.Component):
       inventory: the inventory component to use to get the inventory of players.
       players: sequence of players who have an inventory and will observe it.
       targets: Mapping of player name to their target items. They will be scored
-        by the number of items of the specified types in their inventory. 
+        by the number of items of the specified types in their inventory.
       name: the name of this component e.g. Possessions, Account, Property, etc
       verbose: whether to print the full update chain of thought or not
     """

@@ -1,4 +1,4 @@
- 
+
 
 """A simple acting component that aggregates contexts from components."""
 

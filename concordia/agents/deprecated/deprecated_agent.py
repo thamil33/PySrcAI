@@ -1,4 +1,4 @@
- 
+
 
 
 """Classes to use in a basic generative agent.

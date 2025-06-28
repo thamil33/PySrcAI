@@ -1,4 +1,4 @@
- 
+
 
 
 """The abstract class that defines simulacrum agent interface.

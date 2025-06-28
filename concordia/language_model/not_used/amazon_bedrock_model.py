@@ -1,4 +1,4 @@
- 
+
 
 """Language Model that uses Amazon Bedrock models."""
 

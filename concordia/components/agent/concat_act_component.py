@@ -1,4 +1,4 @@
- 
+
 
 """A simple acting component that aggregates contexts from components."""
 
@@ -45,7 +45,7 @@ class ConcatActComponent(
         the component order must be in the `ComponentContextMapping` passed to
         `get_action_attempt`.
       prefix_entity_name: Whether to prefix the entity name to the output of
-        `get_action_attempt` when the `action_spec` output type is `FREE`. 
+        `get_action_attempt` when the `action_spec` output type is `FREE`.
 
     Raises:
       ValueError: If the component order is not None and contains duplicate

@@ -13,10 +13,10 @@ from .base import BaseEmbedder
 
 class SentenceTransformerEmbeddings(BaseEmbedder):
     """Local embeddings using sentence-transformers models."""
-    
+
     def __init__(self, config: EmbeddingConfig):
         """Initialize the sentence-transformers embeddings adapter.
-        
+
         Args:
             config: Embedding configuration containing model name and device settings
         """
@@ -53,13 +53,13 @@ class SentenceTransformerEmbeddings(BaseEmbedder):
                         self.logger.error(f"Failed to load fallback model '{model}': {e2}")
                         continue
             raise ValueError(f"Failed to load sentence-transformers model: {e}")
-    
+
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts.
-        
+
         Args:
             texts: List of texts to embed
-            
+
         Returns:
             List of embedding vectors
         """
@@ -77,13 +77,13 @@ class SentenceTransformerEmbeddings(BaseEmbedder):
             # Numpy array (e.g., from mocks)
             embeddings_list = embeddings.tolist()
         return self._normalize_embeddings(embeddings_list)
-    
+
     def embed_query(self, text: str) -> List[float]:
         """Generate embedding for a single query text.
-        
+
         Args:
             text: Text to embed
-            
+
         Returns:
             Embedding vector
         """

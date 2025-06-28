@@ -1,4 +1,4 @@
- 
+
 
 """A component backed by a memory bank."""
 

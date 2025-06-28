@@ -1,4 +1,4 @@
- 
+
 
 """An acting component that can be set to give fixed responses."""
 

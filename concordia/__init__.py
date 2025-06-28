@@ -18,7 +18,7 @@ from concordia.associative_memory import basic_associative_memory, formative_mem
 from concordia.clocks import game_clock
 from concordia.document import document, interactive_document
 from concordia.environment import engine
-from concordia.language_model import language_model, gpt_model
+from concordia.language_model import language_model
 from concordia.thought_chains import thought_chains
 
 

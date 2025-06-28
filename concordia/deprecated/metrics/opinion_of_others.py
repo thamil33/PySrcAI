@@ -1,4 +1,4 @@
- 
+
 
 
 """Metric of player's opinion of other players."""

@@ -1,4 +1,4 @@
- 
+
 
 """Component for the Game Master to handle conversations between players."""
 

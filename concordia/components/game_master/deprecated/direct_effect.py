@@ -1,4 +1,4 @@
- 
+
 
 
 """Externality for the Game Master, which tracks direct effect on players."""

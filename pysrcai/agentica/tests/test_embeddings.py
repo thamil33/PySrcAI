@@ -19,7 +19,7 @@ def test_base_embedder_normalize():
             pass
         def embed_query(self, text):
             pass
-    
+
     embedder = TestEmbedder()
     vec = [1.0, 2.0, 2.0]  # Length 3
     normalized = embedder._normalize_embedding(vec)
@@ -50,10 +50,10 @@ def test_sentence_transformer_embeddings(mock_st, mock_st_config):
     mock_model = Mock()
     mock_model.encode.return_value = np.array([[1.0, 0.0, 0.0]])
     mock_st.return_value = mock_model
-    
+
     embedder = SentenceTransformerEmbeddings(mock_st_config)
     result = embedder.embed_query("test")
-    
+
     assert len(result) == 3
     assert abs(sum(x*x for x in result) - 1.0) < 1e-6
 

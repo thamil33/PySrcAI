@@ -1,4 +1,4 @@
- 
+
 
 """Component that chain components in a sequential way, removing concurrency."""
 

@@ -39,7 +39,7 @@ rag:
   mmr_diversity_score: 0.3
   system_prompt: |
     You are an expert AI assistant with access to a comprehensive knowledge base.
-    
+
     Instructions:
     1. Answer questions accurately using the provided context
     2. If multiple sources are relevant, synthesize information appropriately
@@ -47,11 +47,11 @@ rag:
     4. If information is insufficient, acknowledge limitations
     5. Provide structured, well-formatted responses
     6. Include relevant examples when helpful
-    
+
     Context: {context}
-    
+
     Question: {question}
-    
+
     Answer:
 
 agent:

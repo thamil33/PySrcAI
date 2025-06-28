@@ -29,21 +29,21 @@ class OpenRouterLLM(LLM):
     seed: Optional[int] = Field(default=None)
     logit_bias: Optional[Dict[str, float]] = Field(default=None)
     user: Optional[str] = Field(default=None)
-    
+
     # OpenRouter-specific parameters
     provider: Optional[Dict[str, Any]] = Field(default=None)
     models: Optional[List[str]] = Field(default=None)
     route: Optional[str] = Field(default=None)
-    
+
     # Application identification (for OpenRouter leaderboards)
     app_name: Optional[str] = Field(default="pysrcai")
     site_url: Optional[str] = Field(default="https://github.com/tyler-richardson/pysrcai_workstation")
-    
+
     # Request configuration
     timeout: int = Field(default=60)
     max_retries: int = Field(default=3)
     retry_delay: float = Field(default=1.0)
-    
+
     class Config:
         """Configuration for this pydantic object."""
         extra = "forbid"
@@ -51,7 +51,7 @@ class OpenRouterLLM(LLM):
     def __init__(self, **data: Any):
         """Initialize the OpenRouter LLM adapter."""
         super().__init__(**data)
-        
+
         # Set API key from environment if not provided
         if not self.api_key.get_secret_value():
             api_key = os.getenv("OPENROUTER_API_KEY")
@@ -87,19 +87,19 @@ class OpenRouterLLM(LLM):
             "Authorization": f"Bearer {self.api_key.get_secret_value()}",
             "Content-Type": "application/json",
         }
-        
+
         # Add OpenRouter-specific headers for leaderboards
         if self.app_name:
             headers["HTTP-Referer"] = self.site_url or ""
             headers["X-Title"] = self.app_name
-            
+
         return headers
 
     def _prepare_request_payload(self, prompt: str, stop: Optional[List[str]] = None) -> Dict[str, Any]:
         """Prepare the request payload for OpenRouter API."""
         # Convert prompt to messages format (required by OpenRouter)
         messages = [{"role": "user", "content": prompt}]
-        
+
         payload = {
             "model": self.model,
             "messages": messages,
@@ -107,7 +107,7 @@ class OpenRouterLLM(LLM):
             "temperature": self.temperature,
             "stream": False,
         }
-        
+
         # Add optional parameters
         if self.top_p is not None:
             payload["top_p"] = self.top_p
@@ -131,7 +131,7 @@ class OpenRouterLLM(LLM):
             payload["user"] = self.user
         if stop is not None:
             payload["stop"] = stop
-            
+
         # Add OpenRouter-specific parameters
         if self.provider is not None:
             payload["provider"] = self.provider
@@ -139,14 +139,14 @@ class OpenRouterLLM(LLM):
             payload["models"] = self.models
         if self.route is not None:
             payload["route"] = self.route
-            
+
         return payload
 
     def _make_request(self, payload: Dict[str, Any]) -> Dict[str, Any]:
         """Make a request to OpenRouter API with retry logic."""
         url = f"{self.base_url}/chat/completions"
         headers = self._get_headers()
-        
+
         last_exception = None
         for attempt in range(self.max_retries + 1):
             try:
@@ -158,7 +158,7 @@ class OpenRouterLLM(LLM):
                 )
                 response.raise_for_status()
                 return response.json()
-                
+
             except requests.exceptions.RequestException as e:
                 last_exception = e
                 if attempt < self.max_retries:
@@ -166,7 +166,7 @@ class OpenRouterLLM(LLM):
                     time.sleep(wait_time)
                     continue
                 break
-                
+
         # If we get here, all retries failed
         if last_exception:
             raise last_exception
@@ -182,10 +182,10 @@ class OpenRouterLLM(LLM):
     ) -> str:
         """Call the OpenRouter API."""
         payload = self._prepare_request_payload(prompt, stop)
-        
+
         try:
             response_data = self._make_request(payload)
-            
+
             # Extract the response text
             if "choices" in response_data and len(response_data["choices"]) > 0:
                 choice = response_data["choices"][0]
@@ -193,10 +193,10 @@ class OpenRouterLLM(LLM):
                     return choice["message"]["content"]
                 elif "text" in choice:
                     return choice["text"]
-            
+
             # Fallback if response format is unexpected
             return str(response_data)
-            
+
         except Exception as e:
             raise RuntimeError(f"OpenRouter API call failed: {str(e)}") from e
 
@@ -210,10 +210,10 @@ class OpenRouterLLM(LLM):
         """Stream the OpenRouter API response."""
         payload = self._prepare_request_payload(prompt, stop)
         payload["stream"] = True
-        
+
         url = f"{self.base_url}/chat/completions"
         headers = self._get_headers()
-        
+
         try:
             response = requests.post(
                 url,
@@ -223,7 +223,7 @@ class OpenRouterLLM(LLM):
                 stream=True
             )
             response.raise_for_status()
-            
+
             for line in response.iter_lines():
                 if line:
                     line_str = line.decode("utf-8")
@@ -244,7 +244,7 @@ class OpenRouterLLM(LLM):
                                         yield chunk
                         except json.JSONDecodeError:
                             continue
-                            
+
         except Exception as e:
             raise RuntimeError(f"OpenRouter streaming API call failed: {str(e)}") from e
 
@@ -257,7 +257,7 @@ class OpenRouterLLM(LLM):
         """Get list of available models from OpenRouter."""
         url = f"{self.base_url}/models"
         headers = self._get_headers()
-        
+
         try:
             response = requests.get(url, headers=headers, timeout=self.timeout)
             response.raise_for_status()
@@ -271,7 +271,7 @@ class OpenRouterLLM(LLM):
         url = f"{self.base_url}/generation"
         headers = self._get_headers()
         params = {"id": generation_id}
-        
+
         try:
             response = requests.get(url, headers=headers, params=params, timeout=self.timeout)
             response.raise_for_status()

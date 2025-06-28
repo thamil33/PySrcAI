@@ -1,4 +1,4 @@
- 
+
 
 """A prefab for a game master for games set in a specific location."""
 

@@ -3,9 +3,9 @@
 ```mermaid
 flowchart LR
     A[__pyscrai workstation] --> B(concordia)
-    A --> C(pysrcai)--> 
+    A --> C(pysrcai)-->
     C --> C1[agentica]
-    C --> C2[geo_mod]--> 
+    C --> C2[geo_mod]-->
     A --> D[converted_notebooks]
     A --> E[util]
     A --> F[docs]

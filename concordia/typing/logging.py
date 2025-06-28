@@ -1,5 +1,3 @@
- 
-
 """Types for logging."""
 
 from collections.abc import Mapping, Sequence

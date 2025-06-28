@@ -1,4 +1,4 @@
- 
+
 
 """A prefab containing an initializer game master to set initial memories."""
 

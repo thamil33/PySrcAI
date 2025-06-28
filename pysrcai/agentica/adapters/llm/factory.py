@@ -8,13 +8,13 @@ from .lmstudio_adapter import LMStudioLLM
 
 def create_llm(config: ModelConfig) -> Union[OpenRouterLLM, LMStudioLLM]:
     """Create an LLM instance based on configuration.
-    
+
     Args:
         config: Model configuration
-        
+
     Returns:
         LLM instance
-        
+
     Raises:
         ValueError: If provider is not supported
     """

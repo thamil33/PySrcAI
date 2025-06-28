@@ -1,4 +1,4 @@
- 
+
 
 """Agent component for representing what kind of person the agent is."""
 import datetime

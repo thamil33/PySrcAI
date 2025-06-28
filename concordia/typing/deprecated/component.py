@@ -1,4 +1,4 @@
- 
+
 
 
 """Base class for generative agent (and game master) components."""

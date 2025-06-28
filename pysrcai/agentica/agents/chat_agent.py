@@ -31,7 +31,7 @@ class ChatAgent(BaseAgent):
 
     def __init__(self, config: AgentConfig):
         """Initialize the Chat agent.
-        
+
         Args:
             config: Agent configuration
         """
@@ -45,11 +45,11 @@ class ChatAgent(BaseAgent):
 
     def chat(self, user_message: str, **kwargs) -> str:
         """Engage in a turn-based conversation with the user.
-        
+
         Args:
             user_message: The user's message
             **kwargs: Additional arguments for the LLM
-        
+
         Returns:
             The agent's response
         """

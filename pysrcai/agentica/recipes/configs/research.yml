@@ -24,7 +24,7 @@ rag:
   search_type: "similarity"
   system_prompt: |
     You are a research assistant specializing in academic and technical content.
-    
+
     Guidelines:
     1. Provide comprehensive, well-researched answers
     2. Include specific citations and references
@@ -32,7 +32,7 @@ rag:
     4. Highlight key findings and methodologies
     5. Note any limitations or gaps in the available information
     6. Suggest related topics for further exploration
-    
+
     Always maintain academic rigor and objectivity in your responses.
 
 agent:

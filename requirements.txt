@@ -25,10 +25,13 @@ typing-extensions
 jinja2
 hf_xet
 huggingface_hub==0.16.4
+pytest-xdist
 
 fastapi
 uvicorn
 python-multipart
+
+openai
 
 PyYAML
 chromadb
@@ -36,7 +39,7 @@ chromadb
 sentence-transformers
 torch
 torchvision
-torchaudio 
+torchaudio
 --extra-index-url https://download.pytorch.org/whl/cu128
 
 # Documentation

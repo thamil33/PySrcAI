@@ -31,58 +31,58 @@ Examples:
   python -m cli --config my_config.yaml --clear
         """
     )
-    
+
     # Configuration options
     config_group = parser.add_mutually_exclusive_group()
     config_group.add_argument(
-        "--config", 
-        type=str, 
+        "--config",
+        type=str,
         help="Custom config YAML file"
     )
     config_group.add_argument(
-        "--template", 
-        type=str, 
-        choices=list_templates(), 
+        "--template",
+        type=str,
+        choices=list_templates(),
         default="default",
         help="Use a template configuration (default: default)"
     )
-    
-    # Action options  
+
+    # Action options
     action_group = parser.add_mutually_exclusive_group()
     action_group.add_argument(
-        "--ingest", 
-        type=str, 
+        "--ingest",
+        type=str,
         help="Ingest documents from a file or directory path"
     )
     action_group.add_argument(
-        "--query", 
-        type=str, 
+        "--query",
+        type=str,
         help="Ask a question and get an answer"
     )
     action_group.add_argument(
-        "--interactive", 
+        "--interactive",
         action="store_true",
         help="Start interactive REPL mode"
     )
     action_group.add_argument(
-        "--clear", 
+        "--clear",
         action="store_true",
         help="Clear the vector store"
     )
     action_group.add_argument(
-        "--info", 
+        "--info",
         action="store_true",
         help="Show vector store information"
     )
-    
+
     # Additional options
     parser.add_argument(
-        "--verbose", 
-        "-v", 
+        "--verbose",
+        "-v",
         action="store_true",
         help="Enable verbose output"
     )
-    
+
     args = parser.parse_args()
 
     # Setup logging
@@ -170,20 +170,20 @@ def ingest_documents(agent, path: str, verbose: bool = False):
     """Ingest documents from a path."""
     if verbose:
         print(f"Ingesting documents from: {path}")
-    
+
     path_obj = Path(path)
     if not path_obj.exists():
         print(f"Error: Path does not exist: {path}")
         sys.exit(1)
-    
+
     try:
         doc_ids = agent.ingest([path])
         print(f"Successfully ingested {len(doc_ids)} documents.")
-        
+
         if verbose:
             info = agent.get_store_info()
             print(f"Vector store now contains {info.get('count', 'unknown')} documents.")
-            
+
     except Exception as e:
         print(f"Error during ingestion: {e}")
         sys.exit(1)
@@ -194,7 +194,7 @@ def query_agent(agent, question: str, verbose: bool = False):
     if verbose:
         print(f"Querying: {question}")
         print()
-    
+
     try:
         # Get answer with sources for verbose mode
         if verbose:
@@ -202,7 +202,7 @@ def query_agent(agent, question: str, verbose: bool = False):
             print("Answer:")
             print(result["answer"])
             print()
-            
+
             if result["source_documents"]:
                 print("Sources:")
                 for i, doc in enumerate(result["source_documents"][:3], 1):
@@ -213,7 +213,7 @@ def query_agent(agent, question: str, verbose: bool = False):
         else:
             answer = agent.query(question)
             print(answer)
-            
+
     except Exception as e:
         print(f"Error during query: {e}")
         sys.exit(1)
@@ -234,7 +234,7 @@ def clear_vectorstore(agent, verbose: bool = False):
         info = agent.get_store_info()
         current_count = info.get('count', 'unknown')
         print(f"Current vector store contains {current_count} documents.")
-    
+
     try:
         success = agent.clear_store()
         if success:
@@ -251,26 +251,26 @@ def show_info(agent, verbose: bool = False):
     """Show vector store information."""
     try:
         info = agent.get_store_info()
-        
+
         print("Vector Store Information:")
         print("=" * 30)
         print(f"Collection: {info.get('name', 'Unknown')}")
         print(f"Document count: {info.get('count', 'Unknown')}")
         print(f"Persist directory: {info.get('persist_directory', 'Unknown')}")
         print(f"Embedding function: {info.get('embedding_function', 'Unknown')}")
-        
+
         if verbose:
             print("\nConfiguration:")
             print(f"LLM Provider: {agent.config.models.provider}")
             print(f"LLM Model: {agent.config.models.model}")
-            print(f"Embedding Provider: {agent.config.embedding.provider}")  
+            print(f"Embedding Provider: {agent.config.embedding.provider}")
             print(f"Embedding Model: {agent.config.embedding.model}")
             print(f"Chunk Size: {agent.config.chunking.chunk_size}")
             print(f"Top K: {agent.config.rag.top_k}")
-            
+
             if info.get('error'):
                 print(f"\nError: {info['error']}")
-                
+
     except Exception as e:
         print(f"Error getting info: {e}")
         sys.exit(1)

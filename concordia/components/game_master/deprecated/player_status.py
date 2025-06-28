@@ -1,4 +1,4 @@
- 
+
 
 
 """This construct track the status and location of players."""

@@ -15,7 +15,7 @@ class AgentBuilder:
     @staticmethod
     def from_config(config: AgentConfig, agent_type: str = "rag") -> BaseAgent:
         """Create an agent from configuration.
-        
+
         Args:
             config: Agent configuration
             agent_type: Type of agent ("rag" or "chat")
@@ -25,11 +25,11 @@ class AgentBuilder:
         if agent_type == "chat":
             return ChatAgent(config)
         return RAGAgent(config)
-    
+
     @staticmethod
     def from_config_file(config_path: str, agent_type: str = "rag") -> BaseAgent:
         """Create an agent from a configuration file.
-        
+
         Args:
             config_path: Path to the configuration YAML file
             agent_type: Type of agent ("rag" or "chat")
@@ -38,11 +38,11 @@ class AgentBuilder:
         """
         config = load_config(config_path)
         return AgentBuilder.from_config(config, agent_type=agent_type)
-    
+
     @staticmethod
     def from_template(template_name: str = "default", agent_type: str = "rag") -> BaseAgent:
         """Create an agent from a configuration template.
-        
+
         Args:
             template_name: Name of the template to use
             agent_type: Type of agent ("rag" or "chat")
@@ -51,11 +51,11 @@ class AgentBuilder:
         """
         config = load_template(template_name)
         return AgentBuilder.from_config(config, agent_type=agent_type)
-    
+
     @staticmethod
     def create_default(agent_type: str = "rag") -> BaseAgent:
         """Create an agent with default configuration.
-        
+
         Args:
             agent_type: Type of agent ("rag" or "chat")
         Returns:
@@ -63,11 +63,11 @@ class AgentBuilder:
         """
         config = AgentConfig()
         return AgentBuilder.from_config(config, agent_type=agent_type)
-    
+
     @staticmethod
     def create_with_overrides(agent_type: str = "rag", **overrides) -> BaseAgent:
         """Create an agent with configuration overrides.
-        
+
         Args:
             agent_type: Type of agent ("rag" or "chat")
             **overrides: Configuration overrides
@@ -87,7 +87,7 @@ class AgentBuilder:
                     if hasattr(nested_obj, attr):
                         setattr(nested_obj, attr, value)
         return AgentBuilder.from_config(config, agent_type=agent_type)
-    
+
     @staticmethod
     def quick_setup(
         data_paths: Optional[list] = None,
@@ -99,7 +99,7 @@ class AgentBuilder:
         **kwargs
     ) -> BaseAgent:
         """Quick setup for an agent with common overrides.
-        
+
         Args:
             data_paths: List of data paths to ingest
             system_prompt: Custom system prompt
@@ -136,7 +136,7 @@ def create_agent(
     **overrides
 ) -> BaseAgent:
     """Convenience function to create an agent (RAG or Chat).
-    
+
     Args:
         config_source: Path to config file, or None for default
         template: Template name to use, or None for default

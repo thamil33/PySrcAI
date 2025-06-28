@@ -15,14 +15,14 @@ load_dotenv()
 
 def test_openrouter_llm_direct():
     """Test the OpenRouterLLM class directly."""
-    
+
     if not os.getenv("OPENROUTER_API_KEY"):
         print("❌ OPENROUTER_API_KEY not set")
         return
-    
+
     print("🧪 Testing OpenRouterLLM Class (Direct Import)")
     print("=" * 50)
-    
+
     # Test the specific model from the LangGraph example
     test_configs = [
         {
@@ -45,13 +45,13 @@ def test_openrouter_llm_direct():
             "provider": None
         }
     ]
-    
+
     for config in test_configs:
         print(f"\n🔬 Testing: {config['name']}")
         print(f"   Model: {config['model']}")
         if config['provider']:
             print(f"   Provider: {config['provider']}")
-        
+
         try:
             # Create the LLM instance with exact same parameters as LangGraph example
             llm_kwargs = {
@@ -61,22 +61,22 @@ def test_openrouter_llm_direct():
                 "app_name": "pyscrai_example",
                 "site_url": "https://github.com/tyler-richardson/pyscrai_workstation",
             }
-            
+
             if config['provider']:
                 llm_kwargs["provider"] = config['provider']
-            
+
             llm = OpenRouterLLM(**llm_kwargs)
-            
+
             print("   ✅ LLM instance created successfully")
-            
+
             # Test a simple invoke
             response = llm.invoke("Say 'test successful' and nothing else.")
             print(f"   ✅ Response: {response[:100]}...")
-            
+
         except Exception as e:
             print(f"   ❌ Error: {str(e)}")
             print(f"   📝 Error type: {type(e).__name__}")
-            
+
             # Check if it's a requests exception for more details
             if "requests" in str(type(e)):
                 print(f"   🔍 Detailed error: {repr(e)}")

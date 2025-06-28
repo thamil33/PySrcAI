@@ -1,4 +1,4 @@
- 
+
 
 """Scene generator class."""
 

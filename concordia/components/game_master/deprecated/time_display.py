@@ -1,4 +1,4 @@
- 
+
 
 
 """This component shows current time interval."""

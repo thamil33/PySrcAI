@@ -126,7 +126,7 @@ rag:
   mmr_diversity_score: 0.3
   system_prompt: |
     You are an expert AI assistant with access to a comprehensive knowledge base.
-    
+
     Instructions:
     1. Answer questions accurately using the provided context
     2. If multiple sources are relevant, synthesize information appropriately
@@ -134,11 +134,11 @@ rag:
     4. If information is insufficient, acknowledge limitations
     5. Provide structured, well-formatted responses
     6. Include relevant examples when helpful
-    
+
     Context: {context}
-    
+
     Question: {question}
-    
+
     Answer:
 
 agent:
@@ -179,7 +179,7 @@ rag:
   search_type: "similarity"
   system_prompt: |
     You are a research assistant specializing in academic and technical content.
-    
+
     Guidelines:
     1. Provide comprehensive, well-researched answers
     2. Include specific citations and references
@@ -187,7 +187,7 @@ rag:
     4. Highlight key findings and methodologies
     5. Note any limitations or gaps in the available information
     6. Suggest related topics for further exploration
-    
+
     Always maintain academic rigor and objectivity in your responses.
 
 agent:
@@ -201,10 +201,10 @@ agent:
 def save_config_examples():
     """Save all configuration examples to files."""
     from pathlib import Path
-    
+
     configs_dir = Path("recipes/configs")
     configs_dir.mkdir(exist_ok=True)
-    
+
     configs = {
         "langchain_docs.yml": LANGCHAIN_DOCS_CONFIG,
         "local_model.yml": LOCAL_MODEL_CONFIG,
@@ -215,7 +215,7 @@ def save_config_examples():
         config_path = configs_dir / filename
         config_path.write_text(content.strip())
         print(f"Created: {config_path}")
-    
+
     print(f"\nConfiguration examples saved to: {configs_dir}")
     print("Copy and modify these configs for your specific use cases.")
 

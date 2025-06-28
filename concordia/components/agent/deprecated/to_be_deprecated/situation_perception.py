@@ -1,4 +1,4 @@
- 
+
 
 """Agent component for situation perception."""
 import datetime

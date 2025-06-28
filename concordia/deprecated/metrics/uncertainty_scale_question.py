@@ -1,4 +1,4 @@
- 
+
 
 
 """Metric for tracking the answer to a configurable question."""

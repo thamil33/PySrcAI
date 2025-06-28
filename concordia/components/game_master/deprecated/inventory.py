@@ -1,4 +1,4 @@
- 
+
 
 """A component to represent each agent's inventory or possessions."""
 

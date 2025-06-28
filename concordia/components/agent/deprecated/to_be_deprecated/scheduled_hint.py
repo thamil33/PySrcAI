@@ -1,4 +1,4 @@
- 
+
 
 """Agent component for scheduled hinting."""
 import datetime

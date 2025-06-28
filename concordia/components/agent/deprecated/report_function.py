@@ -1,4 +1,4 @@
- 
+
 
 
 """This components report what the function returns at the moment.

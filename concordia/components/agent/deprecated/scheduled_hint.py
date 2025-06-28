@@ -1,4 +1,4 @@
- 
+
 
 """Agent component for scheduled hinting."""
 from collections.abc import Callable, Mapping, Sequence

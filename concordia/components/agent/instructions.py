@@ -1,4 +1,4 @@
- 
+
 
 """Component that provides the default role playing instructions to an agent."""
 

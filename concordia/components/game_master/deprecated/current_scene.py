@@ -1,4 +1,4 @@
- 
+
 
 """This component records the current scene type."""
 import datetime

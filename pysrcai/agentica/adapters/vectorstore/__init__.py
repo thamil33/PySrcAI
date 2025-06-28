@@ -6,6 +6,6 @@ from .factory import create_vectorstore
 
 __all__ = [
     "BaseVectorStore",
-    "ChromaVectorStore", 
+    "ChromaVectorStore",
     "create_vectorstore"
 ]

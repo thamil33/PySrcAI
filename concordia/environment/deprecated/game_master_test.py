@@ -1,4 +1,4 @@
- 
+
 
 """Test the sequence of calls made by the game master to the components."""
 

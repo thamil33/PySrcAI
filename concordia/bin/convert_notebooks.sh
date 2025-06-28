@@ -1,6 +1,6 @@
 #!/bin/bash
 #
- 
+
 #
 # Converts notebooks to .py files for testing.
 

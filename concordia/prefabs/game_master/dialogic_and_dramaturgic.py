@@ -1,4 +1,4 @@
- 
+
 
 """A prefab game master specialized for conversation with scenes."""
 

@@ -10,13 +10,13 @@ from .sentence_transformers import SentenceTransformerEmbeddings
 
 def create_embedder(config: EmbeddingConfig) -> BaseEmbedder:
     """Create an embedding adapter based on configuration.
-    
+
     Args:
         config: Embedding configuration specifying provider and settings
-        
+
     Returns:
         Configured embedding adapter instance
-        
+
     Raises:
         ValueError: If provider is not supported
     """

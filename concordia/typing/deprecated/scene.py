@@ -1,4 +1,4 @@
- 
+
 
 """Dataclasses used to structure simulations using scenes."""
 

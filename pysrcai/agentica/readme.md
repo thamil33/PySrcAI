@@ -1,9 +1,9 @@
 # pysrcai - Enhanced RAG Development Framework
 
 ```bash
-python -m pysrcai.agentica.cli --template rag --verbose  --interactive 
+python -m pysrcai.agentica.cli --template rag --verbose  --interactive
 
-python -m pysrcai.agentica.cli --template chat --verbose  --interactive 
+python -m pysrcai.agentica.cli --template chat --verbose  --interactive
 
 ```
 

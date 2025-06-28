@@ -1,4 +1,4 @@
- 
+
 
 """Agent thinks about how to justify their recent voluntary actions."""
 
@@ -64,7 +64,7 @@ class JustifyRecentVoluntaryActions(component.Component):
       model: The language model to use.
       memory: The memory to use.
       agent_name: The name of the agent.
-      components: 
+      components:
       audiences:
       clock_now: time callback to use for the state.
       num_memories_to_retrieve: The number of memories to retrieve.

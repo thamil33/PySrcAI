@@ -1,4 +1,4 @@
- 
+
 
 """Track extent to which an agent is taking rational actions toward a goal."""
 

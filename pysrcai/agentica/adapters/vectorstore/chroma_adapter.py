@@ -9,7 +9,7 @@ try:
 except ImportError:
     # Fallback to deprecated import if langchain-chroma not installed
     from langchain_community.vectorstores import Chroma
-    
+
 from langchain.schema import Document
 from langchain.embeddings.base import Embeddings
 
@@ -22,17 +22,17 @@ class ChromaVectorStore(BaseVectorStore):
 
     def __init__(self, config: VectorDBConfig, embeddings: Embeddings):
         """Initialize the Chroma vector store.
-        
+
         Args:
             config: Vector database configuration
             embeddings: Embeddings model to use
         """
         self.config = config
         self.embeddings = embeddings
-        
+
         # Ensure the persist directory exists
         Path(config.persist_directory).mkdir(parents=True, exist_ok=True)
-        
+
         # Initialize Chroma vector store
         self.vectorstore = Chroma(
             collection_name=config.collection_name,
@@ -43,31 +43,31 @@ class ChromaVectorStore(BaseVectorStore):
 
     def add_documents(self, documents: List[Document], **kwargs) -> List[str]:
         """Add documents to the Chroma vector store.
-        
+
         Args:
             documents: List of documents to add
             **kwargs: Additional arguments for Chroma
-            
+
         Returns:
             List of document IDs
         """
         return self.vectorstore.add_documents(documents, **kwargs)
 
     def similarity_search(
-        self, 
-        query: str, 
+        self,
+        query: str,
         k: int = 4,
         filter: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[Document]:
         """Search for similar documents.
-        
+
         Args:
             query: Query string
             k: Number of documents to return
             filter: Optional metadata filter
             **kwargs: Additional arguments
-            
+
         Returns:
             List of similar documents
         """
@@ -79,20 +79,20 @@ class ChromaVectorStore(BaseVectorStore):
         )
 
     def similarity_search_with_score(
-        self, 
-        query: str, 
+        self,
+        query: str,
         k: int = 4,
         filter: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[Tuple[Document, float]]:
         """Search for similar documents with similarity scores.
-        
+
         Args:
             query: Query string
             k: Number of documents to return
             filter: Optional metadata filter
             **kwargs: Additional arguments
-            
+
         Returns:
             List of (document, score) tuples
         """
@@ -105,11 +105,11 @@ class ChromaVectorStore(BaseVectorStore):
 
     def delete(self, ids: List[str], **kwargs) -> bool:
         """Delete documents by IDs.
-        
+
         Args:
             ids: List of document IDs to delete
             **kwargs: Additional arguments
-            
+
         Returns:
             True if successful
         """
@@ -121,7 +121,7 @@ class ChromaVectorStore(BaseVectorStore):
 
     def clear(self) -> bool:
         """Clear all documents from the vector store.
-        
+
         Returns:
             True if successful
         """
@@ -137,7 +137,7 @@ class ChromaVectorStore(BaseVectorStore):
 
     def get_collection_info(self) -> Dict[str, Any]:
         """Get information about the Chroma collection.
-        
+
         Returns:
             Dictionary with collection information
         """
@@ -169,12 +169,12 @@ class ChromaVectorStore(BaseVectorStore):
         **kwargs
     ) -> List[str]:
         """Add raw texts to the vector store.
-        
+
         Args:
             texts: List of texts to add
             metadatas: Optional list of metadata dicts
             **kwargs: Additional arguments
-            
+
         Returns:
             List of document IDs
         """
@@ -192,13 +192,13 @@ class ChromaVectorStore(BaseVectorStore):
         **kwargs
     ) -> "ChromaVectorStore":
         """Create a ChromaVectorStore from documents.
-        
+
         Args:
             documents: List of documents to add
             config: Vector database configuration
             embeddings: Embeddings model to use
             **kwargs: Additional arguments
-            
+
         Returns:
             ChromaVectorStore instance
         """

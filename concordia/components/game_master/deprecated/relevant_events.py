@@ -1,4 +1,4 @@
- 
+
 
 
 """This component retrieves relevant events from the memory."""

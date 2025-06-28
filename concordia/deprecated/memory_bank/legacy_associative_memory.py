@@ -1,4 +1,4 @@
- 
+
 
 """A memory bank that uses AssociativeMemory to store and retrieve memories."""
 
@@ -110,7 +110,7 @@ class AssociativeMemoryBank(memory_lib.MemoryBank):
   @override
   def get_state(self) -> entity_component.ComponentState:
     """Returns the state of the memory bank.
-    
+
     See `set_state` for details. The default implementation returns an empty
     dictionary.
     """
@@ -119,12 +119,12 @@ class AssociativeMemoryBank(memory_lib.MemoryBank):
   @override
   def set_state(self, state: entity_component.ComponentState) -> None:
     """Sets the state of the memory bank.
-    
-    This is used to restore the state of the memory bank. The state is assumed 
+
+    This is used to restore the state of the memory bank. The state is assumed
     to be the one returned by `get_state`.
-    The state does not need to contain any information that is passed in the 
+    The state does not need to contain any information that is passed in the
     initialization of the memory bank (e.g. embedder, clock, imporance etc.)
-    It is assumed that set_state is called on the memory bank after it was 
+    It is assumed that set_state is called on the memory bank after it was
     initialized with the same parameters as the one used to restore it.
     The default implementation does nothing, which implies that the memory bank
     does not have any state.
@@ -142,7 +142,7 @@ class AssociativeMemoryBank(memory_lib.MemoryBank):
       # do more with obj
       obj.set_state(state)
       # obj will now behave the same as it did before.
-    
+
     Note that the state does not need to contain any information that is passed
     in __init__ (e.g. the embedder, clock, imporance etc.)
 

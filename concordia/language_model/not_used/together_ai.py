@@ -1,4 +1,4 @@
- 
+
 
 """Language Model that uses Together AI api.
 
@@ -45,7 +45,7 @@ def _find_response_start_index(tokens):
 
   Returns:
     The index of the last occurrence of '<start_of_turn>' followed by 'model'
-    and '\n', or 1 if the sequence is not found. This corresponds to the start 
+    and '\n', or 1 if the sequence is not found. This corresponds to the start
     of the response.
   """
   assert len(tokens) >= 3, "Response doesn't match expectation."

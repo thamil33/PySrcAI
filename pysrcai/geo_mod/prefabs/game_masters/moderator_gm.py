@@ -55,25 +55,25 @@ class ModeratorGmPrefab(prefab_lib.Prefab):
         max_turns = self.params.get("max_turns", 4)
         acting_order = self.params.get("acting_order", "fixed")
         verbose = self.params.get("verbose", True)
-        
+
         # Use the entities passed to the prefab
         entities = getattr(self, "entities", [])
-        
+
         # Create debate settings
         settings = DebateSettings(
             max_turns=max_turns,
             acting_order=acting_order
         )
-        
+
         # Create components
         components = {}
-        
+
         # Add memory component
         components["__memory__"] = memory_component.AssociativeMemory(memory_bank)
-        
+
         # Add observation component that will broadcast observations to entities
-        components[observation_component.DEFAULT_OBSERVATION_COMPONENT_KEY] = observation_component.Observation()
-        
+        components[observation_component.DEFAULT_OBSERVATION_COMPONENT_KEY] = observation_component.ObservationToMemory()
+
         # Add system prompt as a constant component
         system_prompt = (
             f"You are a debate moderator named {name}. "
@@ -81,31 +81,30 @@ class ModeratorGmPrefab(prefab_lib.Prefab):
             f"This debate will consist of {max_turns} turns. "
             "Ensure each participant gets an equal opportunity to speak, and maintain a respectful tone."
         )
-        
+
         components["system_prompt"] = constant_component.Constant(
             state=system_prompt,
             pre_act_label="\nSystem prompt:"
         )
-        
+
         # Set up components order for the action component
         component_order = [
             "system_prompt",
             memory_component.DEFAULT_MEMORY_COMPONENT_KEY,
             observation_component.DEFAULT_OBSERVATION_COMPONENT_KEY,
         ]
-        
+
         # Create the act component
         act_component = concat_act_component.ConcatActComponent(
             model=model,
             component_order=component_order,
-            action_spec_name="Moderator action"
         )
-        
+
         # Create the game master entity
         gm = entity_agent_with_logging.EntityAgentWithLogging(
             agent_name=name,
             act_component=act_component,
             context_components=components,
         )
-        
+
         return gm

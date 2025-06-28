@@ -1,4 +1,4 @@
- 
+
 
 """A prefab containing a generic game master."""
 

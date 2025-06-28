@@ -1,4 +1,4 @@
- 
+
 
 """A simple LLM agent."""
 import collections
@@ -33,7 +33,7 @@ class SimpleLLMAgent(agent.GenerativeAgent):
       memories_length: int = 10,
   ):
     """Initializes the agent.
-    
+
     Args:
       agent_name: The name of the agent.
       agent_background: The background intormation of the agent. This is used

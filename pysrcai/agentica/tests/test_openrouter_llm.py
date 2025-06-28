@@ -9,14 +9,14 @@ load_dotenv()
 
 def test_openrouter_llm_class():
     """Test the OpenRouterLLM class with different model configurations."""
-    
+
     if not os.getenv("OPENROUTER_API_KEY"):
         print("❌ OPENROUTER_API_KEY not set")
         return
-    
+
     print("🧪 Testing OpenRouterLLM Class")
     print("=" * 40)
-    
+
     # Test configurations that should work based on our debug results
     test_configs = [
         {
@@ -24,7 +24,7 @@ def test_openrouter_llm_class():
             "model": "mistralai/mistral-small-3.1-24b-instruct:free"
         },
         {
-            "name": "Mistral Small 2501 (free)", 
+            "name": "Mistral Small 2501 (free)",
             "model": "mistralai/mistral-small-24b-instruct-2501:free"
         },
         {
@@ -36,11 +36,11 @@ def test_openrouter_llm_class():
             "model": "mistralai/mistral-small-24b-instruct-2501"
         }
     ]
-    
+
     for config in test_configs:
         print(f"\n🔬 Testing: {config['name']}")
         print(f"   Model: {config['model']}")
-        
+
         try:
             # Create the LLM instance
             llm = OpenRouterLLM(
@@ -50,17 +50,17 @@ def test_openrouter_llm_class():
                 app_name="pyscrai_debug",
                 site_url="https://github.com/tyler-richardson/pyscrai_workstation"
             )
-            
+
             print("   ✅ LLM instance created successfully")
-            
+
             # Test a simple invoke
             response = llm.invoke("Say 'Hello World' and nothing else.")
             print(f"   ✅ Response: {response[:100]}...")
-            
+
         except Exception as e:
             print(f"   ❌ Error: {str(e)}")
             print(f"   📝 Error type: {type(e).__name__}")
-            
+
             # If it's a request exception, let's see more details
             if hasattr(e, 'response'):
                 print(f"   📊 Status code: {e.response.status_code}")

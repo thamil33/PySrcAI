@@ -1,4 +1,4 @@
- 
+
 
 """A component to modify inventories based on events."""
 

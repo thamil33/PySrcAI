@@ -1,4 +1,4 @@
- 
+
 
 """A modular entity agent using the new component system with side logging."""
 

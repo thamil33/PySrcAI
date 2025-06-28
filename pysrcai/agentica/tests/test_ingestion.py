@@ -22,7 +22,7 @@ def mock_config():
             persist_directory="./test_vector_storage",
             collection_name="test_collection"
         ),        embedding=EmbeddingConfig(
-            provider="local_sentencetransformers", 
+            provider="local_sentencetransformers",
             model="all-MiniLM-L6-v2",
             device="cpu"
         )
@@ -56,7 +56,7 @@ class TestTextLoader:
         try:
             loader = TextLoader(temp_path)
             documents = loader.load()
-            
+
             assert len(documents) == 1
             assert documents[0].page_content == "This is a test document."
             assert documents[0].metadata["source"] == temp_path
@@ -71,7 +71,7 @@ class TestJSONLoader:
     def test_json_loader_single_object(self):
         """Test loading a single JSON object."""
         test_data = {"title": "Test", "content": "This is test content"}
-        
+
         with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
             json.dump(test_data, f)
             temp_path = f.name
@@ -79,7 +79,7 @@ class TestJSONLoader:
         try:
             loader = JSONLoader(temp_path, content_key="content", metadata_keys=["title"])
             documents = loader.load()
-            
+
             assert len(documents) == 1
             assert documents[0].page_content == "This is test content"
             assert documents[0].metadata["title"] == "Test"
@@ -93,7 +93,7 @@ class TestJSONLoader:
             {"title": "Doc 1", "content": "First document"},
             {"title": "Doc 2", "content": "Second document"}
         ]
-        
+
         with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
             json.dump(test_data, f)
             temp_path = f.name
@@ -101,7 +101,7 @@ class TestJSONLoader:
         try:
             loader = JSONLoader(temp_path, content_key="content", metadata_keys=["title"])
             documents = loader.load()
-            
+
             assert len(documents) == 2
             assert documents[0].page_content == "First document"
             assert documents[0].metadata["title"] == "Doc 1"
@@ -121,13 +121,13 @@ class TestDirectoryLoader:
             (Path(temp_dir) / "test1.txt").write_text("First document")
             (Path(temp_dir) / "test2.md").write_text("# Second document")
             (Path(temp_dir) / "ignore.log").write_text("Log file")
-            
+
             loader = DirectoryLoader(
                 temp_dir,
                 file_extensions=['.txt', '.md']
             )
             documents = loader.load()
-            
+
             assert len(documents) == 2
             sources = [doc.metadata["source"] for doc in documents]
             assert any("test1.txt" in source for source in sources)
@@ -142,12 +142,12 @@ class TestTextChunker:
         """Test basic text chunking."""
         config = ChunkingConfig(chunk_size=50, overlap=10)
         chunker = TextChunker(config)
-        
+
         long_text = "This is a very long document that should be split into multiple chunks. " * 10
         document = Document(page_content=long_text, metadata={"source": "test.txt"})
-        
+
         chunks = chunker.chunk_documents([document])
-        
+
         assert len(chunks) > 1
         for chunk in chunks:
             assert len(chunk.page_content) <= 50 + 10  # Allow for overlap
@@ -163,7 +163,7 @@ class TestSemanticChunker:
         """Test semantic chunking for markdown."""
         config = ChunkingConfig(chunk_size=200, overlap=20)
         chunker = SemanticChunker(config)
-        
+
         markdown_text = """# Header 1
 This is content under header 1.
 
@@ -172,14 +172,14 @@ This is content under subheader 1.1.
 
 # Header 2
 This is content under header 2."""
-        
+
         document = Document(
             page_content=markdown_text,
             metadata={"source": "test.md", "file_type": "markdown"}
         )
-        
+
         chunks = chunker.chunk_documents([document])
-        
+
         assert len(chunks) > 1
         for chunk in chunks:
             assert chunk.metadata["chunking_strategy"] == "semantic"
@@ -190,24 +190,24 @@ This is content under header 2."""
 @patch('pysrcai.agentica.ingestion.pipeline.create_embedder')
 class TestIngestionPipeline:
     """Tests for IngestionPipeline."""
-    
+
     def test_pipeline_initialization(self, mock_create_embedder, mock_create_vectorstore, mock_create_chunker, mock_config):
         """Test pipeline initialization."""
         mock_embedder = Mock()
         mock_vectorstore = Mock()
         mock_chunker = Mock()
-        
+
         mock_create_embedder.return_value = mock_embedder
         mock_create_vectorstore.return_value = mock_vectorstore
         mock_create_chunker.return_value = mock_chunker
-        
+
         pipeline = IngestionPipeline(mock_config)
-        
+
         assert pipeline.config == mock_config
         assert pipeline.embeddings == mock_embedder
         assert pipeline.vectorstore == mock_vectorstore
         assert pipeline.chunker == mock_chunker
-        
+
         mock_create_embedder.assert_called_once_with(mock_config.embedding)
         mock_create_vectorstore.assert_called_once_with(mock_config.vectordb, mock_embedder)
         mock_create_chunker.assert_called_once_with(mock_config.chunking)
@@ -218,14 +218,14 @@ class TestIngestionPipeline:
         mock_vectorstore = Mock()
         mock_chunker = Mock()
         mock_vectorstore.add_documents.return_value = ["doc1", "doc2"]
-        
+
         mock_create_embedder.return_value = mock_embedder
         mock_create_vectorstore.return_value = mock_vectorstore
         mock_create_chunker.return_value = mock_chunker
-        
+
         pipeline = IngestionPipeline(mock_config)
         doc_ids = pipeline.ingest_documents(test_documents)
-        
+
         assert doc_ids == ["doc1", "doc2"]
         mock_vectorstore.add_documents.assert_called_once()
 
@@ -237,14 +237,14 @@ class TestIngestionPipeline:
         mock_vectorstore.similarity_search.return_value = [
             Document(page_content="Result", metadata={"source": "test.txt"})
         ]
-        
+
         mock_create_embedder.return_value = mock_embedder
         mock_create_vectorstore.return_value = mock_vectorstore
         mock_create_chunker.return_value = mock_chunker
-        
+
         pipeline = IngestionPipeline(mock_config)
         results = pipeline.search("test query")
-        
+
         assert len(results) == 1
         assert results[0].page_content == "Result"
         mock_vectorstore.similarity_search.assert_called_once_with(query="test query", k=5, filter=None)
@@ -255,13 +255,13 @@ class TestIngestionPipeline:
         mock_vectorstore = Mock()
         mock_chunker = Mock()
         mock_vectorstore.clear.return_value = True
-        
+
         mock_create_embedder.return_value = mock_embedder
         mock_create_vectorstore.return_value = mock_vectorstore
         mock_create_chunker.return_value = mock_chunker
-        
+
         pipeline = IngestionPipeline(mock_config)
         success = pipeline.clear_vectorstore()
-        
+
         assert success is True
         mock_vectorstore.clear.assert_called_once()

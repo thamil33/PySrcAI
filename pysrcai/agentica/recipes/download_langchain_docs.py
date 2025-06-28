@@ -23,16 +23,16 @@ def download_file(url: str, output_path: Path) -> bool:
         print(f"📥 Downloading: {url}")
         response = requests.get(url, stream=True)
         response.raise_for_status()
-        
+
         output_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         with open(output_path, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
-        
+
         print(f"✅ Downloaded: {output_path}")
         return True
-        
+
     except Exception as e:
         print(f"❌ Error downloading {url}: {e}")
         return False
@@ -43,29 +43,29 @@ def download_github_docs(repo: str, output_dir: Path, paths: List[str] = None) -
     try:
         # Download as ZIP
         zip_url = f"https://github.com/{repo}/archive/refs/heads/master.zip"
-        
+
         with tempfile.TemporaryDirectory() as temp_dir:
             zip_path = Path(temp_dir) / "repo.zip"
-            
+
             if not download_file(zip_url, zip_path):
                 return False
-            
+
             # Extract ZIP
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(temp_dir)
-            
+
             # Find extracted directory
             extracted_dirs = [d for d in Path(temp_dir).iterdir() if d.is_dir()]
             if not extracted_dirs:
                 print("❌ No directories found in ZIP")
                 return False
-            
+
             repo_dir = extracted_dirs[0]
-            
+
             # Copy documentation files
             if paths is None:
                 paths = ["docs", "README.md"]
-            
+
             for path in paths:
                 source_path = repo_dir / path
                 if source_path.exists():
@@ -82,9 +82,9 @@ def download_github_docs(repo: str, output_dir: Path, paths: List[str] = None) -
                         print(f"📁 Copied directory: {source_path.name}")
                 else:
                     print(f"⚠️  Path not found: {path}")
-        
+
         return True
-        
+
     except Exception as e:
         print(f"❌ Error downloading from {repo}: {e}")
         return False
@@ -93,10 +93,10 @@ def download_github_docs(repo: str, output_dir: Path, paths: List[str] = None) -
 def create_sample_docs(output_dir: Path):
     """Create comprehensive sample documentation if downloads fail."""
     print("📝 Creating sample documentation...")
-    
+
     # Ensure the output directory exists
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # LangChain Core Concepts
     (output_dir / "core_concepts.md").write_text("""
 # LangChain Core Concepts
@@ -136,7 +136,7 @@ Storing and retrieving conversation history:
 - ConversationSummaryMemory
 - ConversationBufferWindowMemory
 """)
-    
+
     # RAG Documentation
     (output_dir / "rag_tutorial.md").write_text("""
 # Retrieval-Augmented Generation (RAG) Tutorial
@@ -194,7 +194,7 @@ result = qa_chain.run("What is the main topic of the document?")
 4. **Context Window**: Respect model token limits
 5. **Evaluation**: Measure retrieval accuracy and generation quality
 """)
-    
+
     # Vector Stores Guide
     (output_dir / "vector_stores.md").write_text("""
 # Vector Stores in LangChain
@@ -270,7 +270,7 @@ docs = vectorstore.similarity_search(
 )
 ```
 """)
-    
+
     # Embeddings Guide
     (output_dir / "embeddings_guide.md").write_text("""
 # Embeddings in LangChain
@@ -334,7 +334,7 @@ query_embedding = embeddings.embed_query("What is machine learning?")
 4. **Batch Processing**: Process multiple texts together for efficiency
 5. **Caching**: Cache embeddings to avoid recomputation
 """)
-    
+
     # Agents Documentation
     (output_dir / "agents_guide.md").write_text("""
 # LangChain Agents
@@ -386,7 +386,7 @@ from langchain.tools import BaseTool
 class CustomTool(BaseTool):
     name = "custom_tool"
     description = "Useful for custom operations"
-    
+
     def _run(self, query: str) -> str:
         # Tool logic here
         return f"Result for: {query}"
@@ -416,7 +416,7 @@ agent.run(
 )
 ```
 """)
-    
+
     print(f"✅ Created sample documentation in {output_dir}")
 
 
@@ -429,16 +429,16 @@ def main():
         default=Path("docs/langchain"),
         help="Output directory for documentation"
     )
-    
+
     args = parser.parse_args()
     output_dir = args.output_dir
-    
+
     print("📚 LangChain Documentation Downloader")
     print("=" * 40)
-    
+
     # Create output directory
     output_dir.mkdir(parents=True, exist_ok=True)
-    
+
     # List of documentation sources to download
     doc_sources = [
         {
@@ -448,38 +448,38 @@ def main():
         },
         {
             "name": "LangChain Community",
-            "repo": "langchain-ai/langchain-community", 
+            "repo": "langchain-ai/langchain-community",
             "paths": ["docs", "README.md"]
         }
     ]
-    
+
     success_count = 0
-    
+
     # Try to download from GitHub repos
     for source in doc_sources:
         print(f"\n📦 Downloading {source['name']}...")
         source_dir = output_dir / source['name'].lower().replace(' ', '_')
-        
+
         if download_github_docs(source['repo'], source_dir, source['paths']):
             success_count += 1
         else:
             print(f"⚠️  Failed to download {source['name']}")
-    
+
     # Create sample docs regardless
     sample_dir = output_dir / "samples"
     create_sample_docs(sample_dir)
-    
+
     # Summary
     print(f"\n📊 Summary:")
     print(f"   Downloaded: {success_count}/{len(doc_sources)} repositories")
     print(f"   Sample docs: ✅ Created")
     print(f"   Output directory: {output_dir}")
-    
+
     # Verification instructions
     print(f"\n✅ Setup complete!")
     print(f"   Documents available in: {output_dir}")
     print(f"   To test RAG setup: python recipes/default_rag_setup.py")
-    
+
     # Count total files
     total_files = len(list(output_dir.rglob("*.md"))) + len(list(output_dir.rglob("*.txt")))
     print(f"   Total documentation files: {total_files}")

@@ -12,7 +12,7 @@ models:
 
 system_prompt: |
   You are a helpful and conversational AI assistant.
-   Engage in a helpful, friendly, and informative back-and-forth chat with the user. 
+   Engage in a helpful, friendly, and informative back-and-forth chat with the user.
    If you don't know something, say so rather than making up information.
 
 agent:

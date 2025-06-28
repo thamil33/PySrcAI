@@ -22,7 +22,7 @@ class ModelConfig:
             "max_tokens": 500
         }
     )
-    
+
     def get_llm(self):
         """Get the configured LLM instance."""
         from ..adapters.llm.factory import create_llm

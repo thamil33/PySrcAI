@@ -1,4 +1,4 @@
- 
+
 
 """A game master component to represent each player's inventory."""
 

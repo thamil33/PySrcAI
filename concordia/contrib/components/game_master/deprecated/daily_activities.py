@@ -1,4 +1,4 @@
- 
+
 
 """Represents each agent's daily activities over a period of time."""
 

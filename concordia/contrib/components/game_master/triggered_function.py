@@ -1,4 +1,4 @@
- 
+
 
 """A component to call functions based on events."""
 

@@ -9,18 +9,18 @@ from .chroma_adapter import ChromaVectorStore
 
 
 def create_vectorstore(
-    config: VectorDBConfig, 
+    config: VectorDBConfig,
     embeddings: Embeddings
 ) -> BaseVectorStore:
     """Create a vector store instance based on configuration.
-    
+
     Args:
         config: Vector database configuration
         embeddings: Embeddings model to use
-        
+
     Returns:
         Vector store instance
-        
+
     Raises:
         ValueError: If provider is not supported
     """

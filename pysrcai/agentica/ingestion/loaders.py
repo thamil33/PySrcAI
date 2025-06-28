@@ -18,20 +18,20 @@ from pysrcai.agentica.config.config import ChunkingConfig
 
 class TextLoader:
     """Loader for plain text files."""
-    
+
     def __init__(self, file_path: str, encoding: str = "utf-8"):
         """Initialize the text loader.
-        
+
         Args:
             file_path: Path to the text file
             encoding: File encoding (default: utf-8)
         """
         self.file_path = file_path
         self.encoding = encoding
-    
+
     def load(self) -> List[Document]:
         """Load the text file as a document.
-        
+
         Returns:
             List containing a single Document
         """
@@ -41,32 +41,32 @@ class TextLoader:
         except UnicodeDecodeError as e:
             print(f"Warning: Skipping {self.file_path}: {e}")
             return []
-        
+
         metadata = {
             "source": self.file_path,
             "file_type": "text",
             "size": len(content)
         }
-        
+
         return [Document(page_content=content, metadata=metadata)]
 
 
 class MarkdownLoader:
     """Loader for Markdown files."""
-    
+
     def __init__(self, file_path: str, encoding: str = "utf-8"):
         """Initialize the markdown loader.
-        
+
         Args:
             file_path: Path to the markdown file
             encoding: File encoding (default: utf-8)
         """
         self.file_path = file_path
         self.encoding = encoding
-    
+
     def load(self) -> List[Document]:
         """Load the markdown file as a document.
-        
+
         Returns:
             List containing a single Document
         """
@@ -82,27 +82,27 @@ class MarkdownLoader:
             except UnicodeDecodeError as e:
                 print(f"Warning: Skipping {self.file_path}: {e}")
                 return []
-            
+
             metadata = {
                 "source": self.file_path,
                 "file_type": "markdown",
                 "size": len(content)
             }
-            
+
             return [Document(page_content=content, metadata=metadata)]
 
 
 class JSONLoader:
     """Loader for JSON files."""
-    
+
     def __init__(
-        self, 
-        file_path: str, 
+        self,
+        file_path: str,
         content_key: Optional[str] = None,
         metadata_keys: Optional[List[str]] = None
     ):
         """Initialize the JSON loader.
-        
+
         Args:
             file_path: Path to the JSON file
             content_key: Key in JSON containing the main content (if None, uses entire JSON as string)
@@ -111,10 +111,10 @@ class JSONLoader:
         self.file_path = file_path
         self.content_key = content_key
         self.metadata_keys = metadata_keys or []
-    
+
     def load(self) -> List[Document]:
         """Load the JSON file as document(s).
-        
+
         Returns:
             List of Documents
         """
@@ -127,9 +127,9 @@ class JSONLoader:
         except json.JSONDecodeError as e:
             print(f"Warning: Skipping {self.file_path} (invalid JSON): {e}")
             return []
-        
+
         documents = []
-        
+
         if isinstance(data, list):
             # Handle JSON arrays
             for i, item in enumerate(data):
@@ -139,16 +139,16 @@ class JSONLoader:
             # Handle single JSON object
             content, metadata = self._extract_content_and_metadata(data)
             documents.append(Document(page_content=content, metadata=metadata))
-        
+
         return documents
-    
+
     def _extract_content_and_metadata(self, item: Dict[str, Any], index: Optional[int] = None) -> tuple:
         """Extract content and metadata from a JSON item.
-        
+
         Args:
             item: JSON item (dict)
             index: Index if part of an array
-            
+
         Returns:
             Tuple of (content, metadata)
         """
@@ -156,27 +156,27 @@ class JSONLoader:
             content = str(item[self.content_key])
         else:
             content = json.dumps(item, indent=2)
-        
+
         metadata = {
             "source": self.file_path,
             "file_type": "json",
             "size": len(content)
         }
-        
+
         if index is not None:
             metadata["index"] = index
-        
+
         # Add specified metadata keys
         for key in self.metadata_keys:
             if key in item:
                 metadata[key] = item[key]
-        
+
         return content, metadata
 
 
 class DirectoryLoader:
     """Loader for directories containing multiple files."""
-    
+
     def __init__(
         self,
         directory_path: str,
@@ -185,7 +185,7 @@ class DirectoryLoader:
         exclude_patterns: Optional[List[str]] = None
     ):
         """Initialize the directory loader.
-        
+
         Args:
             directory_path: Path to the directory
             glob_pattern: Glob pattern for file matching (default: all files)
@@ -196,15 +196,15 @@ class DirectoryLoader:
         self.glob_pattern = glob_pattern
         self.file_extensions = file_extensions or []
         self.exclude_patterns = exclude_patterns or []
-    
+
     def load(self) -> List[Document]:
         """Load all matching files in the directory.
-        
+
         Returns:
             List of Documents from all loaded files
         """
         documents = []
-        
+
         file_count = 0
         doc_count = 0
         for file_path in self.directory_path.glob(self.glob_pattern):
@@ -230,18 +230,18 @@ class DirectoryLoader:
                     print(f"Warning: Failed to load {file_path}: {e}")
         print(f"--- Ingestion complete: {file_count} file(s), {doc_count} document(s) loaded ---")
         return documents
-    
+
     def _get_loader_for_file(self, file_path: Path):
         """Get the appropriate loader for a file based on its extension.
-        
+
         Args:
             file_path: Path to the file
-            
+
         Returns:
             Loader instance or None if unsupported
         """
         extension = file_path.suffix.lower()
-        
+
         if extension in ['.txt', '.py', '.yaml', '.yml', '.toml', '.cfg', '.ini']:
             return TextLoader(str(file_path))
         elif extension in ['.md', '.markdown']:
@@ -259,20 +259,20 @@ def create_loader(
     **kwargs
 ):
     """Create a loader based on path and type.
-    
+
     Args:
         path: File or directory path
         loader_type: Type of loader ('text', 'markdown', 'json', 'directory', or None for auto-detect)
         **kwargs: Additional arguments for the loader
-        
+
     Returns:
         Loader instance
     """
     path_obj = Path(path)
-    
+
     if path_obj.is_dir():
         return DirectoryLoader(path, **kwargs)
-    
+
     if loader_type:
         loaders = {
             'text': TextLoader,
@@ -281,7 +281,7 @@ def create_loader(
         }
         if loader_type in loaders:
             return loaders[loader_type](path, **kwargs)
-    
+
     # Auto-detect based on file extension
     extension = path_obj.suffix.lower()
     if extension in ['.md', '.markdown']:

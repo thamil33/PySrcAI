@@ -13,7 +13,7 @@
 ### 🔬 Target Application Domains
 
 - **Academic Research**: Political science, international relations, and AI safety research
-- **Policy Analysis**: Strategic scenario planning for government agencies and NGOs  
+- **Policy Analysis**: Strategic scenario planning for government agencies and NGOs
 - **AI Development**: Multi-agent system research, development, and deployment
 - **Educational**: Advanced instruction in complex systems and AI methodologies
 - **Entertainment**: Interactive storytelling, gaming applications, and immersive experiences
@@ -79,7 +79,7 @@ These steps will set up a fresh Python 3.12 environment using [UV](https://githu
 (Change to your directory of python 3.12)
 
 ```powershell
-C:\Users\tyler\AppData\Local\Programs\Python\Python312\python.exe -m venv .pysrcai 
+C:\Users\tyler\AppData\Local\Programs\Python\Python312\python.exe -m venv .pysrcai
 .\.pysrcai\Scripts\Activate
 ```
 
@@ -124,8 +124,8 @@ Running a multi turn interactive llm chatbot with PySrcAI.Agentica:
 ```bash
 python -m pysrcai.agentica.cli --template rag --verbose  --interactive
 ```
-  
-### Geo_Mod_Usage  - WIP
+  C:\Users\tyler\dev\__pysrcai\iching.txt
+
 
 ## 📋 Project Status
 

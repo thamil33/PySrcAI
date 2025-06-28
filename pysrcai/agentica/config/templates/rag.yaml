@@ -23,8 +23,8 @@ vectordb:
 chunking:
   json_strategy: recursive
   text_strategy: recursive
-  chunk_size: 500
-  overlap: 120
+  chunk_size: 800
+  overlap: 90
 
 rag:
   top_k: 4

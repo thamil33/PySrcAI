@@ -1,4 +1,4 @@
- 
+
 
 
 """This component always returns the same string."""

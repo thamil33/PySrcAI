@@ -1,4 +1,4 @@
- 
+
 
 """Library of components for both generative game master and agents."""
 

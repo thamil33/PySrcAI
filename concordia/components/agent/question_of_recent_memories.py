@@ -1,4 +1,4 @@
- 
+
 
 """Agent component for asking questions about the agent's recent memories."""
 

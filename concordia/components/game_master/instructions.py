@@ -1,4 +1,4 @@
- 
+
 
 """Component that provides the default game master instructions."""
 

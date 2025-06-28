@@ -1,4 +1,4 @@
- 
+
 
 """Metric to track goal achievement for a player."""
 

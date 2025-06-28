@@ -10,6 +10,7 @@ from concordia.components import agent as agent_components
 import numpy as np
 from concordia.language_model import language_model
 from concordia.typing import prefab as prefab_lib
+from sentence_transformers import SentenceTransformer
 
 DEFAULT_GOAL_COMPONENT_KEY = 'goal'
 DEFAULT_CONTEXT_COMPONENT_KEY = 'context'
@@ -60,13 +61,14 @@ class NationEntity(prefab_lib.Prefab):
             history_length=10,
             pre_act_label=f'\nRecent events and statements:'
         )
-        
+
         # Create a memory bank with formative memories for the nation
         # First, set up embedder function for the memory
+        embedder = SentenceTransformer("all-MiniLM-L6-v2")  # or your preferred model
+
         def simple_embedder(text: str) -> np.ndarray:
-            # This is a placeholder embedder that works with Concordia's memory system
-            return model.embed_string(text)
-            
+            return embedder.encode(text)
+
         # Create memory bank using FormativeMemoryFactory
         memory_factory = formative_memories.FormativeMemoryFactory(
             model=model,
@@ -77,15 +79,18 @@ class NationEntity(prefab_lib.Prefab):
                 f"Context: {context}",
             ],
         )
-        
-        # Create the memory bank
-        memory = memory_factory._blank_memory_factory_call()
-        
-        # Add the nation's core memories
-        for mem in [f"I am {agent_name}.", 
-                   f"My primary goal is to {goal}", 
+
+        # Create the raw memory bank
+        raw_memory_bank = memory_factory._blank_memory_factory_call()
+
+        # Add the nation's core memories to the raw bank
+        for mem in [f"I am {agent_name}.",
+                   f"My primary goal is to {goal}",
                    f"Important context: {context}"]:
-            memory.add(mem)
+            raw_memory_bank.add(mem)
+
+        # Wrap the memory bank in an AssociativeMemory component
+        memory = agent_components.memory.AssociativeMemory(raw_memory_bank)
 
         # 2. Nation-Specific Components (from params)
         goal_component = agent_components.constant.Constant(
@@ -118,7 +123,6 @@ class NationEntity(prefab_lib.Prefab):
         act_component = agent_components.concat_act_component.ConcatActComponent(
             model=model,
             component_order=component_order,
-            action_spec_name='Action',
         )
 
         # 5. Build and return the final agent object

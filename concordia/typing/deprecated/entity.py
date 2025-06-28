@@ -1,4 +1,4 @@
- 
+
 
 
 """The abstract class that defines an Entity interface."""

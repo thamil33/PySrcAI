@@ -37,13 +37,11 @@ INSTANCES = [
     ),
     # --- The Game Master ---
     prefab_lib.InstanceConfig(
-        prefab='moderator_gm',  # This will be mapped to our ModeratorGmPrefab
+        prefab='generic_gm',  # Use the generic game master prefab
         role=prefab_lib.Role.GAME_MASTER,
         params={
             'name': "UN Moderator",
-            'max_turns': 4,  # Two turns for each nation
-            'acting_order': [RUSSIA, UKRAINE, RUSSIA, UKRAINE],
-            'verbose': True,
+            'acting_order': 'fixed',  # Fixed order turns
         },
     ),
 ]

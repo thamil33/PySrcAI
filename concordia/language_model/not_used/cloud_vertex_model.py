@@ -1,4 +1,4 @@
- 
+
 """Google Cloud Vertex Language Model."""
 
 from collections.abc import Collection, Sequence

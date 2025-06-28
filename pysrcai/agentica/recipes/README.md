@@ -67,7 +67,7 @@ Demonstrates integration with LangGraph for complex workflows.
    ```bash
    # Required environment variables
    export OPENROUTER_API_KEY="your_openrouter_api_key"
-   
+
    # Install dependencies
    pip install -r requirements.txt
    ```

@@ -7,14 +7,14 @@ from .vectorstore import *
 __all__ = [
     # Embedding adapters
     "BaseEmbedder",
-    "create_embedder", 
+    "create_embedder",
     "SentenceTransformerEmbeddings",
-    
+
     # LLM adapters
     "OpenRouterLLM",
-    "LMStudioLLM", 
+    "LMStudioLLM",
     "create_llm",
-    
+
     # Vector store adapters
     "BaseVectorStore",
     "ChromaVectorStore",

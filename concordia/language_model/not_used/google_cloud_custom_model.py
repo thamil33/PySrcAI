@@ -1,4 +1,4 @@
- 
+
 
 """Language Model that uses Google Cloud Vertex AI API."""
 

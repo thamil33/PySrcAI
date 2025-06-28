@@ -1,4 +1,4 @@
- 
+
 
 """Component that helps a game master decide whose turn is next."""
 
