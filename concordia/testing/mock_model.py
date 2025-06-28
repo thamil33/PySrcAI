@@ -1,4 +1,3 @@
-
 """A mock Language Model."""
 
 from collections.abc import Collection, Sequence

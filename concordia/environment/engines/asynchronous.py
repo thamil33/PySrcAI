@@ -1,5 +1,3 @@
-
-
 """Asynchronous engine.
 """
 

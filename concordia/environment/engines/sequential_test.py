@@ -1,5 +1,3 @@
-
-
 """Tests for sequential (turn-based) simulation.
 """
 

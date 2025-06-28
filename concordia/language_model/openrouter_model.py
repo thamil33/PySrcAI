@@ -1,6 +1,3 @@
-
-
-
 """Language Model that uses OpenRouter API."""
 
 import os
@@ -12,7 +9,7 @@ from typing import Any
 
 from concordia.language_model import language_model
 from concordia.utils import sampling
-from concordia.utils.deprecated import measurements as measurements_lib
+from concordia.utils import measurements as measurements_lib
 from openai import OpenAI, RateLimitError
 from typing_extensions import override
 

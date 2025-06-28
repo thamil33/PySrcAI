@@ -5,6 +5,7 @@ langchain-chroma
 
 PyGithub
 
+matplotlib
 numpy
 setuptools
 termcolor

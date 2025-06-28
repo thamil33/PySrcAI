@@ -1,5 +1,3 @@
-
-
 """A modular entity agent using the new component system."""
 
 from collections.abc import Mapping
@@ -8,7 +6,7 @@ import threading
 import types
 from typing import cast
 
-from concordia.components.agent.deprecated import no_op_context_processor
+from concordia.components.agent import no_op_context_processor
 from concordia.typing import entity
 from concordia.typing import entity_component
 from concordia.utils import concurrency

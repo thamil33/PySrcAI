@@ -1,5 +1,3 @@
-
-
 """A component for representing the current situation via narrative.
 """
 

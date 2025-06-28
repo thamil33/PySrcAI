@@ -1,6 +1,3 @@
-
-
-
 """Chain of thoughts abstraction for simulacra and game master."""
 
 from collections.abc import Callable, Sequence

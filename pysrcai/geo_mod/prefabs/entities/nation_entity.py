@@ -34,6 +34,7 @@ class NationEntity(prefab_lib.Prefab):
             'name': 'Default Nation',
             'goal': 'Maintain peace and prosperity.',
             'context': 'This nation has a long history of diplomacy.',
+            'word_limits': None,
         }
     )
 
@@ -54,6 +55,7 @@ class NationEntity(prefab_lib.Prefab):
         agent_name = self.params.get('name')
         goal = self.params.get('goal')
         context = self.params.get('context')
+        word_limits = self.params.get('word_limits')
 
         # 1. Core Components for Memory and Observation
         observation_to_memory = agent_components.observation.ObservationToMemory()
@@ -83,10 +85,28 @@ class NationEntity(prefab_lib.Prefab):
         # Create the raw memory bank
         raw_memory_bank = memory_factory._blank_memory_factory_call()
 
+        # Generate appropriate response limit text based on word_limits
+        if word_limits:
+            opening = word_limits['opening_statements']
+            rebuttals = word_limits['rebuttals']
+            final = word_limits['final_arguments']
+            
+            response_limit = (f"RESPONSE LIMIT: I will limit my opening statements to {opening['min']}-{opening['max']} words, "
+                            f"rebuttals to {rebuttals['min']}-{rebuttals['max']} words, and final arguments to "
+                            f"{final['min']}-{final['max']} words to maintain clarity and respect time constraints.")
+        else:
+            # Fallback for when no word limits are provided
+            response_limit = "RESPONSE LIMIT: I will limit my statements to 200-300 words to maintain clarity and respect time."
+
         # Add the nation's core memories to the raw bank
-        for mem in [f"I am {agent_name}.",
-                   f"My primary goal is to {goal}",
-                   f"Important context: {context}"]:
+        for mem in [
+            f"I am {agent_name}, representing my nation's interests.",
+            f"My primary goal: {goal}",
+            f"My context and background: {context}",
+            "IMPORTANT: When speaking in debates, I must keep my responses concise and focused.",
+            response_limit,
+            "I must make every word count and present only the strongest arguments.",
+        ]:
             raw_memory_bank.add(mem)
 
         # Wrap the memory bank in an AssociativeMemory component

@@ -1,5 +1,4 @@
 
-
 """Helper functions."""
 
 from collections.abc import Iterable, Sequence
@@ -12,7 +11,7 @@ from typing import Any
 
 from concordia.document import interactive_document
 from concordia.language_model import language_model
-from concordia.typing.deprecated import component
+from concordia.typing import entity_component as component
 from concordia.utils import concurrency
 
 
@@ -120,7 +119,7 @@ def timedelta_to_readable_str(td: datetime.timedelta):
 
 
 def apply_recursively(
-    parent_component: component.Component,
+    parent_component: component,
     function_name: str,
     function_arg: str | None = None,
     concurrent_child_calls: bool = False,

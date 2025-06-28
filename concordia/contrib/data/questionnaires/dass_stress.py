@@ -1,4 +1,3 @@
-
 """Questionnaire to measure DASS Stress scores."""
 
 AGREEMENT_SCALE = [

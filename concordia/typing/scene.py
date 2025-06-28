@@ -1,5 +1,3 @@
-
-
 """Dataclasses used to structure simulations using scenes."""
 
 from collections.abc import Callable, Sequence

@@ -1,6 +1,3 @@
-
-
-
 """Base class for a language model."""
 
 import abc

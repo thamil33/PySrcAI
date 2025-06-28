@@ -1,5 +1,3 @@
-
-
 """Engine base class.
 """
 

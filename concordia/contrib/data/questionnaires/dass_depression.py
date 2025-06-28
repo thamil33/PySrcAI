@@ -1,4 +1,3 @@
-
 """Questionnaire for the DASS Depression scale."""
 
 AGREEMENT_SCALE = [
