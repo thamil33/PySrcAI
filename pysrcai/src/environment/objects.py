@@ -281,14 +281,23 @@ class Environment:
                     found = True
                     
                     if action == "examine":
+                        # Use detailed examination if available
+                        examination_detail = obj.properties.get("examination_detail", "")
+                        if examination_detail:
+                            desc = f"{obj.description} {examination_detail}"
+                        else:
+                            desc = obj.description
+                        
                         result = {
                             "success": True,
-                            "message": obj.description,
-                            "observation": obj.description
+                            "message": desc,
+                            "observation": desc
                         }
                     
                     elif action == "search" and obj.properties.get("searchable", False):
                         contents = obj.properties.get("contents", [])
+                        search_message = obj.properties.get("search_message", f"You search the {obj.name}.")
+                        
                         if contents:
                             contents_desc = ", ".join([
                                 self.items[item_id].name 
@@ -297,15 +306,16 @@ class Environment:
                             ])
                             result = {
                                 "success": True,
-                                "message": f"You searched the {obj.name} and found: {contents_desc}",
-                                "observation": f"Inside the {obj.name}, you discover: {contents_desc}",
+                                "message": f"{search_message} You found: {contents_desc}",
+                                "observation": f"{search_message} Inside the {obj.name}, you discover: {contents_desc}",
                                 "found_items": contents
                             }
                         else:
+                            empty_message = obj.properties.get("empty_search_message", f"The {obj.name} appears to be empty.")
                             result = {
                                 "success": True,
-                                "message": f"You searched the {obj.name} but found nothing.",
-                                "observation": f"The {obj.name} appears to be empty."
+                                "message": f"{search_message} {empty_message}",
+                                "observation": f"{search_message} {empty_message}"
                             }
                     
                     # Record the interaction

@@ -265,6 +265,30 @@ class ArchonLLMComponent(LLMActingComponent):
         prompt_parts.append(f"\n{call_to_action}")
         
         # Add action-specific guidance
+        if action_spec.tag == "environmental_feedback":
+            prompt_parts.clear()  # Replace standard archon prompt for environmental narration
+            prompt_parts.extend([
+                f"You are {agent_name}, the ENVIRONMENTAL NARRATOR for this simulation.",
+                "",
+                "CRITICAL ROLE: You are the voice of the environment itself. When an agent acts, you describe exactly what happens.",
+                "",
+                "GUIDELINES:",
+                "- Describe immediate, observable results of actions",
+                "- If they examine something, tell them what they see in detail",
+                "- If they search something, describe what they find (or don't find)",
+                "- If they take something, confirm they now have it",
+                "- If they read something, quote the exact contents",
+                "- Use vivid, sensory language (what they see, hear, feel, smell)",
+                "- Make environmental changes feel real and consequential",
+                "- If an action reveals new information, describe it clearly",
+                "",
+                "Remember: You are not analyzing or moderating - you are the environment responding to their action.",
+                "Write in present tense as if the action is happening right now.",
+                "",
+                call_to_action
+            ])
+            return "\n".join(prompt_parts)
+        
         if action_spec.output_type == OutputType.MODERATE:
             prompt_parts.append(
                 f"Provide a moderation decision that maintains fairness and follows your rules. "
@@ -284,6 +308,12 @@ class ArchonLLMComponent(LLMActingComponent):
             prompt_parts.append(
                 f"Decide whether to continue or terminate the session. Consider completion "
                 f"criteria, participant engagement, and overall objectives."
+            )
+        else:
+            # Default guidance for other archon actions
+            prompt_parts.append(
+                f"Respond as a simulation moderator, maintaining fairness and order while "
+                f"providing clear, helpful guidance to participants."
             )
         
         return "\n\n".join(prompt_parts)

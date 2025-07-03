@@ -22,9 +22,9 @@ agents:
 
 engine:
   type: sequential
-  steps: 3
+  steps: 5
   log_level: info
-  response_word_limit: 40
+  response_word_limit: 60
 
 scenario:
   description: "Alice and Bob suddenly find themselves in a simple room."
@@ -41,12 +41,24 @@ scenario:
               name: "Wooden Table"
               description: "A simple wooden table with four chairs."
               properties:
-                searchable: false
+                searchable: true
+                contents: ["notebook"]
+                search_difficulty: "easy"
+                search_message: "You search the table carefully, looking under papers and around the legs."
+                empty_search_message: "You search the table but find nothing of interest."
             window:
               name: "Window"
               description: "A window looking out onto a peaceful garden."
               properties:
                 openable: false
+                examination_detail: "Through the window, you can see a peaceful garden with well-tended flower beds and a small fountain."
+            chairs:
+              name: "Four Chairs"
+              description: "Four wooden chairs arranged around the table."
+              properties:
+                searchable: false
+                moveable: false
+                examination_detail: "The chairs are simple but well-made, with worn seats that suggest frequent use."
       items:
         notebook:
           name: "Notebook"
@@ -54,10 +66,12 @@ scenario:
           properties:
             portable: true
             readable: true
+            location: "hidden"
             content: "The first page of the notebook has the handwritten words `NOTHING IS REAL`, the rest of the notebook is empty."
   rules:
-    - "Each agent takes a turn in order."
-    - "Moderator observes and analyzes after each round."
-    - "Conversation log records all actions and analyses."
-    - "Actors must select an action at the end of each turn." 
-    - "The Archon must calculate the effects of any action and report them via the Environment."
+    - "Each agent must select ONE specific action from the available options."
+    - "Actions must be concrete and environmental (examine, search, take, read, speak, wait)."
+    - "The Archon narrates the environmental results of each action."
+    - "Environmental changes persist and affect future interactions."
+    - "Agents should explore the room and interact with objects to uncover mysteries."
+    - "The notebook contains important information - finding and reading it may be significant."
