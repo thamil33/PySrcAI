@@ -9,8 +9,14 @@ import abc
 from typing import Any
 from collections.abc import Mapping
 
-from .agent import ActingComponent, ActionSpec, ComponentContextMapping, OutputType
-from ..language_model_client import LanguageModel
+from pysrcai.src.agents import ActingComponent, ActionSpec, ComponentContextMapping, OutputType
+
+from pysrcai.src.language_model_client import (
+    LMStudioLanguageModel,
+    OpenRouterLanguageModel,
+    NoLanguageModel,
+)
+from pysrcai.src.language_model_client.language_model import LanguageModel
 
 
 class LLMActingComponent(ActingComponent):
@@ -135,12 +141,17 @@ class ActorLLMComponent(LLMActingComponent):
         Returns:
             The prompt string optimized for Actor decision-making.
         """
+
+        from .actor import Actor 
+        
+
+
         agent = self.get_agent()
         agent_name = agent.name
         
         # Get Actor-specific context if available
         actor_context = {}
-        if hasattr(agent, 'get_actor_context'):
+        if isinstance(agent, Actor):
             actor_context = agent.get_actor_context()
         
         # Format the prompt with Actor-specific framing
@@ -208,12 +219,14 @@ class ArchonLLMComponent(LLMActingComponent):
         Returns:
             The prompt string optimized for Archon moderation and orchestration.
         """
+        from .archon import Archon  
+
         agent = self.get_agent()
         agent_name = agent.name
         
         # Get Archon-specific context if available
         archon_context = {}
-        if hasattr(agent, 'get_archon_context'):
+        if isinstance(agent, Archon):
             archon_context = agent.get_archon_context()
         
         # Format the prompt with Archon-specific framing
@@ -288,7 +301,7 @@ class ConfigurableLLMComponent(LLMActingComponent):
         language_model: LanguageModel,
         *,
         role_description: str,
-        prompt_template: str = None,
+        prompt_template: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 256,
     ):
@@ -340,3 +353,18 @@ class ConfigurableLLMComponent(LLMActingComponent):
             context=formatted_context,
             call_to_action=call_to_action,
         )
+def create_language_model(model_type: str = "mock"):
+    if model_type == "lmstudio":
+        return LMStudioLanguageModel(
+            model_name="local-model",
+            base_url="http://localhost:1234/v1",
+            verbose_logging=True
+        )
+    elif model_type == "openrouter":
+        return OpenRouterLanguageModel(
+            model_name="mistralai/mistral-7b-instruct:free",
+            verbose_logging=True
+        )
+    else:
+        return NoLanguageModel()
+

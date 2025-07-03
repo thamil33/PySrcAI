@@ -179,8 +179,7 @@ class Actor(Agent):
             "personality_traits": self._personality_traits,
             "agent_type": "Actor",
         }
-
-
+        
 class ActorWithLogging(Actor):
     """An Actor that includes logging capabilities for debugging and monitoring."""
     

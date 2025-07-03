@@ -1,0 +1,37 @@
+agents:
+  - name: Alice
+    type: actor
+    personality:
+      curiosity: 0.9
+      friendliness: 0.8
+    memory: associative
+    llm: openroputer
+
+  - name: Bob
+    type: actor
+    personality:
+      introversion: 0.6
+      analytical: 0.9
+    memory: basic
+    llm: openrouter
+
+  - name: Moderator
+    type: archon
+    authority_level: observer
+    llm: openrouter
+
+engine:
+  type: sequential
+  steps: 5
+  log_level: info
+
+scenario:
+  description: "Alice and Bob meet and have a conversation."
+  initial_state:
+    turn: 0
+    conversation_log: []
+    environment: {}
+  rules:
+    - "Each agent takes a turn in order."
+    - "Moderator observes and analyzes after each round."
+    - "Conversation log records all actions and analyses."
