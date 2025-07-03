@@ -1,1 +1,0 @@
-# The generic simulation framework for structured debates between entities.
