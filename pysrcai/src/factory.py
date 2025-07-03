@@ -41,13 +41,19 @@ class SimulationFactory:
                     authority_level=agent_cfg.get('authority_level', 'observer'),
                     language_model=llm
                 )
+                # Optional: per-agent word limit for archon
+                if 'word_limit' in agent_cfg:
+                    setattr(archon, 'word_limit', agent_cfg['word_limit'])
             else:
-                agents.append(Actor(
+                actor = Actor(
                     agent_name=name,
                     context_components=context_components,
                     personality_traits=personality,
                     language_model=llm
-                ))
+                )
+                if 'word_limit' in agent_cfg:
+                    setattr(actor, 'word_limit', agent_cfg['word_limit'])
+                agents.append(actor)
 
         # Engine selection
         engine_cfg = config.get('engine', {})
@@ -56,6 +62,6 @@ class SimulationFactory:
         state = config.get('scenario', {}).get('initial_state', {})
 
         if engine_type == 'sequential':
-            return SequentialEngine(agents=agents, archon=archon, state=state), steps
+            return SequentialEngine(agents=agents, archon=archon, state=state, config=config), steps
         else:
-            return SimulationEngine(agents=agents, state=state), steps 
+            return SimulationEngine(agents=agents, state=state), steps

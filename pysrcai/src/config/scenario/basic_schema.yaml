@@ -5,14 +5,14 @@ agents:
       curiosity: 0.9
       friendliness: 0.8
     memory: associative
-    llm: openroputer
+    llm: openrouter
 
   - name: Bob
     type: actor
     personality:
       introversion: 0.6
       analytical: 0.9
-    memory: basic
+    memory: associative
     llm: openrouter
 
   - name: Moderator
@@ -22,16 +22,42 @@ agents:
 
 engine:
   type: sequential
-  steps: 5
+  steps: 3
   log_level: info
+  response_word_limit: 40
 
 scenario:
-  description: "Alice and Bob meet and have a conversation."
+  description: "Alice and Bob suddenly find themselves in a simple room."
   initial_state:
     turn: 0
     conversation_log: []
-    environment: {}
+    environment:
+      locations:
+        room:
+          name: "Simple Room"
+          description: "A simple room with white walls and basic furniture."
+          objects:
+            table:
+              name: "Wooden Table"
+              description: "A simple wooden table with four chairs."
+              properties:
+                searchable: false
+            window:
+              name: "Window"
+              description: "A window looking out onto a peaceful garden."
+              properties:
+                openable: false
+      items:
+        notebook:
+          name: "Notebook"
+          description: "A small paper notebook with blank pages."
+          properties:
+            portable: true
+            readable: true
+            content: "The first page of the notebook has the handwritten words `NOTHING IS REAL`, the rest of the notebook is empty."
   rules:
     - "Each agent takes a turn in order."
     - "Moderator observes and analyzes after each round."
     - "Conversation log records all actions and analyses."
+    - "Actors must select an action at the end of each turn." 
+    - "The Archon must calculate the effects of any action and report them via the Environment."

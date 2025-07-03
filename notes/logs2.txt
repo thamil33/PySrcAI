@@ -1,0 +1,78 @@
+=== PySrcAI Engine Demo ===
+Loaded config:
+{'agents': [{'name': 'Alice', 'type': 'actor', 'personality': {'curiosity': 0.9, 'friendliness': 0.8}, 'memory': 'associative', 'llm': 'openrouter'}, {'name': 'Bob', 'type': 'actor', 'personality': {'introversion': 0.6, 'analytical': 0.9}, 'memory': 'associative', 'llm': 'openrouter'}, {'name': 'Moderator', 'type': 'archon', 'authority_level': 'observer', 'llm': 'openrouter'}], 'engine': {'type': 'sequential', 'steps': 3, 'log_level': 'info', 'response_word_limit': 40}, 'scenario': {'description': 'Alice and Bob suddenly find themselves in a simple room.', 'initial_state': {'turn': 0, 'conversation_log': [], 'environment': {'locations': {'room': {'name': 'Simple Room', 'description': 'A simple room with white walls and basic furniture.', 'objects': {'table': {'name': 'Wooden Table', 'description': 'A simple wooden table with four chairs.', 'properties': {'searchable': False}}, 'window': {'name': 'Window', 'description': 'A window looking out onto a peaceful garden.', 'properties': {'openable': False}}}}}, 'items': {'notebook': {'name': 'Notebook', 'description': 'A small paper notebook with blank pages.', 'properties': {'portable': True, 'readable': True, 'content': 'The first page of the notebook has the handwritten words `NOTHING IS REAL`, the rest of the notebook is empty.'}}}}}, 'rules': ['Each agent takes a turn in order.', 'Moderator observes and analyzes after each round.', 'Conversation log records all actions and analyses.', 'Actors must select an action at the end of each turn.', 'The Archon must calculate the effects of any action and report them via the Environment.']}}
+
+[Engine] Running for 3 steps...
+[Engine] Initialized. Agents: ['Alice', 'Bob']
+[Engine] Archon: Moderator
+
+[Engine] Step 1
+C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\memory\memory_components.py:203: FutureWarning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  self._memories = pd.concat([self._memories, new_memory], ignore_index=True)
+[14:31:37] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Actor(Alice) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Alice, a participant in a simulation.
+
+Your personality traits: curiosity: 0.9, friendliness...
+Alice acts: Alice, with her high curiosity (0.9), chooses to "speak to [agent]" to gather more information about their purpose, role, and the environment, aiming to understand the nature of this simulation better.
+[14:31:38] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Environment] Alice initiates a conversation with the agent, deepening her understanding of the simulation's purpose, role, and environment. The simulation remains inactive as Alice gathers information and Warning: The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+  self._memories = pd.concat([self._memories, new_memory], ignore_index=True)
+[14:31:39] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Actor(Bob) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Bob, a participant in a simulation.
+
+Your personality traits: introversion: 0.6, analytical:...
+Bob acts: Bob, being analytical, chooses to 'speak to Alice' to further understand the purpose and potential interactions within the simulation. He aims to gather more information that could help him navigate the situation effectively.
+[14:31:40] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Environment] Bob initiates a conversation with Alice, asking about the simulation's purpose and potential interactions. The simulation remains inactive as both characters exchange information, with the objects within it unchanged. The state of the simulation remains the same.
+[14:31:41] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Archon] Moderator analyzes: In this round, both Bob and Alice are gathering information about the simulation's purpose and rules. Their interactions are educational and non-disruptive, maintaining the inactive state of the simulation.
+
+[Engine] Step 2
+[14:31:45] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Actor(Alice) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Alice, a participant in a simulation.
+
+Your personality traits: curiosity: 0.9, friendliness...
+Alice acts: Alice decides to speak to the agent again, building upon the information gathered earlier. She asks, "Could you please explain more about the purpose and rules of this simulation? I'm quite curious."
+[14:31:47] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Environment] As a result of Alice's action, the agent provides additional information about the simulation's purpose and rules. Alice's curiosity is satisfied, and the simulation remains inactive as both characters engage in informative dialogue. The state of the simulation and its objects remains unchanged.
+[14:31:48] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Actor(Bob) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Bob, a participant in a simulation.
+
+Your personality traits: introversion: 0.6, analytical:...
+Bob acts: Given Bob's analytical nature, he might decide to 'speak to Alice again' to further query the agent about any unexplored aspects of the simulation, such as potential tasks, interactions, or hidden features. This could provide more information for effective navigation and understanding within the simulation.
+[14:31:49] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Environment] As a result of Bob's action, Bob and Alice continue their dialogue with the agent, exploring more aspects of the simulation such as potential tasks, interactions, or hidden features. The simulation remains inactive, with its objects unchanged.
+[14:31:49] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Archon] Moderator analyzes: This round of interactions fulfilled the purpose of informative dialogue, with both characters asking questions and sharing information about the simulation. The simulation remains inactive, and the objects within it unchanged. Both Bob and Alice demonstrated curiosity and a willingness to learn about the environment they find themselves in.
+
+[Engine] Step 3
+[14:31:50] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Actor(Alice) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Alice, a participant in a simulation.
+
+Your personality traits: curiosity: 0.9, friendliness...
+Alice acts: Alice decides to speak to the agent again, asking, "Are there any tasks or goals we should be aware of within this simulation? I'm eager to explore and engage more fully with the environment."  
+[14:31:51] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Environment] As a result of Alice's action, the agent provides details about tasks or goals within the simulation, fostering a deeper understanding and engagement. The simulation remains inactive, with its objects unchanged. Alice's curiosity is further satisfied.
+[14:31:52] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Actor(Bob) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Bob, a participant in a simulation.
+
+Your personality traits: introversion: 0.6, analytical:...
+Bob acts: Speak to Alice again to discuss the newly revealed tasks and potential interactions within the simulation. Together, they can formulate a strategy to explore and understand the simulation more effectively.
+[14:31:53] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Environment] As a result of Bob's action, Bob and Alice continue their conversation, discussing new tasks and potential interactions within the simulation. Together, they strategize to explore the simulation more effectively. The simulation remains inactive, with its objects unchanged.
+[14:31:54] concordia.openrouter.mistralai/mistral-7b-instruct:free: LLM Call from Archon(Moderator) | Caller: C:\Users\tyler\dev\__pysrcai\pysrcai\src\agents\llm_components.py:113 | Model: mistralai/mistral-7b-instruct:free | Prompt: You are Moderator, a moderator/orchestrator in a simulation.
+
+Your role is to maintain fair play, en...
+[Archon] Moderator analyzes: The interactions in this round demonstrate a collaborative and inquisitive approach from both Bob and Alice, fostering a deeper understanding of the simulation's environment and purpose. The agents' responses have effectively quenched their curiosity for the time being.
+
+[Engine] Simulation complete.
