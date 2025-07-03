@@ -200,7 +200,13 @@ class AssociativeMemoryBank(MemoryBank):
             
             # Add to dataframe
             new_memory = pd.Series(memory_data).to_frame().T.infer_objects()
-            self._memories = pd.concat([self._memories, new_memory], ignore_index=True)
+            
+            # Handle concatenation to avoid deprecation warnings
+            if not new_memory.empty:
+                if self._memories.empty:
+                    self._memories = new_memory
+                else:
+                    self._memories = pd.concat([self._memories, new_memory], ignore_index=True)
             self._stored_hashes.add(content_hash)
             
             # Limit memory size

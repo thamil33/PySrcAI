@@ -367,18 +367,17 @@ class Environment:
         return env
 
     @classmethod
-    def from_scenario_config(cls, config: Dict[str, Any]) -> 'Environment':
+    def from_scenario_config(cls, env_config: Dict[str, Any]) -> 'Environment':
         """
         Create an environment from a scenario configuration.
         
         Args:
-            config: The scenario configuration with environment details
+            env_config: The environment configuration data directly
             
         Returns:
             An initialized Environment object
         """
         env = cls()
-        env_config = config.get("environment", {})
         
         # Load locations
         for loc_id, loc_data in env_config.get("locations", {}).items():

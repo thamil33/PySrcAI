@@ -49,8 +49,13 @@ class SequentialEngine(SimulationEngine):
         
         # Initialize environment from config
         if "scenario" in self.config and "initial_state" in self.config["scenario"]:
+            print("[Engine] Loading environment from config...")
             self.environment = create_environment_from_config(self.config)
+            print(f"[Engine] Environment loaded. Active location: {self.environment.active_location}")
+            print(f"[Engine] Available locations: {list(self.environment.locations.keys())}")
+            print(f"[Engine] Available items: {list(self.environment.items.keys())}")
         else:
+            print("[Engine] No scenario config found, creating empty environment")
             self.environment = Environment()
             
         # Add environment to scenario state
@@ -82,6 +87,86 @@ class SequentialEngine(SimulationEngine):
                     
             if self.archon and hasattr(self.archon, 'observe'):
                 self.archon.observe(desc)
+
+    def _get_environment_context_for_archon(self):
+        """Generate a context description of the current environment state for the Archon."""
+        context = "CURRENT ENVIRONMENT STATE:\n"
+        
+        if self.environment.active_location and self.environment.active_location in self.environment.locations:
+            active_loc = self.environment.locations[self.environment.active_location]
+            context += f"Location: {active_loc.name}\n"
+            context += f"Description: {active_loc.description}\n"
+            
+            # List visible objects in the location
+            context += "\nObjects in location:\n"
+            for obj_id, obj in active_loc.objects.items():
+                context += f"- {obj_id}: {obj.name} - {obj.description}\n"
+                if obj.properties.get("searchable", False):
+                    contents = obj.properties.get('contents', [])
+                    discovered_items = []
+                    hidden_items = []
+                    
+                    # Check which items are visible vs still hidden
+                    for item_id in contents:
+                        if item_id in self.environment.items:
+                            item = self.environment.items[item_id]
+                            if item.properties.get("location", "hidden") == "visible":
+                                discovered_items.append(item_id)
+                            else:
+                                hidden_items.append(item_id)
+                    
+                    if discovered_items:
+                        context += f"  * Previously discovered items: {discovered_items}\n"
+                    if hidden_items:
+                        context += f"  * May contain hidden items: {len(hidden_items)} remaining\n"
+                
+                if obj.properties.get("examination_detail"):
+                    context += f"  * Detailed examination reveals: {obj.properties['examination_detail']}\n"
+            
+            # List available items (visible ones)
+            visible_items = [item_id for item_id, item in self.environment.items.items() 
+                           if item.properties.get("location", "hidden") == "visible"]
+            
+            context += "\nAvailable items (CURRENTLY VISIBLE):\n"
+            if visible_items:
+                for item_id in visible_items:
+                    item = self.environment.items[item_id]
+                    context += f"- {item_id}: {item.name} - {item.description}\n"
+                    if item.properties.get("readable", False):
+                        context += f"  * Readable content: {item.properties.get('content', 'No content')}\n"
+            else:
+                context += "- No visible items in the current location\n"
+                
+            # List hidden items (for reference)
+            hidden_items = [item_id for item_id, item in self.environment.items.items() 
+                          if item.properties.get("location", "visible") == "hidden"]
+            if hidden_items:
+                context += "\nHidden items (NOT YET DISCOVERED):\n"
+                context += f"- There are {len(hidden_items)} hidden items that can be found by searching\n"
+                    
+            # Show agent inventories if any
+            if "inventory" in self.scenario_state:
+                context += "\nAgent inventories:\n"
+                for agent_name, inventory in self.scenario_state["inventory"].items():
+                    if inventory:
+                        item_names = [self.environment.items[item_id].name for item_id in inventory if item_id in self.environment.items]
+                        context += f"- {agent_name}: {', '.join(item_names)}\n"
+                    else:
+                        context += f"- {agent_name}: empty\n"
+                        
+            # Add recent actions/discoveries for context
+            if 'conversation_log' in self.scenario_state:
+                recent_logs = self.scenario_state['conversation_log'][-3:] if self.scenario_state['conversation_log'] else []
+                if recent_logs:
+                    context += "\nRECENT DEVELOPMENTS:\n"
+                    for entry in recent_logs:
+                        if 'agent' in entry and 'action' in entry:
+                            if entry.get('type') != 'analysis':  # Skip Archon analyses
+                                context += f"- {entry['agent']} {entry['action'][:50]}...\n"
+        else:
+            context += "No active location set.\n"
+            
+        return context
 
     def _make_observation_for_agent(self, agent, step_info=""):
         """Create an observation for a specific agent based on current environment state."""
@@ -126,20 +211,47 @@ class SequentialEngine(SimulationEngine):
                 if word_limit is None:
                     word_limit = self.response_word_limit
                 
-                # Build environment-aware action prompt
-                prompt = f"Step {self.turn+1}: Choose ONE specific action from the available options:\n\n"
-                prompt += "**MOVEMENT & OBSERVATION:**\n"
-                prompt += "- examine room (look around the current location)\n"
-                prompt += "- examine [object] (look closely at table, window, etc.)\n"
-                prompt += "- search [object] (look inside/under table, etc.)\n\n"
+                # Build environment-aware action prompt with actual objects
+                prompt = f"Step {self.turn+1}: Choose ONE specific action from the available options based on your current environment:\n\n"
                 
-                prompt += "**ITEM INTERACTIONS:**\n"
-                if self.environment.items:
-                    for item_id, item in self.environment.items.items():
-                        if item.properties.get("location", "visible") == "visible":
-                            prompt += f"- take {item.name.lower()} (pick up the {item.name})\n"
+                # Add current environment context for the agent
+                if self.environment.active_location and self.environment.active_location in self.environment.locations:
+                    active_loc = self.environment.locations[self.environment.active_location]
+                    prompt += f"CURRENT LOCATION: {active_loc.name}\n"
+                    prompt += f"{active_loc.description}\n\n"
+                    
+                    prompt += "AVAILABLE ACTIONS:\n\n"
+                    prompt += "**OBSERVATION:**\n"
+                    prompt += "- examine room (look around the current location)\n"
+                    
+                    # List actual objects that can be examined
+                    for obj_id, obj in active_loc.objects.items():
+                        prompt += f"- examine {obj_id} (look closely at the {obj.name})\n"
+                    
+                    prompt += "\n**SEARCH ACTIONS:**\n"
+                    # List searchable objects
+                    searchable_objects = [(obj_id, obj) for obj_id, obj in active_loc.objects.items() 
+                                        if obj.properties.get("searchable", False)]
+                    if searchable_objects:
+                        for obj_id, obj in searchable_objects:
+                            prompt += f"- search {obj_id} (search the {obj.name} for hidden items)\n"
+                    else:
+                        prompt += "- No searchable objects available\n"
+                    
+                    prompt += "\n**ITEM INTERACTIONS:**\n"
+                    # List visible items
+                    visible_items = [(item_id, item) for item_id, item in self.environment.items.items() 
+                                   if item.properties.get("location", "visible") == "visible"]
+                    if visible_items:
+                        for item_id, item in visible_items:
+                            prompt += f"- take {item_id} (pick up the {item.name})\n"
                             if item.properties.get("readable", False):
-                                prompt += f"- read {item.name.lower()} (read the contents)\n"
+                                prompt += f"- read {item_id} (read the {item.name})\n"
+                    else:
+                        prompt += "- No visible items to interact with\n"
+                else:
+                    prompt += "**MOVEMENT & OBSERVATION:**\n"
+                    prompt += "- examine room (look around the current location)\n"
                 
                 prompt += "\n**SOCIAL INTERACTIONS:**\n"
                 for other_agent in self.agents:
@@ -147,8 +259,8 @@ class SequentialEngine(SimulationEngine):
                         prompt += f"- speak to {other_agent.name} about [topic]\n"
                 
                 prompt += "- wait and observe (do nothing this turn)\n\n"
-                prompt += "**IMPORTANT**: You must choose exactly ONE action using the exact format shown above. "
-                prompt += "Be specific about what you're examining, taking, or discussing."
+                prompt += "**IMPORTANT**: Choose exactly ONE action using the format shown above. "
+                prompt += "Only interact with objects and items that are actually present in your environment."
                 
 
                 if word_limit:
@@ -165,19 +277,32 @@ class SequentialEngine(SimulationEngine):
                 # PROCESS ACTION THROUGH ENVIRONMENT IMMEDIATELY
                 environment_result = self.process_agent_action(agent, action)
                 
+                # Update scenario state with environment changes after each action
+                self.scenario_state["environment"] = self.environment.to_dict()
+                
                 # Have Archon provide environmental feedback if available
                 if self.archon and hasattr(self.archon, 'act'):
                     word_limit_archon = getattr(self.archon, 'word_limit', None)
                     if word_limit_archon is None:
                         word_limit_archon = self.response_word_limit
                     
+                    # Build environment-grounded feedback prompt
                     feedback_prompt = f"ENVIRONMENTAL NARRATOR ROLE: Process {agent.name}'s action: '{action}'\n\n"
-                    feedback_prompt += "1. First, determine if this action causes any environmental changes\n"
-                    feedback_prompt += f"2. Describe what {agent.name} sees, finds, or experiences\n"
-                    feedback_prompt += "3. Narrate any changes to objects or the environment\n"
-                    feedback_prompt += "4. If the action reveals new information or items, describe them\n\n"
-                    feedback_prompt += "Write your response as a vivid, immediate description of what happens. "
-                    feedback_prompt += "Focus on concrete, observable results rather than abstract concepts."
+                    feedback_prompt += "CRITICAL: You must base your narrative ONLY on the actual environment state below:\n\n"
+                    
+                    # Add current environment state context
+                    feedback_prompt += self._get_environment_context_for_archon()
+                    
+                    feedback_prompt += f"\nBased ONLY on the above environment state, describe what {agent.name} experiences from their action: '{action}'\n\n"
+                    feedback_prompt += "RULES:\n"
+                    feedback_prompt += "- Only reference objects and locations that actually exist in the environment state\n"
+                    feedback_prompt += "- Do NOT invent new objects, rooms, or magical elements\n"
+                    feedback_prompt += "- If the action reveals a previously hidden item, describe it based on its actual properties\n"
+                    feedback_prompt += "- Only describe items as 'discovered' if they were truly hidden before this action\n"
+                    feedback_prompt += "- Keep descriptions grounded in the simple, mundane environment provided\n"
+                    feedback_prompt += "- If the action cannot be performed, explain why based on the actual environment\n"
+                    feedback_prompt += "- CONSISTENCY: Refer to objects by the same name and properties as in previous descriptions\n\n"
+                    feedback_prompt += "Describe the immediate, concrete result of the action. Focus on what changed or what was observed."
                     if word_limit_archon:
                         feedback_prompt += f" (Respond in {word_limit_archon} words or less.)"
                         
@@ -210,16 +335,26 @@ class SequentialEngine(SimulationEngine):
                     'environment_result': environment_result
                 })
                 
-        # Final Archon analysis of the round
+        # Final Archon analysis of the round - grounded in actual environment state
         if self.archon and hasattr(self.archon, 'act'):
             word_limit = getattr(self.archon, 'word_limit', None)
             if word_limit is None:
                 word_limit = self.response_word_limit
-            prompt = f"Step {self.turn+1}: Briefly analyze the environmental changes and agent discoveries from this round."
+            
+            # Build environment-grounded analysis prompt
+            analysis_prompt = f"Step {self.turn+1}: Analyze this round's activities based on the actual environment state:\n\n"
+            analysis_prompt += self._get_environment_context_for_archon()
+            analysis_prompt += f"\nSummarize what actually happened this round based on the real environment state above. "
+            analysis_prompt += "Focus on concrete actions and discoveries, not fictional elements.\n\n"
+            analysis_prompt += "RULES:\n"
+            analysis_prompt += "- Only mention items as 'discovered' if they were NEWLY found this round (check what was already visible)\n"
+            analysis_prompt += "- Be specific about which agent found what\n" 
+            analysis_prompt += "- Refer consistently to objects with their proper names\n"
+            analysis_prompt += "- Don't mention objects or details not present in the environment state"
             if word_limit:
-                prompt += f" (Respond in {word_limit} words or less.)"
+                analysis_prompt += f" (Respond in {word_limit} words or less.)"
             analysis = self.archon.act(ActionSpec(
-                call_to_action=prompt,
+                call_to_action=analysis_prompt,
                 output_type=OutputType.FREE,
                 tag="archon_analysis"
             ))
@@ -286,16 +421,72 @@ class SequentialEngine(SimulationEngine):
             for obj_id in self._get_all_object_ids():
                 obj_name = self._get_object_name(obj_id).lower()
                 if obj_name in action_lower or obj_id.lower() in action_lower:
-                    result = self.environment.process_interaction(
-                        agent_id=agent.name,
-                        action="search",
-                        target_id=obj_id
-                    )
-                    # Handle search results more explicitly
-                    if result.get("success", False) and "found_items" in result:
-                        for item_id in result["found_items"]:
+                    # Check if any items in this object are still hidden
+                    if obj_id in self.environment.locations.get(self.environment.active_location, {}).objects:
+                        obj = self.environment.locations[self.environment.active_location].objects[obj_id]
+                        contents = obj.properties.get("contents", [])
+                        hidden_items = []
+                        already_found = []
+                        
+                        # Check what's already visible vs what's still hidden
+                        for item_id in contents:
                             if item_id in self.environment.items:
-                                self.environment.items[item_id].properties["location"] = "visible"
+                                item = self.environment.items[item_id]
+                                if item.properties.get("location", "hidden") == "hidden":
+                                    hidden_items.append(item_id)
+                                else:
+                                    already_found.append(item_id)
+                        
+                        # If all items already found, provide that feedback
+                        if not hidden_items and already_found:
+                            names = [self.environment.items[item_id].name for item_id in already_found]
+                            result = {
+                                "success": True,
+                                "message": f"You already searched this {obj.name} and found: {', '.join(names)}.",
+                                "observation": f"You search the {obj.name} again, but find nothing new beyond what you already discovered."
+                            }
+                        else:
+                            # Process normal search interaction
+                            result = self.environment.process_interaction(
+                                agent_id=agent.name,
+                                action="search",
+                                target_id=obj_id
+                            )
+                            
+                            # Handle search results more explicitly
+                            if result.get("success", False) and "found_items" in result:
+                                newly_found = []
+                                for item_id in result["found_items"]:
+                                    if item_id in self.environment.items:
+                                        item = self.environment.items[item_id]
+                                        
+                                        # Only announce if it was actually hidden before
+                                        if item.properties.get("location", "hidden") == "hidden":
+                                            # Move item from hidden to visible
+                                            item.properties["location"] = "visible"
+                                            newly_found.append(item_id)
+                                            print(f"[Engine] Item '{item_id}' is now visible after search.")
+                                            
+                                # Update result message if some items were already found
+                                if not newly_found and already_found:
+                                    names = [self.environment.items[item_id].name for item_id in already_found]
+                                    result["observation"] = f"You search the {obj.name} again, but find nothing new beyond what you already discovered: {', '.join(names)}"
+                    else:
+                        # Default search process for non-location objects
+                        result = self.environment.process_interaction(
+                            agent_id=agent.name,
+                            action="search",
+                            target_id=obj_id
+                        )
+                        
+                        # Handle search results
+                        if result.get("success", False) and "found_items" in result:
+                            for item_id in result["found_items"]:
+                                if item_id in self.environment.items:
+                                    # Move item from hidden to visible
+                                    self.environment.items[item_id].properties["location"] = "visible"
+                                    print(f"[Engine] Item '{item_id}' is now visible after search.")
+                                    
                     interaction_found = True
                     break
 
@@ -377,9 +568,6 @@ class SequentialEngine(SimulationEngine):
                     
                     interaction_found = True
                     break
-        
-        # Update scenario state with environment changes
-        self.scenario_state["environment"] = self.environment.to_dict()
         
         # Notify agent of the result through observation
         result_message = result.get("observation", result.get("message", "You performed an action."))

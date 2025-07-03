@@ -1,59 +1,104 @@
 from .engine import SimulationEngine, SequentialEngine
-from .agents.actor import Actor
-from .agents.archon import Archon
-from .agents.memory.memory_components import MemoryComponent
-from .agents.memory.memory_components import BasicMemoryBank, AssociativeMemoryBank
-from .agents.memory.embedders import create_simple_embedder
-from .language_model_client import create_language_model
+from .agents.agent_factory import AgentFactory
+from .agents.component_factory import ComponentFactory
+from .agents.environment.environment_components import EnvironmentComponentFactory
+from .environment.objects import create_environment_from_config
 
 class SimulationFactory:
     """
-    Base class for simulation factories. Responsible for creating engines and agents from configuration.
+    Factory for creating simulations from configuration.
+    
+    This factory creates all components of a simulation (engine, agents, environment)
+    from a single configuration dictionary, promoting modularity and configurability.
     """
     def create_engine(self, config):
         """
         Create and return a SimulationEngine instance based on the provided config.
+        
+        Args:
+            config: Dictionary containing simulation configuration
+            
+        Returns:
+            Tuple of (engine, steps)
         """
+        # Create agents with agent factory
         agents = []
         archon = None
+        
+        # Process agent configurations
         for agent_cfg in config.get('agents', []):
             agent_type = agent_cfg.get('type', 'actor')
             name = agent_cfg.get('name', 'Agent')
-            personality = agent_cfg.get('personality', {})
+            
+            # Create compatible component configs for the agent factory
+            
+            # Memory component config
             memory_type = agent_cfg.get('memory', 'basic')
-            llm_type = agent_cfg.get('llm', None)
-            llm = create_language_model(llm_type)
-            context_components = {}
-
-            # Memory setup
-            if memory_type == 'associative':
-                embedder = create_simple_embedder()
-                memory_bank = AssociativeMemoryBank(embedder=embedder.embed, max_memories=100)
-            else:
-                memory_bank = BasicMemoryBank(max_memories=100)
-            memory_component = MemoryComponent(memory_bank, max_context_memories=5)
-            context_components['memory'] = memory_component
-
+            memory_component_config = {
+                'name': 'memory',
+                'type': 'memory',
+                'memory': {
+                    'memory_bank': {'type': memory_type},
+                    'max_context_memories': 5
+                }
+            }
+            
+            # Language model config for acting component
+            llm_type = agent_cfg.get('llm', 'mock')
+            acting_component_config = {
+                'type': 'llm',
+                'language_model': {'type': llm_type},
+                'temperature': 0.7,
+                'max_tokens': 256
+            }
+            
+            # Environment component config if needed
+            env_component_config = {
+                'name': 'environment',
+                'type': 'custom',
+                'class_path': 'pysrcai.src.agents.environment.environment_components.EnvironmentContextComponent',
+                'constructor_args': {}
+            }
+            
+            # Build full agent config
+            full_agent_config = {
+                'name': name,
+                'agent_type': agent_type,
+                'acting_component': acting_component_config,
+                'context_components': [memory_component_config, env_component_config]
+            }
+            
+            # Add agent-specific configuration
+            if agent_type == 'actor':
+                full_agent_config['personality_traits'] = agent_cfg.get('personality', {})
+            elif agent_type == 'archon':
+                full_agent_config['authority_level'] = agent_cfg.get('authority_level', 'observer')
+                full_agent_config['moderation_rules'] = config.get('scenario', {}).get('rules', [])
+            
+            # Create agent
+            with_logging = True  # Enable logging for development
+            agent = AgentFactory.create_agent(full_agent_config, with_logging)
+            
+            # Optional: per-agent word limit
+            if 'word_limit' in agent_cfg:
+                setattr(agent, 'word_limit', agent_cfg['word_limit'])
+                
+            # Add to appropriate collection
             if agent_type == 'archon':
-                archon = Archon(
-                    agent_name=name,
-                    context_components=context_components,
-                    authority_level=agent_cfg.get('authority_level', 'observer'),
-                    language_model=llm
-                )
-                # Optional: per-agent word limit for archon
-                if 'word_limit' in agent_cfg:
-                    setattr(archon, 'word_limit', agent_cfg['word_limit'])
+                archon = agent
             else:
-                actor = Actor(
-                    agent_name=name,
-                    context_components=context_components,
-                    personality_traits=personality,
-                    language_model=llm
-                )
-                if 'word_limit' in agent_cfg:
-                    setattr(actor, 'word_limit', agent_cfg['word_limit'])
-                agents.append(actor)
+                agents.append(agent)
+
+        # Create and configure environment if needed
+        environment = None
+        if "scenario" in config and "initial_state" in config["scenario"]:
+            environment = create_environment_from_config(config)
+            
+            # Connect environment to agent components
+            for agent in agents + ([archon] if archon else []):
+                if 'environment' in agent.get_all_context_components():
+                    env_component = agent.get_component('environment')
+                    env_component.set_environment(environment)
 
         # Engine selection
         engine_cfg = config.get('engine', {})
@@ -61,6 +106,7 @@ class SimulationFactory:
         steps = engine_cfg.get('steps', 10)
         state = config.get('scenario', {}).get('initial_state', {})
 
+        # Create appropriate engine
         if engine_type == 'sequential':
             return SequentialEngine(agents=agents, archon=archon, state=state, config=config), steps
         else:
