@@ -18,7 +18,7 @@ We have successfully integrated the embedding system from the old PySrcAI projec
   - `MemoryConfig`: For memory system settings
 
 ### 2. Memory System Integration
-- Created `pysrcai/src/agents/memory/memory_components_v2.py` with improved typing
+- Created `pysrcai/src/agents/memory/memory_components.py` with improved typing
 - Created `pysrcai/src/agents/memory/memory_factory.py` for easy memory bank creation
 - Fixed the "Embedder must be set before adding memories" error
 - Provided both basic and associative memory options
@@ -84,7 +84,7 @@ memory_bank = create_memory_bank_with_embeddings(config)
 
 ### Agent Integration
 ```python
-from pysrcai.src.agents.memory.memory_components_v2 import MemoryComponent
+from pysrcai.src.agents.memory.memory_components import MemoryComponent
 
 # Create memory component
 memory_component = MemoryComponent(

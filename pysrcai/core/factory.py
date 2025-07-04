@@ -33,12 +33,16 @@ class SimulationFactory:
             # Create compatible component configs for the agent factory
             
             # Memory component config
-            memory_type = agent_cfg.get('memory', 'basic')
+            memory_config = agent_cfg.get('memory', {'type': 'basic'})
+            if isinstance(memory_config, str):
+                # Handle legacy format where memory is just a string
+                memory_config = {'type': memory_config}
+            
             memory_component_config = {
                 'name': 'memory',
                 'type': 'memory',
                 'memory': {
-                    'memory_bank': {'type': memory_type},
+                    'memory_bank': memory_config,
                     'max_context_memories': 5
                 }
             }

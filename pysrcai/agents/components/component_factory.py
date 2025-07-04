@@ -15,6 +15,8 @@ from ..memory.memory_components import (
     AssociativeMemoryBank,
     MemoryComponent
 )
+from ..memory.memory_factory import create_memory_bank_with_embeddings
+from ...config.embedding_config import MemoryConfig, EmbeddingConfig
 from ...llm.llm_components import (
     ActorLLMComponent, 
     ArchonLLMComponent,
@@ -34,6 +36,7 @@ class ComponentFactory:
             config: Configuration dictionary with the following keys:
                 type: The type of memory bank ('basic' or 'associative')
                 max_memories: Maximum number of memories to store
+                embedding: Optional embedding configuration for associative memory
                 
         Returns:
             A configured MemoryBank instance
@@ -41,16 +44,25 @@ class ComponentFactory:
         memory_type = config.get('type', 'basic')
         max_memories = config.get('max_memories', 1000)
         
-        if memory_type == 'associative':
-            # For associative memory, we need an embedder
-            # We'll implement this properly when we have embedder support
-            try:
-                return AssociativeMemoryBank(embedder=None, max_memories=max_memories)
-            except ImportError:
-                print("Warning: AssociativeMemoryBank requires numpy and pandas. Falling back to BasicMemoryBank")
-                return BasicMemoryBank(max_memories=max_memories)
-        else:
-            return BasicMemoryBank(max_memories=max_memories)
+        # Create MemoryConfig object
+        memory_config = MemoryConfig(
+            type=memory_type,
+            max_memories=max_memories
+        )
+        
+        # Add embedding config if provided
+        embedding_config = config.get('embedding')
+        if embedding_config and memory_type == 'associative':
+            memory_config.embedding = EmbeddingConfig(**embedding_config)
+        
+        # Use the proper memory factory that handles embeddings
+        try:
+            return create_memory_bank_with_embeddings(memory_config)
+        except Exception as e:
+            print(f"Warning: Failed to create associative memory bank: {e}")
+            print("Falling back to BasicMemoryBank")
+            memory_config.type = "basic"
+            return create_memory_bank_with_embeddings(memory_config)
     
     @staticmethod
     def create_memory_component(config: Dict[str, Any]) -> MemoryComponent:

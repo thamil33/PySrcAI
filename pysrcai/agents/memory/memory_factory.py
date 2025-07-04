@@ -3,7 +3,7 @@
 from typing import Optional, Callable, Any
 from collections.abc import Sequence
 
-from .memory_components_v2 import MemoryBank, BasicMemoryBank, AssociativeMemoryBank
+from .memory_components import MemoryBank, BasicMemoryBank, AssociativeMemoryBank
 from ...config.embedding_config import MemoryConfig, EmbeddingConfig, VectorDBConfig
 
 

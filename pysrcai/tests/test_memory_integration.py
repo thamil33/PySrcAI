@@ -3,11 +3,12 @@
 import sys
 import os
 
-# Add the embeddings directory to the path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..', 'embeddings'))
+# Add the project root to the path for proper imports
+project_root = os.path.join(os.path.dirname(__file__), '..', '..')
+sys.path.insert(0, project_root)
 
-from ...config.embedding_config import MemoryConfig, EmbeddingConfig
-from .memory_factory import create_memory_bank_with_embeddings
+from pysrcai.config.embedding_config import MemoryConfig, EmbeddingConfig
+from pysrcai.agents.memory.memory_factory import create_memory_bank_with_embeddings
 
 
 def test_basic_memory():

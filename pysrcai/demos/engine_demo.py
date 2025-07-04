@@ -4,7 +4,7 @@ from datetime import datetime
 from pysrcai.config.config_loader import load_config
 from pysrcai.core.factory import SimulationFactory
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'configs', 'basic_schema.yaml')
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'config', 'prefabs', 'basic_schema.yaml')
 
 class TeeOutput:
     """Captures output and writes to both console and file."""
@@ -27,10 +27,10 @@ class TeeOutput:
 def main():
     # Create timestamped log filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_filename = f"notes/LOG_{timestamp}.txt"
+    log_filename = f"pysrcai/data/logs/LOG_{timestamp}.txt"
     
-    # Ensure notes directory exists
-    os.makedirs("notes", exist_ok=True)
+    # Ensure logs directory exists
+    os.makedirs("data/logs", exist_ok=True)
     
     # Set up output capture
     tee = TeeOutput(log_filename)

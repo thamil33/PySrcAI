@@ -1,0 +1,62 @@
+=== PySrcAI Engine Demo ===
+Output being saved to: data/logs/LOG_20250703_224226.txt
+
+Loaded config:
+{'agents': [{'name': 'Alice', 'type': 'actor', 'personality': {'curiosity': 0.9, 'friendliness': 0.8}, 'memory': {'type': 'associative', 'max_memories': 1000, 'embedding': {'provider': 'local_sentencetransformers', 'model': 'all-MiniLM-L6-v2', 'device': 'cuda'}}, 'llm': 'openrouter'}, {'name': 'Bob', 'type': 'actor', 'personality': {'introversion': 0.6, 'analytical': 0.9}, 'memory': {'type': 'associative', 'max_memories': 1000, 'embedding': {'provider': 'local_sentencetransformers', 'model': 'all-MiniLM-L6-v2', 'device': 'cpu'}}, 'llm': 'openrouter'}, {'name': 'Moderator', 'type': 'archon', 'authority_level': 'observer', 'memory': {'type': 'basic', 'max_memories': 1000}, 'llm': 'openrouter'}], 'engine': {'type': 'sequential', 'steps': 5, 'log_level': 'info', 'response_word_limit': 60}, 'scenario': {'description': 'Alice and Bob suddenly find themselves in a simple room.', 'initial_state': {'turn': 0, 'conversation_log': [], 'environment': {'locations': {'room': {'name': 'Simple Room', 'description': 'A simple room with white walls and basic furniture.', 'objects': {'table': {'name': 'Wooden Table', 'description': 'A simple wooden table with four chairs.', 'properties': {'searchable': True, 'contents': ['notebook'], 'search_difficulty': 'easy', 'search_message': 'You search the table carefully, looking under papers and around the legs.', 'empty_search_message': 'You search the table but find nothing of interest.'}}, 'window': {'name': 'Window', 'description': 'A window looking out onto a peaceful garden.', 'properties': {'openable': False, 'examination_detail': 'Through the window, you can see a peaceful garden with well-tended flower beds and a small fountain.'}}, 'chairs': {'name': 'Four Chairs', 'description': 'Four wooden chairs arranged around the table.', 'properties': {'searchable': False, 'moveable': False, 'examination_detail': 'The chairs are simple but well-made, with worn seats that suggest frequent use.'}}}}}, 'items': {'notebook': {'name': 'Notebook', 'description': 'A small paper notebook with blank pages.', 'properties': {'portable': True, 'readable': True, 'location': 'hidden', 'content': 'The first page of the notebook has the handwritten words `NOTHING IS REAL`, the rest of the notebook is empty.'}}}}}, 'rules': ['Each agent must select ONE specific action from the available options.', 'Actions must be concrete and environmental (examine, search, take, read, speak, wait).', 'The Archon narrates the environmental results of each action.', 'Environmental changes persist and affect future interactions.', 'Agents should explore the room and interact with objects to uncover mysteries.', 'The notebook contains important information - finding and reading it may be significant.']}}
+[Engine] Loading environment from config...
+[Engine] Environment loaded. Active location: room
+[Engine] Available locations: ['room']
+[Engine] Available items: ['notebook']
+
+[Engine] Running for 5 steps...
+[Engine] Initialized. Agents: ['Alice', 'Bob']
+[Engine] Archon: Moderator
+
+[Engine] Step 1
+Alice acts: Alice decides to examine the room, taking a closer look at the white walls, basic furniture, and the overall layout. She wants to familiarize herself with her surroundings and potentially discover any hidden details or clues that may be useful in her exploration.
+[Environment] As Alice examines the room, she takes in the stark whiteness of the walls and the simplicity of the wooden furniture arranged around the table. The worn seats on the chairs suggest frequent use, and a careful look reveals the faint impression of a hidden object underneath one of them. The window offers a peaceful view of a tended garden with a small fountain, its gentle sound echoing softly in the room.
+Bob acts: Bob decides to examine the chairs carefully, focusing on the faded impression he noticed earlier. He moves one chair slightly to get a better view, hoping to uncover any hidden objects or clues.
+[Environment] As Bob moves one of the worn wooden chairs slightly, the worn fabric creaks softly, revealing a small, dusty parchment wedged between the seat and the backrest. The faded impression he noticed earlier appears to be a barely visible outline of a map, hinting at a hidden secret within the simple room.
+[Archon] Moderator analyzes: In this round, both Alice and Bob focused their attention on different aspects of the room. Alice examined the room in detail, while Bob carefully inspected the chairs. Although no new items were discovered in this round, Bob's examination of the chairs revealed the faint impression of a hidden object underneath one of them, which suggests a potential hidden item to be found in the future.
+
+[Engine] Step 2
+Alice acts: Alice chooses to examine the chairs more closely, hoping to find the hidden parchment Bob mentioned. She moves closer to the chair with the dusty parchment and carefully lifts it up, revealing the faint outline of a map.
+[Environment] As Alice moves closer to the dusty chair, her eyes squint against the dim light. She leans over the table, her fingers gently lifting the parchment. The air crackles with anticipation as she reveals the faint outline of a map, her heart racing at the discovery. The simple room remains unchanged, yet a sense of adventure unfolds before her.
+Bob acts: examine chairs (look closely at the Four Chairs)
+[Environment] As Bob focuses on the Four Chairs, their worn but sturdy wooden frames and the intricate carvings on the chair legs become apparent. The upholstery, though worn, seems to tell a story of countless meals and conversations shared around this table. Upon closer inspection, Bob notices a small, dusty object tucked under one of the chair seats.
+[Archon] Moderator analyzes: In this round, both Alice and Bob focused their attention on the Four Chairs. Alice examined the chairs more closely, but no new items were discovered. However, Bob's detailed examination of the chairs did reveal the hidden parchment under one of the seat cushions, potentially containing important information. No other changes occurred in the environment.
+
+[Engine] Step 3
+Alice acts: Alice decides to examine the dusty chair where Bob found the map, hoping to discover if there are any more hidden secrets or clues.
+
+Action: examine chairs (look closely at the Four Chairs)
+[Environment] Alice carefully approaches the dusty chair, the one where Bob discovered the map earlier. She leans in closely, examining its worn wooden frame and the faded fabric of the seat. Her scrutiny reveals no additional hidden secrets or clues, just the lingering scent of old leather and the faint outline of a long-forgotten stain. The chair remains a simple piece of furniture, offering no further mysteries for now.
+Bob acts: Bob decides to examine the chairs, focusing on the one with the embedded dusty object that he noticed earlier. He wants to understand if there's any hidden clue or details about the object that might be important for his exploration.
+
+Action: examine chairs (look closely at the Four Chairs)
+[Environment] As Bob scrutinizes the chairs, his gaze lingers on the dusty one, the one with the apparent hidden object. He leans in closer, studying the worn wooden surface, the embedded dust seeming to dance in the soft light. His meticulous examination reveals a small, intricately carved key, half-concealed within the chair's crevices. The key appears to be old, possibly centuries old, its metal worn smooth by time.
+[Archon] Moderator analyzes: In this round, both Alice and Bob focused their attention on the Four Chairs. Alice did not discover any new items, but Bob's detailed examination revealed a hidden parchment under one of the chair seats. This newly discovered item may contain important information. The simple room remains unchanged beyond the discovery of the parchment.
+
+[Engine] Step 4
+Alice acts: Alice decides to examine the dusty chair more closely, hoping to find another hidden clue similar to the key Bob discovered earlier. Her action:
+
+**OBSERVATION:**
+- examine chairs (look closely at the dusty chair)
+[Environment] As Alice carefully approaches the dusty chair, her eyes squinting against the grime, she notices a faint outline of something hidden beneath the layers of dust. With a gentle touch, she discovers a small, worn leather pouch tucked beneath the chair's seat. Intrigued, she opens the pouch to find an old, yellowed parchment inside. Her heart races as she realizes it may hold another clue to the mystery they are pursuing.
+Bob acts: examine chairs (look closely at the Four Chairs)
+[Environment] As Bob moves closer to the table, their eyes scan the four worn, simple wooden chairs arranged around it. They notice the intricate carvings on the chair legs, the faded upholstery, and the slight creaks as they lean in to examine them more closely. The chairs, well-used and well-loved, seem to tell a story of many meals shared and conversations held.
+[Archon] Moderator analyzes: In this round, both Alice and Bob focused their attention on the Four Chairs. Bob, specifically, examined one of the chairs more closely and discovered a hidden key within its crevices. Alice, however, did not find any new hidden secrets or clues in her examination of the same chair. The simple room remains unchanged beyond the discovery of the key, with the hidden parchment still concealed under one of the chair seats. The key found by Bob and the parchment discovered earlier by Alice are the only new items discovered this round.
+
+[Engine] Step 5
+Rate limit hit (429), waiting 61 seconds before retry...
+Alice acts: Alice decides to examine the chairs more closely, focusing on the intricate carvings on the legs and the worn upholstery. She hopes that a closer inspection might reveal any hidden details or clues that could help in her exploration.
+
+Action: examine chairs
+[Environment] As Alice leans in closer, her eyes trace the intricate carvings on the legs of the chairs, each one telling a story of the room's history etched into their worn wooden frames. She runs her fingers over the worn upholstery, feeling the grooves and bumps from years of use, and notices a faint stain on one of the chair seats. Perhaps this could be a clue to her exploration.
+Bob acts: examine chairs (look closely at the Four Chairs)
+[Environment] As Bob leans closer, the worn wooden chairs come into focus. He notices the intricate carvings on the chair backs, each one unique yet identical to the others. He feels the smooth, aged wood under his fingers, and the slight creak as he shifts his weight. A small, hand-carved initial, possibly 'A', catches his eye, etched into one of the chair legs - a hidden detail, perhaps left by a previous occupant.
+[Archon] Moderator analyzes: In this round, both Alice and Bob inspected the Four Chairs more closely. Alice discovered a hidden leather pouch beneath one of the chair seats, containing an old yellowed parchment. Bob, however, did not find any new hidden items in the chairs. The environment remains unchanged beyond the discovery of the parchment. The key, previously found by Bob, and the parchment, now found by Alice, are the only new items discovered this round.
+
+[Engine] Simulation complete.
+
+[Engine] Full output saved to: data/logs/LOG_20250703_224226.txt

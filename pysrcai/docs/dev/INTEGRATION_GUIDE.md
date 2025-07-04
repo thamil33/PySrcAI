@@ -91,7 +91,7 @@ tagged = memory_bank.retrieve_by_tags(['conversation'], k=5)
 ### Using Memory Components
 
 ```python
-from pysrcai.src.agents.memory.memory_components_v2 import MemoryComponent
+from pysrcai.src.agents.memory.memory_components import MemoryComponent
 
 # Create memory component
 memory_component = MemoryComponent(
@@ -133,7 +133,7 @@ agents:
 
 ```python
 from pysrcai.src.agents.memory.memory_factory import create_memory_bank_with_embeddings
-from pysrcai.src.agents.memory.memory_components_v2 import MemoryComponent
+from pysrcai.src.agents.memory.memory_components import MemoryComponent
 
 # Create memory bank
 memory_config = MemoryConfig(

@@ -1,6 +1,6 @@
 """Memory components for PySrcAI agents."""
 
-from .memory_components_v2 import (
+from .memory_components import (
     MemoryBank,
     BasicMemoryBank,
     AssociativeMemoryBank,

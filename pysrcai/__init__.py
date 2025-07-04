@@ -9,7 +9,6 @@ from . import agents
 from . import config
 from . import core
 from . import embeddings
-from . import environment
 from . import llm
 from . import utils
 
@@ -34,7 +33,6 @@ __all__ = [
     "config", 
     "core",
     "embeddings",
-    "environment",
     "llm",
     "utils",
 ]

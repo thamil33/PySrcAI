@@ -4,7 +4,13 @@ agents:
     personality:
       curiosity: 0.9
       friendliness: 0.8
-    memory: associative
+    memory:
+      type: associative
+      max_memories: 1000
+      embedding:
+        provider: local_sentencetransformers
+        model: all-MiniLM-L6-v2
+        device: cuda
     llm: openrouter
 
   - name: Bob
@@ -12,12 +18,21 @@ agents:
     personality:
       introversion: 0.6
       analytical: 0.9
-    memory: associative
+    memory:
+      type: associative
+      max_memories: 1000
+      embedding:
+        provider: local_sentencetransformers
+        model: all-MiniLM-L6-v2
+        device: cpu
     llm: openrouter
 
   - name: Moderator
     type: archon
     authority_level: observer
+    memory:
+      type: basic
+      max_memories: 1000
     llm: openrouter
 
 engine:
