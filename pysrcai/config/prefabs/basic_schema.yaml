@@ -24,7 +24,7 @@ agents:
       embedding:
         provider: local_sentencetransformers
         model: all-MiniLM-L6-v2
-        device: cpu
+        device: cuda
     llm: openrouter
 
   - name: Moderator

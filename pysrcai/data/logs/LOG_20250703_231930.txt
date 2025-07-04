@@ -1,0 +1,104 @@
+=== PySrcAI Engine Demo ===
+Output being saved to: pysrcai/data/logs/LOG_20250703_231930.txt
+
+Loaded config:
+{'agents': [{'name': 'Alice', 'type': 'actor', 'personality': {'curiosity': 0.9, 'friendliness': 0.8}, 'memory': {'type': 'associative', 'max_memories': 1000, 'embedding': {'provider': 'local_sentencetransformers', 'model': 'all-MiniLM-L6-v2', 'device': 'cuda'}}, 'llm': 'openrouter'}, {'name': 'Bob', 'type': 'actor', 'personality': {'introversion': 0.6, 'analytical': 0.9}, 'memory': {'type': 'associative', 'max_memories': 1000, 'embedding': {'provider': 'local_sentencetransformers', 'model': 'all-MiniLM-L6-v2', 'device': 'cuda'}}, 'llm': 'openrouter'}, {'name': 'Moderator', 'type': 'archon', 'authority_level': 'observer', 'memory': {'type': 'basic', 'max_memories': 1000}, 'llm': 'openrouter'}], 'engine': {'type': 'sequential', 'steps': 5, 'log_level': 'info', 'response_word_limit': 60}, 'scenario': {'description': 'Alice and Bob suddenly find themselves in a simple room.', 'initial_state': {'turn': 0, 'conversation_log': [], 'environment': {'locations': {'room': {'name': 'Simple Room', 'description': 'A simple room with white walls and basic furniture.', 'objects': {'table': {'name': 'Wooden Table', 'description': 'A simple wooden table with four chairs.', 'properties': {'searchable': True, 'contents': ['notebook'], 'search_difficulty': 'easy', 'search_message': 'You search the table carefully, looking under papers and around the legs.', 'empty_search_message': 'You search the table but find nothing of interest.'}}, 'window': {'name': 'Window', 'description': 'A window looking out onto a peaceful garden.', 'properties': {'openable': False, 'examination_detail': 'Through the window, you can see a peaceful garden with well-tended flower beds and a small fountain.'}}, 'chairs': {'name': 'Four Chairs', 'description': 'Four wooden chairs arranged around the table.', 'properties': {'searchable': False, 'moveable': False, 'examination_detail': 'The chairs are simple but well-made, with worn seats that suggest frequent use.'}}}}}, 'items': {'notebook': {'name': 'Notebook', 'description': 'A small paper notebook with blank pages.', 'properties': {'portable': True, 'readable': True, 'location': 'hidden', 'content': 'The first page of the notebook has the handwritten words `NOTHING IS REAL`, the rest of the notebook is empty.'}}}}}, 'rules': ['Each agent must select ONE specific action from the available options.', 'Actions must be concrete and environmental (examine, search, take, read, speak, wait).', 'The Archon narrates the environmental results of each action.', 'Environmental changes persist and affect future interactions.', 'Agents should explore the room and interact with objects to uncover mysteries.', 'The notebook contains important information - finding and reading it may be significant.']}}
+[Engine] Loading environment from config...
+[Engine] Environment loaded. Active location: room
+[Engine] Available locations: ['room']
+[Engine] Available items: ['notebook']
+
+[Engine] Running for 5 steps...
+[Engine] Initialized. Agents: ['Alice', 'Bob']
+[Engine] Archon: Moderator
+
+[Engine] Step 1
+Alice acts: **ACTION CHOSEN: examine window**
+
+Alice approaches the window, curious about what lies beyond the sterile room. She peers through the glass, checking for any signs of activity or clues about her environment. This might reveal new locations, items, or potential escape routes that weren't visible from her previous position.
+[Environment] Alice peers through the window. The glass is clear, framing a peaceful garden with neatly arranged flower beds bursting with color. A small stone fountain in the center creates a soft, soothing splash. Beyond the foliage, she sees a narrow gravel path leading out of sight.
+Bob acts: examine table (look closely at the Wooden Table)
+
+*Bob's analytical nature drives him to investigate the only solid object in the room. With an empty inventory and no visible items, searching the table offers the highest chance of discovering hidden resources or clues in this unfamiliar environment.*
+[Environment] Bob runs his fingers along the table's worn surface. In a barely-noticeable groove beneath the edge, he feels something. A folded piece of paper! He carefully extracts it, revealing a hand-drawn map of the garden visible through the window, with an 'X' marking a spot near the fountain.
+[Archon] Moderator analyzes: Round summary: 
+
+Bob discovered a hidden folded paper map beneath the Wooden Table's groove while examining it. This reveals a potential exploration point in the garden's fountain area. Alice examined the Window, confirming the garden's presence and fountain location. No visible items were found in the room. One hidden item remains undiscovered.
+
+[Engine] Step 2
+Alice acts: **ACTION CHOSEN: speak to Bob about the map**
+
+Alice's curiosity piqued by Bob's discovery. "Bob, that map you found – it shows a garden like the one I just saw! The fountain matches exactly. Let's figure out how to get there and see what's marked with that 'X'."
+[Environment] As Alice speaks, Bob nods thoughtfully. "The garden's just outside the window," he says. "But how to reach the marked spot? There must be a path we're missing. Let's look for clues around here." The room's simplicity offers few options beyond the table and window.
+Bob acts: search table (continue searching for additional clues or items; analytical nature drives thorough investigation of all possibilities in simple environment with limited resources; previous success finding map suggests potential for further discoveries on same object)
+[Environment] Bob runs his hands carefully across every surface of the wooden table. His fingers trace the grain of the wood, probing for hidden compartments or loose joints. After thorough examination, he finds no additional items or clues beyond the notebook previously discovered. The table's construction appears sound and unremarkable.
+[Archon] Moderator analyzes: Alice spoke to Bob about the map, confirming the fountain's location. Bob continued searching the table but found no new items. Discovered this round: none. Remaining items: none visible. Remember: speak to narrate thoughts, search for hidden items, examine for details.
+
+**Round Summary:**
+- **Alice:** Spoke about map
+- **Bob:** Continued table search
+- **Discoveries:** None
+- **Remaining Items:** Notebook (visible)
+
+[Engine] Step 3
+Alice acts: **ACTION CHOSEN: examine chairs** 
+
+Alice's curiosity drives her to inspect the four chairs. She checks under the seats, between the legs, and along the backrests for any hidden compartments or writing that might reveal clues about the room's purpose or potential escape routes.
+[Environment] Alice runs her fingers along the chair legs and peers beneath each seat. The chairs are sturdy, with no visible compartments or markings. Worn areas on the seats confirm frequent use, but no hidden messages or escape clues emerge from her thorough inspection of the four wooden chairs.
+Bob acts: search window (search the Window for hidden mechanisms or escape clues)
+
+*Bob's analytical mind recognizes the window as the only unexplored object in the room. With no visible items remaining and the furniture yielding no clues, focusing on potential escape routes or communication channels is the next logical step in his systematic room evaluation.*
+[Environment] Bob runs his fingers along the window frame, feeling for hidden mechanisms. The sill feels smooth and cool to the touch. He hears a faint click as the latch releases, but the window remains firmly closed. No escape route found. He notes the garden view remains unchanged, tranquil yet unbreachable.
+[Archon] Moderator analyzes: **Round Summary:**
+
+- **Alice:** Examined chairs - Found nothing new
+- **Bob:** Searched Window - Found no hidden mechanisms (window remains closed)
+- **Discoveries:** None
+- **Remaining Visible Items:** Notebook (previously discovered)
+
+**Next Steps:**
+- Read the Notebook's message again (`NOTHING IS REAL`) for clues
+- Consider non-visible items or environmental interactions
+- Explore the window's view for potential path clues
+
+[Engine] Step 4
+Alice acts: **ACTION CHOSEN: search table**  
+Alice's curiosity drives her to search the Wooden Table. She runs her fingers along its surface and checks underneath for any hidden compartments, drawers, or loose papers that might reveal clues about their situation, potential escape routes, or the purpose of the room's setup.
+[Environment] As Alice searches the Wooden Table, her fingers trace its smooth surface. She finds no hidden compartments or drawers. Underneath the table, there's nothing but dust and a few cobwebs. The only item she discovers is the notebook already known to be on top. The table reveals no further secrets.
+Bob acts: search chairs (search the Four Chairs for hidden items) 
+
+*With the table and window yielding no clues, Bob's analytical mind turns to the remaining furniture. Four identical chairs present an equal probability of containing hidden compartments or mechanisms. Methodical searching of each chair's structure is the logical next step in resource discovery.*
+[Environment] Methodically, Bob examines each chair's joints and legs. He feels the worn upholstery for hidden seams. After thorough inspection of all four chairs, he finds no secret compartments or mechanisms. The chairs remain simple wooden furnishings, their only story being that of frequent use around this table.
+[Archon] Moderator analyzes: **Round Summary:**  
+- **Alice:** Searched Wooden Table - Found no new items  
+- **Bob:** Searched Four Chairs - Found no hidden compartments  
+- **Discoveries:** None  
+- **Remaining Visible Items:** Notebook (already known)  
+
+**Next Steps:**  
+- Both agents missed the Window's garden view when searching  
+- Consider re-examining Notebook message for clues  
+- Explore environmental interactions beyond visible objects
+
+[Engine] Step 5
+Alice acts: **ACTION CHOSEN: examine room**  
+Alice's curiosity prompts her to look around the Simple Room. She scans the white walls for hidden panels, checks corners for overlooked items, and inspects the ceiling and floor for unusual marks or mechanisms that could reveal more clues about their situation.
+[Environment] Alice scans the white walls, finding no hidden panels. The simple furniture shows no unusual marks. The ceiling remains smooth and pristine. The worn chairs around the wooden table suggest regular use. The window reveals a peaceful garden view. No new items or mechanisms are found in the simple room.
+Bob acts: **ACTION: examine window**
+
+*Bob's analytical mind prioritizes potential escape routes. After exhausting all furniture searches, the Window remains the last unexplored object. A thorough inspection might reveal hidden mechanisms, security systems, or communication opportunities crucial for understanding the room's true purpose.*
+[Environment] Bob examines the window. Through it, he sees a peaceful garden with well-tended flower beds and a small fountain. The window frame feels sturdy, with no visible hinges or latches. The glass is cool to the touch, but doesn't budge when pressed. No security systems or mechanisms are visible.
+[Archon] Moderator analyzes: **Round Summary:**
+- **Alice:** Examined Room - Found no new items
+- **Bob:** Examined Window - Discovered garden view
+- **Discoveries:** Peaceful garden view through window
+- **Remaining Visible Items:** Notebook (on table)
+
+**Next Steps:**
+- Consider re-examining Notebook message for clues
+- Explore environmental interactions beyond visible objects
+- Check for hidden mechanisms in existing furniture
+
+[Engine] Simulation complete.
+
+[Engine] Full output saved to: pysrcai/data/logs/LOG_20250703_231930.txt

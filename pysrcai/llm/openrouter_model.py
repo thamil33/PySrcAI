@@ -52,7 +52,7 @@ class OpenRouterLanguageModel(LanguageModel):
     self._measurements = measurements
     self._channel = channel
     self._verbose_logging = verbose_logging
-    self._logger = logging.getLogger(f"concordia.openrouter.{model_name}")
+    self._logger = logging.getLogger(f"pysrcai.openrouter.{model_name}")
 
     # Configure logging level based on verbose setting
     if verbose_logging:

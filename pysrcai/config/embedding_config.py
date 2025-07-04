@@ -10,7 +10,7 @@ class EmbeddingConfig:
     
     provider: str = "local_sentencetransformers"
     model: str = "all-MiniLM-L6-v2"
-    device: str = "cpu"
+    device: str = "cuda"
     cache_folder: Optional[str] = None
     fallback_models: List[str] = field(default_factory=list)
     

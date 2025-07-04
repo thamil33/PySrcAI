@@ -32,18 +32,3 @@ __all__ = [
     "ArchonLLMComponent",
     "ConfigurableLLMComponent",
 ]
-
-def create_language_model(model_type: str = "mock"):
-    if model_type == "lmstudio":
-        return LMStudioLanguageModel(
-            model_name="local-model",
-            base_url="http://localhost:1234/v1",
-            verbose_logging=True
-        )
-    elif model_type == "openrouter":
-        return OpenRouterLanguageModel(
-            model_name="mistralai/mistral-7b-instruct:free",
-            verbose_logging=True
-        )
-    else:
-        return NoLanguageModel()

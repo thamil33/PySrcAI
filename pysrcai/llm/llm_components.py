@@ -390,7 +390,7 @@ def create_language_model(model_type: str = "mock"):
         )
     elif model_type == "openrouter":
         return OpenRouterLanguageModel(
-            model_name="mistralai/mistral-7b-instruct:free",
+            model_name="openrouter/cypher-alpha:free",
             verbose_logging=True
         )
     else:
