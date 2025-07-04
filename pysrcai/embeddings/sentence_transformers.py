@@ -6,7 +6,7 @@ from sentence_transformers import SentenceTransformer
 import logging
 import time
 
-from pysrcai.config.embedding_config import EmbeddingConfig
+from ..config.embedding_config import EmbeddingConfig
 from .base import BaseEmbedder
 
 

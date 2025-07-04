@@ -7,5 +7,5 @@ from .sentence_transformers import SentenceTransformerEmbeddings
 __all__ = [
     "BaseEmbedder",
     "create_embedder",
-    "SentenceTransformerEmbeddings"
+    "SentenceTransformerEmbeddings",
 ]

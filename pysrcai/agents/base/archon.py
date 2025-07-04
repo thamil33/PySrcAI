@@ -19,7 +19,7 @@ from typing import Any
 from collections.abc import Mapping, Sequence
 
 from .agent import Agent, ActingComponent, ContextComponent, ActionSpec, OutputType
-from .llm_components import ArchonLLMComponent
+from ...llm.llm_components import ArchonLLMComponent
 
 
 class ArchonActingComponent(ActingComponent):

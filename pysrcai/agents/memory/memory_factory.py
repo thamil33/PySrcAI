@@ -4,7 +4,7 @@ from typing import Optional, Callable, Any
 from collections.abc import Sequence
 
 from .memory_components_v2 import MemoryBank, BasicMemoryBank, AssociativeMemoryBank
-from pysrcai.src.config.embedding_config import MemoryConfig, EmbeddingConfig, VectorDBConfig
+from ...config.embedding_config import MemoryConfig, EmbeddingConfig, VectorDBConfig
 
 
 def create_memory_bank(
@@ -50,7 +50,7 @@ def create_embedder_from_config(config: EmbeddingConfig) -> Callable[[str], Any]
         Embedder function that takes text and returns embeddings
     """
     # Import here to avoid circular imports
-    from pysrcai.src.embeddings.factory import create_embedder
+    from ...embeddings.factory import create_embedder
     
     embedder_instance = create_embedder(config)
     

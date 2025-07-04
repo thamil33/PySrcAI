@@ -11,7 +11,7 @@ The agent hierarchy is designed to provide clear separation of concerns:
 - Archons focus on moderation, rule enforcement, and simulation management
 
 Usage Example:
-    from pysrcai.src.agents import Actor, Archon
+    from pysrcai.agents.base import Actor, Archon
     
     # Create a debate participant
     participant = Actor(
@@ -74,9 +74,7 @@ from .base.archon import (
     ArchonActingComponent,
 )
 
-
-
-from .llm.llm_components import (
+from ..llm.llm_components import (
     LLMActingComponent,
     ActorLLMComponent,
     ArchonLLMComponent,

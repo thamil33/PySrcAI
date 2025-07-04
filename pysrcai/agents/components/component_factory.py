@@ -8,18 +8,18 @@ components, promoting modularity and reuse.
 from typing import Any, Dict, List, Optional, Type, Union, cast
 import importlib
 
-from .agent import ActingComponent, ContextComponent
-from .llm_components import (
-    ActorLLMComponent, 
-    ArchonLLMComponent,
-    ConfigurableLLMComponent,
-    create_language_model
-)
-from .memory.memory_components import (
+from ..base.agent import ActingComponent, ContextComponent
+from ..memory.memory_components import (
     MemoryBank,
     BasicMemoryBank,
     AssociativeMemoryBank,
     MemoryComponent
+)
+from ...llm.llm_components import (
+    ActorLLMComponent, 
+    ArchonLLMComponent,
+    ConfigurableLLMComponent,
+    create_language_model
 )
 
 

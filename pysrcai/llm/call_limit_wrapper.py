@@ -2,7 +2,7 @@
 
 from collections.abc import Collection, Mapping, Sequence
 from typing import Any
-from pysrcai.src.language_model_client import language_model
+from pysrcai.llm import language_model
 from typing_extensions import override
 
 

@@ -3,7 +3,7 @@
 from typing import Union
 from langchain.embeddings.base import Embeddings
 
-from pysrcai.src.config.embedding_config import VectorDBConfig
+from ...config.embedding_config import VectorDBConfig
 from .base import BaseVectorStore
 from .chroma_adapter import ChromaVectorStore
 

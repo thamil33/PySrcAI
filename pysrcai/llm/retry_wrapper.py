@@ -3,17 +3,23 @@
 from collections.abc import Collection, Sequence, Mapping
 from typing import Any, Type
 
-from pysrcai.src.language_model_client import language_model
+from .language_model import (
+    LanguageModel,
+    DEFAULT_MAX_TOKENS,
+    DEFAULT_TERMINATORS,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TIMEOUT_SECONDS,
+)
 import retry
 from typing_extensions import override
 
 
-class RetryLanguageModel(language_model.LanguageModel):
+class RetryLanguageModel(LanguageModel):
   """Wraps an underlying language model and retries calls to it."""
 
   def __init__(
       self,
-      model: language_model.LanguageModel,
+      model: LanguageModel,
       retry_on_exceptions: Collection[Type[Exception]] = (Exception,),
       retry_tries: int = 3,
       retry_delay: float = 2.,
@@ -39,10 +45,10 @@ class RetryLanguageModel(language_model.LanguageModel):
       self,
       prompt: str,
       *,
-      max_tokens: int = language_model.DEFAULT_MAX_TOKENS,
-      terminators: Collection[str] = language_model.DEFAULT_TERMINATORS,
-      temperature: float = language_model.DEFAULT_TEMPERATURE,
-      timeout: float = language_model.DEFAULT_TIMEOUT_SECONDS,
+      max_tokens: int = DEFAULT_MAX_TOKENS,
+      terminators: Collection[str] = DEFAULT_TERMINATORS,
+      temperature: float = DEFAULT_TEMPERATURE,
+      timeout: float = DEFAULT_TIMEOUT_SECONDS,
       seed: int | None = None,
   ) -> str:
     @retry.retry(self._retry_on_exceptions, tries=self._retry_tries,

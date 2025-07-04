@@ -1,7 +1,7 @@
 """Functions for plotting metrics."""
 
 from typing import Collection
-from pysrcai.src.utils import measurements
+from . import measurements
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd

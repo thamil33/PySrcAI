@@ -9,7 +9,7 @@ import importlib
 
 from .actor import Actor, ActorWithLogging
 from .archon import Archon, ArchonWithLogging
-from .component_factory import ComponentFactory
+from ..components.component_factory import ComponentFactory
 
 
 class AgentFactory:

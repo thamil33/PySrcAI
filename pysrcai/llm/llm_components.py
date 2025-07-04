@@ -9,14 +9,12 @@ import abc
 from typing import Any
 from collections.abc import Mapping
 
-from pysrcai.src.agents.base.agent import ActingComponent, ActionSpec, ComponentContextMapping, OutputType
+from ..agents.base.agent import ActingComponent, ActionSpec, ComponentContextMapping, OutputType
 
-from pysrcai.src.language_model_client import (
-    LMStudioLanguageModel,
-    OpenRouterLanguageModel,
-    NoLanguageModel,
-)
-from pysrcai.src.language_model_client.language_model import LanguageModel
+from .language_model import LanguageModel
+from .lmstudio_model import LMStudioLanguageModel
+from .openrouter_model import OpenRouterLanguageModel
+from .no_language_model import NoLanguageModel
 
 
 class LLMActingComponent(ActingComponent):
@@ -142,7 +140,7 @@ class ActorLLMComponent(LLMActingComponent):
             The prompt string optimized for Actor decision-making.
         """
 
-        from pysrcai.src.agents.base.actor import Actor 
+        from ..agents.base.actor import Actor 
         
 
 
@@ -219,7 +217,7 @@ class ArchonLLMComponent(LLMActingComponent):
         Returns:
             The prompt string optimized for Archon moderation and orchestration.
         """
-        from pysrcai.src.agents.base.archon import Archon  
+        from ..agents.base.archon import Archon  
 
         agent = self.get_agent()
         agent_name = agent.name

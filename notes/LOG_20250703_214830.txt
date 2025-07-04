@@ -1,0 +1,5 @@
+=== PySrcAI Engine Demo ===
+Output being saved to: notes/LOG_20250703_214830.txt
+
+
+[Engine] Error during simulation: [Errno 2] No such file or directory: 'c:\\Users\\tyler\\dev\\__pysrcai\\pysrcai\\examples\\demos\\pysrcai.examples.scenario.basic_schema.yaml'

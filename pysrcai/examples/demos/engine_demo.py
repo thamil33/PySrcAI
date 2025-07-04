@@ -1,10 +1,10 @@
 import os
 import sys
 from datetime import datetime
-from pysrcai.src.config.config_loader import load_config
-from pysrcai.src.factory import SimulationFactory
+from pysrcai.config.config_loader import load_config
+from pysrcai.core.factory import SimulationFactory
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), '../config/scenario/basic_schema.yaml')
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'configs', 'basic_schema.yaml')
 
 class TeeOutput:
     """Captures output and writes to both console and file."""

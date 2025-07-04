@@ -2,7 +2,7 @@ import functools
 import time
 
 from absl.testing import absltest
-from pysrcai.src.utils import concurrency
+from . import concurrency
 
 
 class ExpectedError(Exception):

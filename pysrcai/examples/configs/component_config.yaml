@@ -18,11 +18,11 @@ agents:
           max_context_memories: 5
       - name: environment
         type: custom
-        class_path: pysrcai.src.agents.environment.environment_components.EnvironmentContextComponent
+        class_path: pysrcai.agents.environment.environment_components.EnvironmentContextComponent
         constructor_args: {}
       - name: interaction
         type: custom
-        class_path: pysrcai.src.agents.environment.environment_components.InteractionComponent
+        class_path: pysrcai.agents.environment.environment_components.InteractionComponent
         constructor_args: {}
     acting_component:
       type: llm
@@ -49,11 +49,11 @@ agents:
           max_context_memories: 5
       - name: environment
         type: custom
-        class_path: pysrcai.src.agents.environment.environment_components.EnvironmentContextComponent
+        class_path: pysrcai.agents.environment.environment_components.EnvironmentContextComponent
         constructor_args: {}
       - name: interaction
         type: custom
-        class_path: pysrcai.src.agents.environment.environment_components.InteractionComponent
+        class_path: pysrcai.agents.environment.environment_components.InteractionComponent
         constructor_args: {}
     acting_component:
       type: llm
@@ -77,7 +77,7 @@ agents:
           max_context_memories: 5
       - name: environment
         type: custom
-        class_path: pysrcai.src.agents.environment.environment_components.EnvironmentContextComponent
+        class_path: pysrcai.agents.environment.environment_components.EnvironmentContextComponent
         constructor_args: {}
     acting_component:
       type: llm

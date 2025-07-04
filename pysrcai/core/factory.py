@@ -1,8 +1,8 @@
 from .engine import SimulationEngine, SequentialEngine
-from .agents.agent_factory import AgentFactory
-from .agents.component_factory import ComponentFactory
-from .agents.environment.environment_components import EnvironmentComponentFactory
-from .environment.objects import create_environment_from_config
+from ..agents.base.agent_factory import AgentFactory
+from ..agents.components.component_factory import ComponentFactory
+from ..agents.environment.environment_components import EnvironmentComponentFactory
+from ..core.objects import create_environment_from_config
 
 class SimulationFactory:
     """
@@ -56,7 +56,7 @@ class SimulationFactory:
             env_component_config = {
                 'name': 'environment',
                 'type': 'custom',
-                'class_path': 'pysrcai.src.agents.environment.environment_components.EnvironmentContextComponent',
+                'class_path': 'pysrcai.agents.environment.environment_components.EnvironmentContextComponent',
                 'constructor_args': {}
             }
             

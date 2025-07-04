@@ -1,49 +1,41 @@
-"""Memory components for PySrcAI agents.
-
-This module provides memory capabilities for agents, including:
-- Basic memory storage and retrieval
-- Associative memory with embedding-based search
-- Context components that provide memory-based context
-- Integration with the agent component system
-"""
+"""Memory components for PySrcAI agents."""
 
 import abc
 import threading
 from collections.abc import Callable, Sequence
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional, Union
 import time
 import json
 
 try:
     import numpy as np
-    import pandas as pd
     HAS_EMBEDDINGS = True
 except ImportError:
     HAS_EMBEDDINGS = False
 
-from ..agent import ContextComponent, ActionSpec, ComponentState
+from ..base.agent import ContextComponent, ActionSpec, ComponentState
 
 
 class MemoryBank(abc.ABC):
     """Abstract base class for memory storage systems."""
     
     @abc.abstractmethod
-    def add_memory(self, text: str, tags: list[str] | None = None, importance: float = 1.0) -> None:
+    def add_memory(self, text: str, tags: Optional[List[str]] = None, importance: float = 1.0) -> None:
         """Add a memory to the bank."""
         raise NotImplementedError()
     
     @abc.abstractmethod
-    def retrieve_recent(self, k: int = 5) -> Sequence[str]:
+    def retrieve_recent(self, k: int = 5) -> List[str]:
         """Retrieve the k most recent memories."""
         raise NotImplementedError()
     
     @abc.abstractmethod
-    def retrieve_by_query(self, query: str, k: int = 5) -> Sequence[str]:
+    def retrieve_by_query(self, query: str, k: int = 5) -> List[str]:
         """Retrieve memories relevant to a query."""
         raise NotImplementedError()
     
     @abc.abstractmethod
-    def get_all_memories(self) -> Sequence[str]:
+    def get_all_memories(self) -> List[str]:
         """Get all memories."""
         raise NotImplementedError()
     
@@ -55,6 +47,11 @@ class MemoryBank(abc.ABC):
     @abc.abstractmethod
     def set_state(self, state: ComponentState) -> None:
         """Set state from serialized data."""
+        raise NotImplementedError()
+    
+    @abc.abstractmethod
+    def __len__(self) -> int:
+        """Return the number of memories."""
         raise NotImplementedError()
 
 
@@ -68,10 +65,10 @@ class BasicMemoryBank(MemoryBank):
             max_memories: Maximum number of memories to store.
         """
         self._max_memories: int = max_memories
-        self._memories: list[dict[str, Any]] = []
+        self._memories: List[Dict[str, Any]] = []
         self._lock = threading.Lock()
     
-    def add_memory(self, text: str, tags: list[str] | None = None, importance: float = 1.0) -> None:
+    def add_memory(self, text: str, tags: Optional[List[str]] = None, importance: float = 1.0) -> None:
         """Add a memory to the bank."""
         memory = {
             'text': text.replace('\n', ' '),  # Normalize newlines
@@ -86,13 +83,13 @@ class BasicMemoryBank(MemoryBank):
             if len(self._memories) > self._max_memories:
                 self._memories = self._memories[-self._max_memories:]
     
-    def retrieve_recent(self, k: int = 5) -> Sequence[str]:
+    def retrieve_recent(self, k: int = 5) -> List[str]:
         """Retrieve the k most recent memories."""
         with self._lock:
             recent_memories = self._memories[-k:] if self._memories else []
             return [mem['text'] for mem in reversed(recent_memories)]
     
-    def retrieve_by_query(self, query: str, k: int = 5) -> Sequence[str]:
+    def retrieve_by_query(self, query: str, k: int = 5) -> List[str]:
         """Retrieve memories that contain query terms (simple text search)."""
         query_lower = query.lower()
         relevant_memories = []
@@ -106,7 +103,7 @@ class BasicMemoryBank(MemoryBank):
         
         return relevant_memories
     
-    def retrieve_by_tags(self, tags: list[str], k: int = 5) -> Sequence[str]:
+    def retrieve_by_tags(self, tags: List[str], k: int = 5) -> List[str]:
         """Retrieve memories that have any of the specified tags."""
         relevant_memories = []
         
@@ -119,7 +116,7 @@ class BasicMemoryBank(MemoryBank):
         
         return relevant_memories
     
-    def get_all_memories(self) -> Sequence[str]:
+    def get_all_memories(self) -> List[str]:
         """Get all memories."""
         with self._lock:
             return [mem['text'] for mem in self._memories]
@@ -137,7 +134,8 @@ class BasicMemoryBank(MemoryBank):
         with self._lock:
             memories = state.get('memories', [])
             if isinstance(memories, list):
-                self._memories = memories
+                # Type cast to ensure compatibility
+                self._memories = [mem for mem in memories if isinstance(mem, dict)]
             else:
                 self._memories = []
             
@@ -158,7 +156,7 @@ class AssociativeMemoryBank(MemoryBank):
     
     def __init__(
         self, 
-        embedder: Callable[[str], Any] | None = None,
+        embedder: Optional[Callable[[str], Any]] = None,
         max_memories: int = 1000,
     ):
         """Initialize the associative memory bank.
@@ -168,19 +166,19 @@ class AssociativeMemoryBank(MemoryBank):
             max_memories: Maximum number of memories to store.
         """
         if not HAS_EMBEDDINGS:
-            raise ImportError("AssociativeMemoryBank requires numpy and pandas")
+            raise ImportError("AssociativeMemoryBank requires numpy")
         
         self._embedder = embedder
-        self._max_memories = max_memories
+        self._max_memories: int = max_memories
         self._lock = threading.Lock()
-        self._memories = pd.DataFrame(columns=['text', 'timestamp', 'tags', 'importance', 'embedding'])
+        self._memories: List[Dict[str, Any]] = []
         self._stored_hashes = set()
     
     def set_embedder(self, embedder: Callable[[str], Any]) -> None:
         """Set the embedder function."""
         self._embedder = embedder
     
-    def add_memory(self, text: str, tags: list[str] | None = None, importance: float = 1.0) -> None:
+    def add_memory(self, text: str, tags: Optional[List[str]] = None, importance: float = 1.0) -> None:
         """Add a memory to the bank."""
         if not self._embedder:
             raise ValueError("Embedder must be set before adding memories")
@@ -192,12 +190,12 @@ class AssociativeMemoryBank(MemoryBank):
         memory_data = {
             'text': text,
             'timestamp': time.time(),
-            'tags': json.dumps(tags or []),  # Store as JSON string
+            'tags': tags or [],
             'importance': importance,
         }
         
         # Check for duplicates
-        content_hash = hash(tuple(memory_data.values()))
+        content_hash = hash(tuple(str(v) for v in memory_data.values()))
         
         with self._lock:
             if content_hash in self._stored_hashes:
@@ -207,63 +205,66 @@ class AssociativeMemoryBank(MemoryBank):
             embedding = self._embedder(text)
             memory_data['embedding'] = embedding
             
-            # Add to dataframe
-            new_memory = pd.Series(memory_data).to_frame().T.infer_objects()
-            
-            # Handle concatenation to avoid deprecation warnings
-            if not new_memory.empty:
-                if self._memories.empty:
-                    self._memories = new_memory
-                else:
-                    self._memories = pd.concat([self._memories, new_memory], ignore_index=True)
+            # Add to memory list
+            self._memories.append(memory_data)
             self._stored_hashes.add(content_hash)
             
             # Limit memory size
             if len(self._memories) > self._max_memories:
-                oldest_index = self._memories['timestamp'].idxmin()
-                self._memories = self._memories.drop(oldest_index)
+                # Remove oldest memory
+                oldest_memory = min(self._memories, key=lambda m: m['timestamp'])
+                self._memories.remove(oldest_memory)
     
-    def retrieve_recent(self, k: int = 5) -> Sequence[str]:
+    def retrieve_recent(self, k: int = 5) -> List[str]:
         """Retrieve the k most recent memories."""
         with self._lock:
-            if self._memories.empty:
+            if not self._memories:
                 return []
-            recent = self._memories.nlargest(k, 'timestamp')
-            return recent['text'].tolist()
+            # Sort by timestamp and get most recent
+            sorted_memories = sorted(self._memories, key=lambda m: m['timestamp'], reverse=True)
+            return [mem['text'] for mem in sorted_memories[:k]]
     
-    def retrieve_by_query(self, query: str, k: int = 5) -> Sequence[str]:
+    def retrieve_by_query(self, query: str, k: int = 5) -> List[str]:
         """Retrieve memories most similar to the query using embeddings."""
         if not self._embedder:
             raise ValueError("Embedder must be set before retrieving memories")
         
         with self._lock:
-            if self._memories.empty:
+            if not self._memories:
                 return []
             
             # Get query embedding
             query_embedding = self._embedder(query)
             
             # Calculate cosine similarities
-            similarities = self._memories['embedding'].apply(
-                lambda emb: np.dot(query_embedding, emb) / (
-                    np.linalg.norm(query_embedding) * np.linalg.norm(emb)
-                ) if np.linalg.norm(emb) > 0 else 0
-            )
+            similarities = []
+            for memory in self._memories:
+                emb = memory['embedding']
+                if isinstance(emb, (list, np.ndarray)):
+                    # Calculate cosine similarity
+                    dot_product = np.dot(query_embedding, emb)
+                    norm_query = np.linalg.norm(query_embedding)
+                    norm_emb = np.linalg.norm(emb)
+                    if norm_query > 0 and norm_emb > 0:
+                        similarity = dot_product / (norm_query * norm_emb)
+                    else:
+                        similarity = 0
+                    similarities.append((similarity, memory['text']))
             
-            # Get top k most similar
-            top_indices = similarities.nlargest(k).index
-            return self._memories.loc[top_indices, 'text'].tolist()
+            # Sort by similarity and return top k
+            similarities.sort(reverse=True)  # Highest similarity first
+            return [text for _, text in similarities[:k]]
     
-    def retrieve_by_tags(self, tags: list[str], k: int = 5) -> Sequence[str]:
+    def retrieve_by_tags(self, tags: List[str], k: int = 5) -> List[str]:
         """Retrieve memories that have any of the specified tags."""
         with self._lock:
-            if self._memories.empty:
+            if not self._memories:
                 return []
             
-            # Filter by tags (stored as JSON strings)
+            # Filter by tags
             relevant_memories = []
-            for _, memory in self._memories.iterrows():
-                memory_tags = json.loads(memory['tags'])
+            for memory in self._memories:
+                memory_tags = memory['tags']
                 if any(tag in memory_tags for tag in tags):
                     relevant_memories.append((memory['timestamp'], memory['text']))
             
@@ -271,18 +272,16 @@ class AssociativeMemoryBank(MemoryBank):
             relevant_memories.sort(reverse=True)  # Most recent first
             return [text for _, text in relevant_memories[:k]]
     
-    def get_all_memories(self) -> Sequence[str]:
+    def get_all_memories(self) -> List[str]:
         """Get all memories."""
         with self._lock:
-            if self._memories.empty:
-                return []
-            return self._memories['text'].tolist()
+            return [mem['text'] for mem in self._memories]
     
     def get_state(self) -> ComponentState:
         """Get serializable state."""
         with self._lock:
             return {
-                'memories_json': self._memories.to_json() if not self._memories.empty else '{}',
+                'memories': self._memories.copy(),
                 'stored_hashes': list(self._stored_hashes),
                 'max_memories': self._max_memories,
             }
@@ -290,14 +289,24 @@ class AssociativeMemoryBank(MemoryBank):
     def set_state(self, state: ComponentState) -> None:
         """Set state from serialized data."""
         with self._lock:
-            memories_json = state.get('memories_json', '{}')
-            if memories_json != '{}':
-                self._memories = pd.read_json(memories_json)
+            memories = state.get('memories', [])
+            if isinstance(memories, list):
+                # Type cast to ensure compatibility
+                self._memories = [mem for mem in memories if isinstance(mem, dict)]
             else:
-                self._memories = pd.DataFrame(columns=['text', 'timestamp', 'tags', 'importance', 'embedding'])
+                self._memories = []
             
-            self._stored_hashes = set(state.get('stored_hashes', []))
-            self._max_memories = state.get('max_memories', 1000)
+            stored_hashes = state.get('stored_hashes', [])
+            if isinstance(stored_hashes, list):
+                self._stored_hashes = set(stored_hashes)
+            else:
+                self._stored_hashes = set()
+            
+            max_memories = state.get('max_memories', 1000)
+            if isinstance(max_memories, int):
+                self._max_memories = max_memories
+            else:
+                self._max_memories = 1000
     
     def __len__(self) -> int:
         """Return the number of memories."""
@@ -371,9 +380,11 @@ class MemoryComponent(ContextComponent):
     
     def post_observe(self) -> str:
         """Provide summary of current memory state."""
-        memory_count = len(self._memory_bank)
+        try:
+            memory_count = len(self._memory_bank)
+        except (AttributeError, TypeError):
+            memory_count = 0
         return f"Memory bank contains {memory_count} memories."
-    
     def get_state(self) -> ComponentState:
         """Get the component's state."""
         return {
@@ -384,17 +395,24 @@ class MemoryComponent(ContextComponent):
     
     def set_state(self, state: ComponentState) -> None:
         """Set the component's state."""
-        if 'memory_bank_state' in state:
-            self._memory_bank.set_state(state['memory_bank_state'])
-        self._importance_threshold = state.get('importance_threshold', 0.5)
-        self._max_context_memories = state.get('max_context_memories', 5)
+        memory_bank_state = state.get('memory_bank_state')
+        if memory_bank_state and isinstance(memory_bank_state, dict):
+            self._memory_bank.set_state(memory_bank_state)
+        
+        importance_threshold = state.get('importance_threshold', 0.5)
+        if isinstance(importance_threshold, (int, float)):
+            self._importance_threshold = float(importance_threshold)
+        
+        max_context_memories = state.get('max_context_memories', 5)
+        if isinstance(max_context_memories, int):
+            self._max_context_memories = max_context_memories
     
     def get_memory_bank(self) -> MemoryBank:
         """Get the underlying memory bank."""
         return self._memory_bank
     
-    def add_explicit_memory(self, text: str, tags: list[str] | None = None, importance: float = 1.0) -> None:
+    def add_explicit_memory(self, text: str, tags: Optional[List[str]] = None, importance: float = 1.0) -> None:
         """Explicitly add a memory (useful for initialization or external events)."""
         agent = self.get_agent()
         memory_text = f"{agent.name}: {text}"
-        self._memory_bank.add_memory(memory_text, tags=tags, importance=importance)
+        self._memory_bank.add_memory(memory_text, tags=tags, importance=importance) 

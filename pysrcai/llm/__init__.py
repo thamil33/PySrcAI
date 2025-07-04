@@ -1,39 +1,21 @@
-"""PySrcAI Language Model Client Module.
+"""Language model system for PySrcAI."""
 
-This module provides language model integrations for PySrcAI agents.
-It includes support for:
-- LM Studio (local models)
-- OpenRouter (cloud models)
-- Call limiting and retry wrappers
-- No-op model for testing
-
-Usage Example:
-    from pysrcai.src.language_model_client import LMStudioLanguageModel, OpenRouterLanguageModel
-    
-    # Local model via LM Studio
-    local_model = LMStudioLanguageModel(
-        model_name="my-local-model",
-        base_url="http://localhost:1234/v1"
-    )
-    
-    # Cloud model via OpenRouter
-    cloud_model = OpenRouterLanguageModel(
-        model_name="mistralai/mistral-small-3.1-24b-instruct:free",
-        api_key="your-openrouter-key"
-    )
-"""
-
-from .language_model import LanguageModel, InvalidResponseError
-from .lmstudio_model import LMStudioLanguageModel  
+from .language_model import LanguageModel
+from .lmstudio_model import LMStudioLanguageModel
 from .openrouter_model import OpenRouterLanguageModel
 from .no_language_model import NoLanguageModel
-from .call_limit_wrapper import CallLimitLanguageModel
 from .retry_wrapper import RetryLanguageModel
+from .call_limit_wrapper import CallLimitLanguageModel
+from .llm_components import (
+    LLMActingComponent,
+    ActorLLMComponent,
+    ArchonLLMComponent,
+    ConfigurableLLMComponent,
+)
 
 __all__ = [
     # Base classes
     "LanguageModel",
-    "InvalidResponseError",
     
     # Model implementations
     "LMStudioLanguageModel",
@@ -41,8 +23,14 @@ __all__ = [
     "NoLanguageModel",
     
     # Wrappers
-    "CallLimitLanguageModel",
     "RetryLanguageModel",
+    "CallLimitLanguageModel",
+    
+    # Components
+    "LLMActingComponent",
+    "ActorLLMComponent",
+    "ArchonLLMComponent",
+    "ConfigurableLLMComponent",
 ]
 
 def create_language_model(model_type: str = "mock"):

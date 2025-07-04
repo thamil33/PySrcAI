@@ -8,7 +8,7 @@ a modular, configurable way.
 from typing import Any, Dict, List, Optional
 from collections.abc import Mapping
 
-from ..agent import ContextComponent, ActionSpec, ComponentState
+from ..base.agent import ContextComponent, ActionSpec, ComponentState
 
 
 class EnvironmentContextComponent(ContextComponent):

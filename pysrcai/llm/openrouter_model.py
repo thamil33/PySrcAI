@@ -7,9 +7,16 @@ import inspect
 from collections.abc import Collection, Mapping, Sequence
 from typing import Any
 
-from pysrcai.src.language_model_client import language_model
-from pysrcai.src.utils import sampling
-from pysrcai.src.utils import measurements as measurements_lib
+from .language_model import (
+    LanguageModel,
+    DEFAULT_MAX_TOKENS,
+    DEFAULT_TERMINATORS,
+    DEFAULT_TEMPERATURE,
+    DEFAULT_TIMEOUT_SECONDS,
+    DEFAULT_STATS_CHANNEL,
+)
+from ..utils import sampling
+from ..utils import measurements as measurements_lib
 from openai import OpenAI, RateLimitError
 from typing_extensions import override
 
@@ -17,7 +24,7 @@ from typing_extensions import override
 _MAX_MULTIPLE_CHOICE_ATTEMPTS = 20
 
 
-class OpenRouterLanguageModel(language_model.LanguageModel):
+class OpenRouterLanguageModel(LanguageModel):
   """Language Model that uses OpenRouter API."""
 
   def __init__(
@@ -26,7 +33,7 @@ class OpenRouterLanguageModel(language_model.LanguageModel):
       *,
       api_key: str | None = None,
       measurements: measurements_lib.Measurements | None = None,
-      channel: str = language_model.DEFAULT_STATS_CHANNEL,
+      channel: str = DEFAULT_STATS_CHANNEL,
       verbose_logging: bool = False,
   ):
     """Initializes the instance.
@@ -96,10 +103,10 @@ class OpenRouterLanguageModel(language_model.LanguageModel):
       self,
       prompt: str,
       *,
-      max_tokens: int = language_model.DEFAULT_MAX_TOKENS,
-      terminators: Collection[str] = language_model.DEFAULT_TERMINATORS,
-      temperature: float = language_model.DEFAULT_TEMPERATURE,
-      timeout: float = language_model.DEFAULT_TIMEOUT_SECONDS,
+      max_tokens: int = DEFAULT_MAX_TOKENS,
+      terminators: Collection[str] = DEFAULT_TERMINATORS,
+      temperature: float = DEFAULT_TEMPERATURE,
+      timeout: float = DEFAULT_TIMEOUT_SECONDS,
       seed: int | None = None,
   ) -> str:
     """Samples text from the OpenRouter model."""

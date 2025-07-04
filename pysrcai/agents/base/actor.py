@@ -19,7 +19,7 @@ from typing import Any
 from collections.abc import Mapping
 
 from .agent import Agent, ActingComponent, ContextComponent, ActionSpec, OutputType
-from .llm_components import ActorLLMComponent
+from ...llm.llm_components import ActorLLMComponent
 
 
 class ActorActingComponent(ActingComponent):
