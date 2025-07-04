@@ -28,7 +28,7 @@ Usage Example:
     )
 """
 
-from .agent import (
+from .base.agent import (
     # Core classes
     Agent,
     AgentWithLogging,
@@ -55,10 +55,6 @@ from .agent import (
     FREE_ACTION_TYPES,
     CHOICE_ACTION_TYPES,
     
-    # Default action specs
-    DEFAULT_ACTION_SPEC,
-    DEFAULT_SPEECH_ACTION_SPEC,
-    
     # Convenience functions
     free_action_spec,
     choice_action_spec,
@@ -66,19 +62,21 @@ from .agent import (
     speech_action_spec,
 )
 
-from .actor import (
+from .base.actor import (
     Actor,
     ActorWithLogging,
     ActorActingComponent,
 )
 
-from .archon import (
+from .base.archon import (
     Archon,
     ArchonWithLogging,
     ArchonActingComponent,
 )
 
-from .llm_components import (
+
+
+from .llm.llm_components import (
     LLMActingComponent,
     ActorLLMComponent,
     ArchonLLMComponent,
@@ -90,8 +88,6 @@ from .memory import (
     BasicMemoryBank,
     AssociativeMemoryBank,
     MemoryComponent,
-    create_simple_embedder,
-    create_hash_embedder,
 )
 
 __all__ = [
@@ -121,8 +117,6 @@ __all__ = [
     "BasicMemoryBank",
     "AssociativeMemoryBank", 
     "MemoryComponent",
-    "create_simple_embedder",
-    "create_hash_embedder",
     
     # Action specification
     "ActionSpec",

@@ -1,50 +1,23 @@
-"""PySrcAI Memory Module.
+"""Memory components for PySrcAI agents."""
 
-This module provides memory capabilities for agents:
-- BasicMemoryBank: Simple chronological memory storage
-- AssociativeMemoryBank: Advanced embedding-based memory retrieval
-- MemoryComponent: Context component for memory integration
-- Simple embedders for text similarity
-
-Usage Example:
-    from pysrcai.src.agents.memory import BasicMemoryBank, MemoryComponent
-    
-    # Create a memory bank
-    memory_bank = BasicMemoryBank(max_memories=500)
-    
-    # Create memory component for an agent
-    memory_component = MemoryComponent(memory_bank)
-    
-    # Add to agent's context components
-    context_components = {"memory": memory_component}
-"""
-
-from .memory_components import (
+from .memory_components_v2 import (
     MemoryBank,
     BasicMemoryBank,
     AssociativeMemoryBank,
-    MemoryComponent,
+    MemoryComponent
 )
-
-from .embedders import (
-    SimpleEmbedder,
-    HashEmbedder,
-    create_simple_embedder,
-    create_hash_embedder,
+from .memory_factory import (
+    create_memory_bank,
+    create_memory_bank_with_embeddings,
+    create_embedder_from_config
 )
 
 __all__ = [
-    # Memory banks
     "MemoryBank",
     "BasicMemoryBank", 
     "AssociativeMemoryBank",
-    
-    # Components
     "MemoryComponent",
-    
-    # Embedders
-    "SimpleEmbedder",
-    "HashEmbedder",
-    "create_simple_embedder",
-    "create_hash_embedder",
+    "create_memory_bank",
+    "create_memory_bank_with_embeddings",
+    "create_embedder_from_config"
 ]
