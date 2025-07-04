@@ -2,10 +2,9 @@
 
 from typing import Type
 
-from pysrcai.src.config.embedding_config import EmbeddingConfig
+from ..config.embedding_config import EmbeddingConfig
 from .base import BaseEmbedder
-
-from .sentence_transformers import SentenceTransformerEmbeddings
+from .models.sentence_transformers import SentenceTransformerEmbeddings
 
 
 def create_embedder(config: EmbeddingConfig) -> BaseEmbedder:

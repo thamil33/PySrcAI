@@ -1,13 +1,12 @@
 """Local sentence-transformers embeddings."""
 
-
 from typing import List, Optional
 import torch
 from sentence_transformers import SentenceTransformer
 import logging
 import time
 
-from pysrcai.src.config.embedding_config import EmbeddingConfig
+from pysrcai.config.embedding_config import EmbeddingConfig
 from .base import BaseEmbedder
 
 
@@ -22,7 +21,7 @@ class SentenceTransformerEmbeddings(BaseEmbedder):
         """
         import pprint
         self.config = config
-        self.logger = logging.getLogger("pysrcai.agentica.embeddings.sentence_transformers")
+        self.logger = logging.getLogger("pysrcai.embeddings.sentence_transformers")
         self.logger.info("--- EMBEDDING CONFIG PASSED TO EMBEDDER ---")
         self.logger.info(pprint.pformat(vars(config)))
         start = time.time()

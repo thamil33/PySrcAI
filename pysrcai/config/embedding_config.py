@@ -46,4 +46,4 @@ class MemoryConfig:
     embedding: Optional[EmbeddingConfig] = None
     
     # Vector store settings for persistence
-    vectorstore: Optional[VectorDBConfig] = None 
+    vectorstore: Optional[VectorDBConfig] = None
