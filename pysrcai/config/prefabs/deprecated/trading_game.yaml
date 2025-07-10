@@ -1,0 +1,127 @@
+agents:
+  - name: Alice
+    type: actor
+    personality:
+      friendliness: 0.8
+      risk_aversion: 0.4
+      generosity: 0.6
+    memory:
+      type: associative
+      max_memories: 1000
+      embedding:
+        provider: local_sentencetransformers
+        model: all-MiniLM-L6-v2
+        device: cuda
+    llm: openrouter
+
+  - name: Bob
+    type: actor
+    personality:
+      analytical: 0.9
+      patience: 0.7
+      risk_aversion: 0.7
+    memory:
+      type: associative
+      max_memories: 1000
+      embedding:
+        provider: local_sentencetransformers
+        model: all-MiniLM-L6-v2
+        device: cuda
+    llm: openrouter
+
+  - name: MarketMaster
+    type: archon
+    authority_level: observer
+    personality:
+      fairness: 1.0
+    memory:
+      type: basic
+      max_memories: 1000
+    llm: openrouter
+
+engine:
+  type: sequential
+  steps: 5
+  log_level: info
+  response_word_limit: 80
+
+scenario:
+  description: "Two merchants must negotiate trades to maximize their profits in a desert marketplace."
+  initial_state:
+    turn: 0
+    conversation_log: []
+    trade_history: []
+    environment:
+      locations:
+        marketplace:
+          name: "Desert Marketplace"
+          description: "A bustling marketplace with two merchant stalls facing each other across a narrow alley. The air is thick with the scent of spices and the sound of haggling."
+          objects:
+            alice_stall:
+              name: "Alice's Trading Stall"
+              description: "A colorful tent with silks draped around the entrance. Various goods are arranged neatly on display."
+              properties:
+                examination_detail: "Alice's stall is well-organized with her inventory clearly labeled. A small abacus sits on a side table for calculations."
+                owner: "Alice"
+            
+            bob_stall:
+              name: "Bob's Trading Stall"
+              description: "A more austere setup with goods arranged by type and value. A small scale sits prominently at the front."
+              properties:
+                examination_detail: "Bob's stall reflects his analytical nature, with items categorized and a ledger open to track transactions."
+                owner: "Bob"
+            
+            price_board:
+              name: "Market Prices Board"
+              description: "A wooden board in the center of the marketplace listing the current market values for various goods."
+              properties:
+                readable: true
+                content: "Current market values (gold pieces):\n- Spice: 5\n- Silk: 8\n- Jewels: 12\n- Pottery: 3\n- Incense: 6"
+            
+            trading_table:
+              name: "Neutral Trading Table"
+              description: "A small wooden table positioned between the two stalls where merchants can meet to negotiate."
+              properties:
+                examination_detail: "The table's surface is worn smooth from countless negotiations. Small notches mark its edges, possibly tallying successful trades."
+
+      items:
+        alice_inventory:
+          name: "Alice's Inventory"
+          description: "Alice's trading goods and gold."
+          properties:
+            readable: true
+            owner: "Alice"
+            content: "Inventory: 10 gold pieces, 3 Spice, 2 Silk, 0 Jewels, 4 Pottery, 1 Incense"
+            calculated_value: 41  # 10 + (3*5) + (2*8) + (0*12) + (4*3) + (1*6)
+        
+        bob_inventory:
+          name: "Bob's Inventory"
+          description: "Bob's trading goods and gold."
+          properties:
+            readable: true
+            owner: "Bob"
+            content: "Inventory: 15 gold pieces, 1 Spice, 3 Silk, 2 Jewels, 1 Pottery, 3 Incense"
+            calculated_value: 66  # 15 + (1*5) + (3*8) + (2*12) + (1*3) + (3*6)
+
+  rules:
+    - "Each agent must perform ONE action per turn: examine inventories, propose trade, accept/reject trade, or speak."
+    - "Trade proposals must be specific and include exact quantities (e.g., 'I offer 2 Silk for 10 gold')."
+    - "The MarketMaster validates and executes valid trades, updating inventories accordingly."
+    - "Trades are only executed when formally accepted by the other merchant."
+    - "After {{engine.steps}} turns, final profits will be calculated based on market values."
+    - "The goal is to maximize your inventory's total value by the end of trading."
+    - "Success is measured by final profit compared to starting value and negotiation effectiveness."
+
+  evaluation_criteria:
+    - "Profit Growth: Percentage increase in total inventory value"
+    - "Trade Balance: Fairness of executed trades relative to market values"
+    - "Negotiation Strategy: Effectiveness of offers and counteroffers"
+    - "Market Awareness: Appropriate valuation of goods relative to market prices"
+    - "Memory Utilization: Recalling previous offers and adjusting strategy"
+
+  action_templates:
+    - "examine [inventory_name or price_board]"
+    - "propose trade to [agent_name]: offer [quantity] [item_type] for [quantity] [item_type]"
+    - "accept trade from [agent_name]"
+    - "reject trade from [agent_name]"
+    - "speak to [agent_name]: [brief message about trade or negotiation]"

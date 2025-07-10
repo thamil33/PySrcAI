@@ -1,0 +1,91 @@
+import os
+import sys
+import argparse
+from datetime import datetime
+from pysrcai.config.config_loader import load_config
+from pysrcai.core.factory import SimulationFactory
+
+# Default config path
+DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'config', 'prefabs', 'debate_chamber.yaml')
+
+class TeeOutput:
+    """Captures output and writes to both console and file."""
+    def __init__(self, filename):
+        self.terminal = sys.stdout
+        self.log = open(filename, 'w', encoding='utf-8')
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.log.write(message)
+        self.log.flush()  # Ensure immediate writing
+
+    def flush(self):
+        self.terminal.flush()
+        self.log.flush()
+
+    def close(self):
+        self.log.close()
+
+def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Run the PySrcAI Philosophical Debate Simulation')
+    parser.add_argument('-c', '--config', default=DEFAULT_CONFIG_PATH,
+                      help='Path to the configuration YAML file')
+    parser.add_argument('-s', '--steps', type=int, help='Override number of steps in simulation')
+    args = parser.parse_args()
+    
+    config_path = args.config
+    
+    # Create timestamped log filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_filename = f"pysrcai/data/logs/DEBATE_LOG_{timestamp}.txt"
+    
+    # Ensure logs directory exists
+    os.makedirs("pysrcai/data/logs", exist_ok=True)
+    
+    # Set up output capture
+    tee = TeeOutput(log_filename)
+    old_stdout = sys.stdout
+    sys.stdout = tee
+    
+    try:
+        print("=== PySrcAI Philosophical Debate Demo ===")
+        print(f"Output being saved to: {log_filename}")
+        print(f"Using configuration: {config_path}")
+        print()
+        
+        # Load scenario config
+        config = load_config(config_path)
+        
+        # Override steps if provided
+        if args.steps:
+            config['engine']['steps'] = args.steps
+        
+        print("Loaded config:")
+        print(config)
+
+        # Build engine and steps from factory
+        factory = SimulationFactory()
+        engine, steps = factory.create_engine(config)
+        print(f"\n[Engine] Running for {steps} steps...")
+        engine.run(steps=steps)
+        print("\n[Engine] Simulation complete.")
+        print("\n[Engine] Final Debate Assessment:")
+        print(f"Debate topic: {config['scenario']['initial_state']['debate_topic']}")
+        print("Each philosopher presented arguments for their worldview and responded to counterpoints.")
+        print("See the full transcript above for the detailed philosophical exchange.")
+        print(f"\n[Engine] Full output saved to: {log_filename}")
+        
+    except Exception as e:
+        print(f"\n[Engine] Error during simulation: {e}")
+        import traceback
+        traceback.print_exc()
+        
+    finally:
+        # Restore original stdout and close log file
+        sys.stdout = old_stdout
+        tee.close()
+        print(f"✅ Log saved to: {log_filename}")
+
+if __name__ == "__main__":
+    main()

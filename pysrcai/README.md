@@ -1,3 +1,7 @@
+llm_components.py ln 393 (set openrouter model)
+
+
+
 # PySrcAI
 
 A Python-based AI agent framework for simulations, embeddings, and more.

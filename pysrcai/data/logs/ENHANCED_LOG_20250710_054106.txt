@@ -1,0 +1,74 @@
+=== PySrcAI Enhanced Demo ===
+Output being saved to: pysrcai/data/logs/ENHANCED_LOG_20250710_054106.txt
+Using configuration: c:\Users\tyler\dev\__pysrcai\pysrcai\demos\..\config\prefabs\enhanced_minimal.yaml
+
+[Engine] Registered agent: Proponent
+[Engine] Registered agent: Opponent
+[Engine] Registered archon: Moderator
+
+[Engine] Running for 6 steps...
+[MinimalEnvironment] Initialized with 0 initial notes
+[DebateModule] Initialized with topic: Should we adopt a four-day work week?
+[DebateModule] Word limit: 75
+[DebateModule] Initial phase: opening
+[Engine] Modules initialized
+[Engine] Running enhanced debate simulation for 6 steps...
+[Engine] Debate topic: Should we adopt a four-day work week?
+[Engine] Word limit per response: 75
+
+[Engine] Step 1
+Proponent acts: propose
+I oppose the four-day work week as it could reduce overall productivity, create scheduling challenges, and potentially decrease customer satisfaction due to reduced availability.
+
+[Engine] Step 2
+Opponent acts: propose
+I oppose the four-day work week as it could reduce overall productivity, create scheduling challenges, and potentially decrease customer satisfaction due to reduced availability.
+[DebateModule] Requesting moderator assessment
+[Engine] Step 3
+[DebateModule] Advanced to phase: rebuttal
+Proponent acts: respond
+[Moderator] Both speakers have made compelling points. The proponent emphasizes well-being while the opponent raises practical concerns. Let's continue the discussion.
+While some studies show benefits, others reveal logistical challenges, especially for customer-facing roles. Not all industries can adapt without service disruptions.
+
+
+[Engine] Step 4
+Opponent acts: respond
+While some studies show benefits, others reveal logistical challenges, especially for customer-facing roles. Not all industries can adapt without service disruptions.
+[DebateModule] Requesting moderator assessment
+[Engine] Step 5
+[DebateModule] Advanced to phase: closing
+Proponent acts: respond
+[Moderator] Both speakers have made compelling points. The proponent emphasizes well-being while the opponent raises practical concerns. Let's continue the discussion.
+We should approach this cautiously with optional pilot programs rather than mandates. Some industries and workers may prefer traditional schedules.
+
+
+[Engine] Step 6
+Opponent acts: respond
+The evidence clearly shows four-day work weeks benefit both workers and companies through improved wellbeing, retention, and sustained productivity. It's time for change.
+[Engine] Simulation complete.[DebateModule] Requesting moderator assessment
+
+[DebateModule] Already at final phase
+[Engine] Simulation complete.
+[DebateModule] Requesting moderator final judgment
+
+[Moderator] This phase saw thoughtful rebuttals from both sides. The debate is highlighting both the potential benefits and implementation challenges of this policy.
+[Moderator] Final Judgment: After careful consideration, I declare the Proponent the winner for presenting more evidence-based arguments and addressing the opponent's concerns effectively.
+[Engine] Debate complete
+[Engine] Simulation terminated.
+
+[Engine] Simulation state saved to: pysrcai/data/logs/ENHANCED_STATE_20250710_054106.json
+
+[Engine] Final Whiteboard State:
+[1] Proponent: I oppose the four-day work week as it could reduce overall productivity, create scheduling challenges, and potentially decrease customer satisfaction due to reduced availability.
+[2] Opponent: I oppose the four-day work week as it could reduce overall productivity, create scheduling challenges, and potentially decrease customer satisfaction due to reduced availability.
+[3] Moderator: Both speakers have made compelling points. The proponent emphasizes well-being while the opponent raises practical concerns. Let's continue the discussion.
+[4] Proponent: While some studies show benefits, others reveal logistical challenges, especially for customer-facing roles. Not all industries can adapt without service disruptions.
+[5] Opponent: While some studies show benefits, others reveal logistical challenges, especially for customer-facing roles. Not all industries can adapt without service disruptions.
+[6] Moderator: Both speakers have made compelling points. The proponent emphasizes well-being while the opponent raises practical concerns. Let's continue the discussion.
+[7] Proponent: We should approach this cautiously with optional pilot programs rather than mandates. Some industries and workers may prefer traditional schedules.
+[8] Opponent: The evidence clearly shows four-day work weeks benefit both workers and companies through improved wellbeing, retention, and sustained productivity. It's time for change.
+[9] Moderator: This phase saw thoughtful rebuttals from both sides. The debate is highlighting both the potential benefits and implementation challenges of this policy.
+[10] Moderator: After careful consideration, I declare the Proponent the winner for presenting more evidence-based arguments and addressing the opponent's concerns effectively.
+[11] SIMULATION END
+
+[Engine] Full output saved to: pysrcai/data/logs/ENHANCED_LOG_20250710_054106.txt

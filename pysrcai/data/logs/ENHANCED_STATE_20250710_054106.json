@@ -1,0 +1,73 @@
+{
+  "current_state": {
+    "turn": 6,
+    "phase": "opening",
+    "whiteboard": []
+  },
+  "history": [
+    {
+      "state": {
+        "turn": 0,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.8154573,
+      "metadata": {}
+    },
+    {
+      "state": {
+        "turn": 1,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.8171537,
+      "metadata": {}
+    },
+    {
+      "state": {
+        "turn": 2,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.817463,
+      "metadata": {}
+    },
+    {
+      "state": {
+        "turn": 3,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.817463,
+      "metadata": {}
+    },
+    {
+      "state": {
+        "turn": 4,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.8184633,
+      "metadata": {}
+    },
+    {
+      "state": {
+        "turn": 5,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.8184633,
+      "metadata": {}
+    },
+    {
+      "state": {
+        "turn": 6,
+        "phase": "opening",
+        "whiteboard": []
+      },
+      "timestamp": 1752140466.8194642,
+      "metadata": {}
+    }
+  ],
+  "max_history": 100
+}

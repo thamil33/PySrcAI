@@ -1,0 +1,53 @@
+agents:
+  - name: 1_ALPHA
+    type: actor
+    personality:
+      logical: 0.7
+      persuasive: 0.8
+      optimistic: 0.6
+    memory:
+      type: basic
+      max_memories: 10
+    llm: openrouter
+
+  - name: 2_BRAVO
+    type: actor
+    personality:
+      analytical: 0.8
+      skeptical: 0.7
+      pragmatic: 0.6
+    memory:
+      type: basic
+      max_memories: 10
+    llm: openrouter
+
+  - name: Moderator
+    type: archon
+    authority_level: referee
+    personality:
+      fairness: 0.9
+      impartiality: 0.9
+    memory:
+      type: basic
+      max_memories: 10
+    llm: openrouter
+
+engine:
+  type: minimal
+  steps: 6
+  log_level: info
+  response_word_limit: 75
+
+scenario:
+  debate_topic: "Should we adopt a four-day work week?"
+  description: "A focused debate on the merits of a four-day work week."
+  initial_state:
+    turn: 0
+    whiteboard: []
+  
+  rules:
+    - "Each agent must use the specified action template for their turn."
+    - "Arguments must be concise (75 words or less)."
+    - "The debate follows three phases: opening, rebuttal, and closing."
+    - "The Moderator assesses arguments after each phase and declares a winner at the end."
+    - "Success metrics: logical consistency, persuasiveness, and responsiveness to opponent."

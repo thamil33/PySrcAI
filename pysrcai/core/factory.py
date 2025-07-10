@@ -1,4 +1,6 @@
-from .engine import SimulationEngine, SequentialEngine
+from .engines.sequential_engine import SequentialEngine
+from .engines.minimal_engine import MinimalEngine
+from .engine import SimulationEngine
 from ..agents.base.agent_factory import AgentFactory
 from ..agents.components.component_factory import ComponentFactory
 from ..agents.environment.environment_components import EnvironmentComponentFactory
@@ -113,5 +115,10 @@ class SimulationFactory:
         # Create appropriate engine
         if engine_type == 'sequential':
             return SequentialEngine(agents=agents, archon=archon, state=state, config=config), steps
+        elif engine_type == 'minimal':
+            engine = MinimalEngine(config=config)
+            engine.setup_agents(agents, archon)
+            # For minimal engine, we don't override the environment since it creates its own MinimalEnvironment
+            return engine, steps
         else:
-            return SimulationEngine(agents=agents, state=state), steps
+            raise ValueError(f"Unknown engine type: {engine_type}")

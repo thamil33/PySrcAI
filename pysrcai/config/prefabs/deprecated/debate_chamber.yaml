@@ -1,0 +1,127 @@
+agents:
+  - name: Rationalist
+    type: actor
+    personality:
+      logical: 0.9
+      empirical: 0.8
+      skepticism: 0.7
+      patience: 0.6
+      creativity: 0.4
+    memory:
+      type: associative
+      max_memories: 1000
+      embedding:
+        provider: local_sentencetransformers
+        model: all-MiniLM-L6-v2
+        device: cuda
+    llm: openrouter
+
+  - name: Idealist
+    type: actor
+    personality:
+      intuition: 0.8
+      abstract_thinking: 0.9
+      passion: 0.7
+      eloquence: 0.8
+      creativity: 0.7
+    memory:
+      type: associative
+      max_memories: 1000
+      embedding:
+        provider: local_sentencetransformers
+        model: all-MiniLM-L6-v2
+        device: cuda
+    llm: openrouter
+
+  - name: Moderator
+    type: archon
+    authority_level: referee
+    personality:
+      fairness: 1.0
+      critical_thinking: 0.9
+    memory:
+      type: basic
+      max_memories: 1000
+    llm: openrouter
+
+engine:
+  type: sequential
+  steps: 6
+  log_level: info
+  response_word_limit: 150
+
+scenario:
+  description: "Two philosophers with opposing worldviews engage in a structured debate on a fundamental question."
+  initial_state:
+    turn: 0
+    debate_phase: "opening_statements"
+    debate_score: {"Rationalist": 0, "Idealist": 0}
+    debate_topic: "Is reality fundamentally material or mental in nature?"
+    conversation_log: []
+    environment:
+      locations:
+        debate_hall:
+          name: "The Academy Debate Hall"
+          description: "A circular room with tiered seating and a central podium. Light streams through high windows illuminating the debating area."
+          objects:
+            podium:
+              name: "Central Podium"
+              description: "A wooden podium with a small hourglass on top."
+              properties:
+                examination_detail: "The podium bears the inscription 'Seek Truth Through Dialogue'. It stands between the two debate positions."
+                interactive: true
+            
+            hourglass:
+              name: "Debate Timer"
+              description: "A small ornate hourglass with golden sand."
+              properties:
+                turnable: true
+                state: "inactive"
+                turn_message: "You turn the hourglass. The sand begins to flow, marking the time remaining."
+            
+            scroll:
+              name: "Debate Topic"
+              description: "An unrolled scroll on the podium."
+              properties:
+                readable: true
+                content: "Topic: Is reality fundamentally material or mental in nature?\n\nRationalist Position: Reality is fundamentally material, composed of physical substances governed by natural laws that exist independently of minds.\n\nIdealist Position: Reality is fundamentally mental, constructed from consciousness and ideas, with physical matter being derivative of or dependent on mind."
+            
+            audience:
+              name: "Attentive Audience"
+              description: "Scholars and students from the Academy seated in tiered rows."
+              properties:
+                reactive: true
+                current_reaction: "attentive silence"
+                examination_detail: "The audience watches intently, ready to judge the quality of arguments presented."
+
+      items: {}
+  
+  rules:
+    - "Debate proceeds through structured phases: opening statements, arguments, rebuttals, and closing statements."
+    - "The Rationalist argues for a materialist worldview, while the Idealist argues for an idealist worldview."
+    - "Each agent must use specific debate actions: present_argument, rebut_opponent, cite_evidence, ask_question, or summarize_position."
+    - "Arguments should be logical, coherent, and responsive to the opponent's previous points."
+    - "The Moderator judges adherence to logical structure, strength of arguments, and fallacies."
+    - "Agents must cite previous points raised in the debate when making rebuttals."
+    - "Success metrics: coherence, logical consistency, quality of rebuttals, and persuasiveness."
+
+  action_templates:
+    - "present_argument: [claim] because [reasoning]"
+    - "rebut_opponent: Your claim that [opponent_claim] is flawed because [counter_reasoning]"
+    - "cite_evidence: [evidence_type] shows that [conclusion]"
+    - "ask_question: How do you explain [philosophical_issue]?"
+    - "summarize_position: My worldview holds that [core_thesis]"
+  
+  debate_phases:
+    - name: "opening_statement"
+      description: "Each philosopher presents their core position and strongest arguments"
+      turns: 2
+    - name: "archon_assessment"
+      description: "The Moderator assesses the opening arguments"
+      turns: 1
+    - name: "rebuttals"
+      description: "Each philosopher responds to their opponent's arguments"
+      turns: 2
+    - name: "final_judgment"
+      description: "The Moderator evaluates all arguments and declares a winner"
+      turns: 1

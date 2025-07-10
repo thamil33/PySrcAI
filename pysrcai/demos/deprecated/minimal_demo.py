@@ -1,10 +1,19 @@
+"""Hello World demo for PySrcAI.
+
+This script demonstrates the minimal functionality of the PySrcAI framework
+using a simple debate scenario with a whiteboard for shared state.
+"""
+
 import os
 import sys
+import argparse
 from datetime import datetime
 from pysrcai.config.config_loader import load_config
 from pysrcai.core.factory import SimulationFactory
+from pysrcai.core.engines.minimal_engine import MinimalEngine
 
-CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'config', 'prefabs', 'basic_schema.yaml')
+# Default config path
+DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), '..', 'config', 'prefabs', 'minimal.yaml')
 
 class TeeOutput:
     """Captures output and writes to both console and file."""
@@ -25,12 +34,20 @@ class TeeOutput:
         self.log.close()
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Run the PySrcAI Hello World Simulation')
+    parser.add_argument('-c', '--config', default=DEFAULT_CONFIG_PATH,
+                      help='Path to the configuration YAML file')
+    args = parser.parse_args()
+    
+    config_path = args.config
+    
     # Create timestamped log filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_filename = f"pysrcai/data/logs/LOG_{timestamp}.txt"
+    log_filename = f"pysrcai/data/logs/HELLO_LOG_{timestamp}.txt"
     
     # Ensure logs directory exists
-    os.makedirs("data/logs", exist_ok=True)
+    os.makedirs("pysrcai/data/logs", exist_ok=True)
     
     # Set up output capture
     tee = TeeOutput(log_filename)
@@ -38,21 +55,32 @@ def main():
     sys.stdout = tee
     
     try:
-        print("=== PySrcAI Engine Demo ===")
+        print("=== PySrcAI Minimal Demo ===")
         print(f"Output being saved to: {log_filename}")
+        print(f"Using configuration: {config_path}")
         print()
         
         # Load scenario config
-        config = load_config(CONFIG_PATH)
+        config = load_config(config_path)
         print("Loaded config:")
         print(config)
 
-        # Build engine and steps from factory
+        # Create simulation using factory
         factory = SimulationFactory()
         engine, steps = factory.create_engine(config)
+        
+        # Get steps from config
+        steps = config.get("engine", {}).get("steps", 6)
+        
         print(f"\n[Engine] Running for {steps} steps...")
         engine.run(steps=steps)
         print("\n[Engine] Simulation complete.")
+        
+        # Print whiteboard final state
+        print("\n[Engine] Final Whiteboard State:")
+        for i, entry in enumerate(engine.environment.snapshot()):
+            print(f"[{i+1}] {entry}")
+        
         print(f"\n[Engine] Full output saved to: {log_filename}")
         
     except Exception as e:
